@@ -101,6 +101,14 @@ namespace TheOtherRoles.Patches
             if (PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipOldAdmin.getBool())
                 GameObject.Find("records_admin_map").SetActive(false);
 
+            // GapRoomの配電盤を消す
+            if (PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipDisableGapSwitchBoard.getBool())
+            {
+                GameObject sabo = GameObject.Find("task_lightssabotage (gap)");
+                sabo.SetActive(false);
+                ShipStatus.Instance.AllConsoles = ShipStatus.Instance.AllConsoles.Where(x => x != sabo.GetComponent<Console>()).ToArray();
+            }
+
 
             //タスクバグ修正
             if (PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipEnableWallCheck.getBool())
