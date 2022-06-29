@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>2.1.61</Version>
+        <Version>2.1.63</Version>
         <Description>TheOtherRoles: GM Haoming Edition</Description>
         <Authors>Haoming</Authors>
 		<Configurations>Debug;Release;Release_Dev;Release_Local;Embedded</Configurations>
