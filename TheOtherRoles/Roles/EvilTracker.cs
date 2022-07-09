@@ -149,9 +149,11 @@ namespace TheOtherRoles
                             gameObject.transform.localPosition = new Vector3(0, -2.0f + 0.25f * count, gameObject.transform.localPosition.z);
                             gameObject.transform.localScale = Vector3.one * 1.0f;
                             TMPro.TMP_Text positionText = gameObject.GetComponent<TMPro.TMP_Text>();
+                            positionText.alpha = 1.0f;
                             impostorPositionText.Add(p.name, positionText);
                         }
                         PlainShipRoom room = Helpers.getPlainShipRoom(p);
+                        impostorPositionText[p.name].gameObject.SetActive(true);
                         if (room != null)
                         {
                             impostorPositionText[p.name].text = "<color=#FF1919FF>" + $"{p.name}(" + DestroyableSingleton<TranslationController>.Instance.GetString(room.RoomId) + ")</color>";
@@ -180,8 +182,10 @@ namespace TheOtherRoles
                         gameObject.transform.localPosition = new Vector3(0, -2.0f, gameObject.transform.localPosition.z);
                         gameObject.transform.localScale = Vector3.one * 1.0f;
                         targetPositionText = gameObject.GetComponent<TMPro.TMP_Text>();
+                        targetPositionText.alpha = 1.0f;
                     }
                     PlainShipRoom room = Helpers.getPlainShipRoom(target);
+                    targetPositionText.gameObject.SetActive(true);
                     if (room != null)
                     {
                         targetPositionText.text = "<color=#8CFFFFFF>" + $"{target.name}(" + DestroyableSingleton<TranslationController>.Instance.GetString(room.RoomId) + ")</color>";
