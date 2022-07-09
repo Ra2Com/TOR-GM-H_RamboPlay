@@ -114,32 +114,8 @@ namespace TheOtherRoles.Patches
                 adminTimer = 0f;
 
                 // 現在地からどのアドミンを使っているか特定する
-                PlainShipRoom[] array = null;
-                UnhollowerBaseLib.Il2CppReferenceArray<Collider2D> buffer = new Collider2D[10];
-                ContactFilter2D filter = default(ContactFilter2D);
-                filter.layerMask = Constants.PlayersOnlyMask;
-                filter.useLayerMask = true;
-                filter.useTriggers = false;
-                if (ShipStatus.Instance)
-                {
-                    array = ShipStatus.Instance.AllRooms;
-                }
-                foreach (PlainShipRoom plainShipRoom in array)
-                {
-                    if (plainShipRoom.roomArea)
-                    {
-                        int hitCount = plainShipRoom.roomArea.OverlapCollider(filter, buffer);
-                        if (hitCount == 0) continue;
-                        for (int i = 0; i < hitCount; i++)
-                        {
-                            if (buffer[i]?.gameObject == PlayerControl.LocalPlayer.gameObject)
-                            {
-                                room = plainShipRoom;
-                                break;
-                            }
-                        }
-                    }
-                }
+                room = Helpers.getPlainShipRoom(PlayerControl.LocalPlayer);
+                if(room == null) return;
 
                 // アドミンの画像を差し替える
                 if (!PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) && PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipRestrictedAdmin.getBool() && (room.name == "Cockpit" || room.name == "Records"))

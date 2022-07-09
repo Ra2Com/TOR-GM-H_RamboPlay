@@ -19,6 +19,8 @@ namespace TheOtherRoles
         public static CustomButton trackerButton;
         public static Sprite trackerButtonSprite;
         public static Sprite arrowSprite;
+        public static Dictionary<string, TMPro.TMP_Text> impostorPositionText;
+        public static TMPro.TMP_Text targetPositionText;
 
 
         public EvilTracker()
@@ -89,6 +91,7 @@ namespace TheOtherRoles
             target = null;
             currentTarget = null;
             arrows = new List<Arrow>();
+            impostorPositionText = new();
         }
         public static List<Arrow> arrows = new();
         public static float updateTimer = 0f;
@@ -117,9 +120,17 @@ namespace TheOtherRoles
                 arrows = new List<Arrow>();
 
                 // インポスターの位置を示すArrowsを描画
+                int count = 0;
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls)
                 {
-                    if (p.Data.IsDead) continue;
+                    if (p.Data.IsDead)
+                    {
+                        if(p.isImpostor() && impostorPositionText.ContainsKey(p.name))
+                        {
+                            impostorPositionText[p.name].text = "";
+                        }
+                        continue;
+                    }
                     Arrow arrow;
                     if (p.isImpostor() && p != PlayerControl.LocalPlayer)
                     {
@@ -127,6 +138,28 @@ namespace TheOtherRoles
                         arrow.arrow.SetActive(true);
                         arrow.Update(p.transform.position);
                         arrows.Add(arrow);
+                        count += 1;
+                        if (!impostorPositionText.ContainsKey(p.name))
+                        {
+                            RoomTracker roomTracker = HudManager.Instance?.roomTracker;
+                            if (roomTracker == null) return;
+                            GameObject gameObject = UnityEngine.Object.Instantiate(roomTracker.gameObject);
+                            UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
+                            gameObject.transform.SetParent(HudManager.Instance.transform);
+                            gameObject.transform.localPosition = new Vector3(0, -2.0f + 0.25f * count, gameObject.transform.localPosition.z);
+                            gameObject.transform.localScale = Vector3.one * 1.0f;
+                            TMPro.TMP_Text positionText = gameObject.GetComponent<TMPro.TMP_Text>();
+                            impostorPositionText.Add(p.name, positionText);
+                        }
+                        PlainShipRoom room = Helpers.getPlainShipRoom(p);
+                        if (room != null)
+                        {
+                            impostorPositionText[p.name].text = "<color=#FF1919FF>" + $"{p.name}(" + DestroyableSingleton<TranslationController>.Instance.GetString(room.RoomId) + ")</color>";
+                        }
+                        else
+                        {
+                            impostorPositionText[p.name].text = "";
+                        }
                     }
                 }
 
@@ -137,6 +170,33 @@ namespace TheOtherRoles
                     arrow.arrow.SetActive(true);
                     arrow.Update(target.transform.position);
                     arrows.Add(arrow);
+                    if (targetPositionText == null)
+                    {
+                        RoomTracker roomTracker = HudManager.Instance?.roomTracker;
+                        if (roomTracker == null) return;
+                        GameObject gameObject = UnityEngine.Object.Instantiate(roomTracker.gameObject);
+                        UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
+                        gameObject.transform.SetParent(HudManager.Instance.transform);
+                        gameObject.transform.localPosition = new Vector3(0, -2.0f, gameObject.transform.localPosition.z);
+                        gameObject.transform.localScale = Vector3.one * 1.0f;
+                        targetPositionText = gameObject.GetComponent<TMPro.TMP_Text>();
+                    }
+                    PlainShipRoom room = Helpers.getPlainShipRoom(target);
+                    if (room != null)
+                    {
+                        targetPositionText.text = "<color=#8CFFFFFF>" + $"{target.name}(" + DestroyableSingleton<TranslationController>.Instance.GetString(room.RoomId) + ")</color>";
+                    }
+                    else
+                    {
+                        targetPositionText.text = "";
+                    }
+                }
+                else
+                {
+                    if(targetPositionText != null)
+                    {
+                        targetPositionText.text = "";
+                    }
                 }
 
                 // タイマーに時間をセット

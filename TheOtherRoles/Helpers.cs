@@ -790,5 +790,32 @@ namespace TheOtherRoles
             }
             else return false;
         }
+        public static PlainShipRoom getPlainShipRoom(PlayerControl p)
+        {
+                PlainShipRoom[] array = null;
+                UnhollowerBaseLib.Il2CppReferenceArray<Collider2D> buffer = new Collider2D[10];
+                ContactFilter2D filter = default(ContactFilter2D);
+                filter.layerMask = Constants.PlayersOnlyMask;
+                filter.useLayerMask = true;
+                filter.useTriggers = false;
+                array = DestroyableSingleton<ShipStatus>.Instance?.AllRooms;
+                if(array == null) return null;
+                foreach (PlainShipRoom plainShipRoom in array)
+                {
+                    if (plainShipRoom.roomArea)
+                    {
+                        int hitCount = plainShipRoom.roomArea.OverlapCollider(filter, buffer);
+                        if (hitCount == 0) continue;
+                        for (int i = 0; i < hitCount; i++)
+                        {
+                            if (buffer[i]?.gameObject == p.gameObject)
+                            {
+                                return plainShipRoom;
+                            }
+                        }
+                    }
+                }
+                return null;
+        }
     }
 }
