@@ -612,7 +612,7 @@ namespace TheOtherRoles
             bomberHasOneVote = CustomOption.Create(1036, CustomOptionType.Impostor, "bomberHasOneVote", true, bomberSpawnRate);
             bomberAlwaysShowArrow = CustomOption.Create(1037, CustomOptionType.Impostor, "bomberAlwaysShowArrow", true, bomberSpawnRate);
 
-            evilTrackerSpawnRate = new CustomRoleOption(1050, CustomOptionType.Impostor, "evilTracker", EvilTracker.color, 1);
+            evilTrackerSpawnRate = new CustomRoleOption(1050, CustomOptionType.Impostor, "evilTracker", EvilTracker.color, 3);
             evilTrackerCooldown = CustomOption.Create(1052, CustomOptionType.Impostor, "evilTrackerCooldown", 10f, 0f, 60f, 1f, evilTrackerSpawnRate);
             evilTrackerResetTargetAfterMeeting = CustomOption.Create(1053, CustomOptionType.Impostor, "evilTrackerResetTargetAfterMeeting", true, evilTrackerSpawnRate);
             evilTrackerCanSeeDeathFlash = CustomOption.Create(1054, CustomOptionType.Impostor, "evilTrackerCanSeeDeathFlash", true, evilTrackerSpawnRate);
