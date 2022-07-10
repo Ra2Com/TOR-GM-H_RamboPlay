@@ -228,6 +228,11 @@ namespace TheOtherRoles.Patches
         [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.ShowSabotageMap))]
         class MapBehaviourShowSabotageMap
         {
+            static bool Prefix(MapBehaviour __instance)
+            {
+                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker)) return evilHackerShowMap(__instance);
+                return true;
+            }
             static void Postfix(MapBehaviour __instance)
             {
                 if (TheOtherRolesPlugin.HideFakeTasks.Value)
@@ -235,6 +240,63 @@ namespace TheOtherRoles.Patches
                     __instance.taskOverlay.Hide();
                 }
             }
+        }
+        private static bool evilHackerShowMap(MapBehaviour __instance)
+        {
+            if (PlayerControl.GameOptions.MapId != 4) return true;
+            if (__instance.IsOpen)
+            {
+                __instance.Close();
+                return false;
+            }
+            if (!PlayerControl.LocalPlayer.CanMove)
+            {
+                return false;
+            }
+            if (__instance.specialInputHandler != null)
+            {
+                __instance.specialInputHandler.disableVirtualCursor = true;
+            }
+            PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
+            __instance.GenericShow();
+            __instance.gameObject.SetActive(true);
+            __instance.countOverlay.gameObject.SetActive(true);
+            __instance.infectedOverlay.gameObject.SetActive(true);
+            __instance.taskOverlay.Hide();
+            __instance.ColorControl.SetColor(Palette.ImpostorRed);
+            DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
+            ConsoleJoystick.SetMode_Sabotage();
+
+            // サボタージュアイコンのレイアウトを変更
+            Vector3 halfScale = new Vector3(0.5f, 0.5f, 0.5f);
+            Transform comms = __instance.infectedOverlay.transform.FindChild("Comms");
+            Transform electrical = __instance.infectedOverlay.transform.FindChild("Electrical");
+            Transform mainHall = __instance.infectedOverlay.transform.FindChild("MainHall");
+            Transform gapRoom = __instance.infectedOverlay.transform.FindChild("Gap Room");
+            Transform records = __instance.infectedOverlay.transform.FindChild("Records");
+            Transform brig = __instance.infectedOverlay.transform.FindChild("Brig");
+            Transform kitchen = __instance.infectedOverlay.transform.FindChild("Kitchen");
+            Transform medbay = __instance.infectedOverlay.transform.FindChild("Medbay");
+
+            comms.localScale = halfScale;
+            electrical.localScale = halfScale;
+            mainHall.localScale = halfScale;
+            gapRoom.localScale = halfScale;
+            records.localScale = halfScale;
+            brig.localScale = halfScale;
+            kitchen.localScale = halfScale;
+            medbay.localScale = halfScale;
+
+            comms.FindChild("bomb").localPosition = new Vector3(-0.3f, 1.25f, -1f);
+            comms.FindChild("Doors").localPosition = new Vector3(0.75f, 0.55f, -1f);
+            electrical.FindChild("lightsOut").localPosition = new Vector3(0f, -0.75f, -1f);
+            mainHall.FindChild("Doors").localPosition = new Vector3(-0.25f, -0.4f, -1f);
+            gapRoom.FindChild("meltdown").localPosition = new Vector3(-0.5f, 0f, -1f);
+            records.FindChild("Doors").localPosition = new Vector3(0f, 1.7f, -1f);
+            brig.FindChild("Doors").localPosition = new Vector3(0f, 1.3f, -1f);
+            kitchen.FindChild("Doors").localPosition = new Vector3(0f, 1.25f, -1f);
+            medbay.FindChild("Doors").localPosition = new Vector3(0.2f, 0f, -1f);
+            return false;
         }
 
         public static Dictionary<byte, Il2CppSystem.Collections.Generic.List<Vector2>> realTasks = new();
@@ -265,36 +327,45 @@ namespace TheOtherRoles.Patches
         {
             static bool Prefix(MapTaskOverlay __instance)
             {
-                if (!MeetingHud.Instance) return true;  // Only run in meetings, and then set the Position of the HerePoint to the Position before the Meeting!
-                if (!PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker) || !CustomOptionHolder.evilTrackerCanSeeTargetTask.getBool()) return true;
-                if (EvilTracker.target == null) return true;
-                if (realTasks[EvilTracker.target.PlayerId] == null) return false;
-                __instance.gameObject.SetActive(true);
-                __instance.data.Clear();
-                for (int i = 0; i < realTasks[EvilTracker.target.PlayerId].Count; i++)
+                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker))
                 {
-                    try
-                    {
-                        Vector2 pos = realTasks[EvilTracker.target.PlayerId][i];
-
-                        Vector3 localPosition = pos / ShipStatus.Instance.MapScale;
-                        localPosition.z = -1f;
-                        PooledMapIcon pooledMapIcon = __instance.icons.Get<PooledMapIcon>();
-                        pooledMapIcon.transform.localScale = new Vector3(pooledMapIcon.NormalSize, pooledMapIcon.NormalSize, pooledMapIcon.NormalSize);
-                        pooledMapIcon.rend.color = Color.yellow;
-                        pooledMapIcon.name = $"{i}";
-                        pooledMapIcon.lastMapTaskStep = 0;
-                        pooledMapIcon.transform.localPosition = localPosition;
-                        string text = $"{i}";
-                        __instance.data.Add(text, pooledMapIcon);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.error(ex.Message);
-                    }
+                    return evilTrackerShowMap(__instance);
                 }
-                return false;
+                return true;
             }
+        }
+
+        private static bool evilTrackerShowMap(MapTaskOverlay __instance)
+        {
+            if (!MeetingHud.Instance) return true;  // Only run in meetings, and then set the Position of the HerePoint to the Position before the Meeting!
+            if (!PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker) || !CustomOptionHolder.evilTrackerCanSeeTargetTask.getBool()) return true;
+            if (EvilTracker.target == null) return true;
+            if (realTasks[EvilTracker.target.PlayerId] == null) return false;
+            __instance.gameObject.SetActive(true);
+            __instance.data.Clear();
+            for (int i = 0; i < realTasks[EvilTracker.target.PlayerId].Count; i++)
+            {
+                try
+                {
+                    Vector2 pos = realTasks[EvilTracker.target.PlayerId][i];
+
+                    Vector3 localPosition = pos / ShipStatus.Instance.MapScale;
+                    localPosition.z = -1f;
+                    PooledMapIcon pooledMapIcon = __instance.icons.Get<PooledMapIcon>();
+                    pooledMapIcon.transform.localScale = new Vector3(pooledMapIcon.NormalSize, pooledMapIcon.NormalSize, pooledMapIcon.NormalSize);
+                    pooledMapIcon.rend.color = Color.yellow;
+                    pooledMapIcon.name = $"{i}";
+                    pooledMapIcon.lastMapTaskStep = 0;
+                    pooledMapIcon.transform.localPosition = localPosition;
+                    string text = $"{i}";
+                    __instance.data.Add(text, pooledMapIcon);
+                }
+                catch (Exception ex)
+                {
+                    Logger.error(ex.Message);
+                }
+            }
+            return false;
         }
     }
 }
