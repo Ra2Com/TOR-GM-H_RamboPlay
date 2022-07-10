@@ -16,6 +16,9 @@ namespace TheOtherRoles.Patches
         public static Sprite corpseSprite;
         private static Vector3 useButtonPos;
 
+        public static SpriteRenderer targetHerePoint;
+        public static Dictionary<byte, SpriteRenderer> impostorHerePoint;
+
         public static Sprite getCorpseSprite()
         {
             if (corpseSprite) return corpseSprite;
@@ -39,6 +42,21 @@ namespace TheOtherRoles.Patches
                     UnityEngine.Object.Destroy(r.gameObject);
                 corpseIcons.Clear();
                 corpseIcons = null;
+            }
+
+            if (targetHerePoint != null)
+            {
+                UnityEngine.Object.Destroy(targetHerePoint.gameObject);
+            }
+
+            if (impostorHerePoint != null)
+            {
+                foreach (SpriteRenderer r in impostorHerePoint.Values)
+                {
+                    UnityEngine.Object.Destroy(r.gameObject);
+                }
+                impostorHerePoint.Clear();
+                impostorHerePoint = null;
             }
         }
 
@@ -95,6 +113,11 @@ namespace TheOtherRoles.Patches
 
             static void Postfix(MapBehaviour __instance)
             {
+                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker))
+                {
+                    evilTrackerFixedUpdate(__instance);
+                }
+
                 if (PlayerControl.LocalPlayer.isGM())
                 {
                     foreach (PlayerControl p in PlayerControl.AllPlayerControls)
@@ -231,6 +254,7 @@ namespace TheOtherRoles.Patches
             static bool Prefix(MapBehaviour __instance)
             {
                 if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker)) return evilHackerShowMap(__instance);
+                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker)) return evilTrackerShowMap(__instance);
                 return true;
             }
             static void Postfix(MapBehaviour __instance)
@@ -241,32 +265,8 @@ namespace TheOtherRoles.Patches
                 }
             }
         }
-        private static bool evilHackerShowMap(MapBehaviour __instance)
+        private static void changeSabotageLayout(MapBehaviour __instance)
         {
-            if (PlayerControl.GameOptions.MapId != 4) return true;
-            if (__instance.IsOpen)
-            {
-                __instance.Close();
-                return false;
-            }
-            if (!PlayerControl.LocalPlayer.CanMove)
-            {
-                return false;
-            }
-            if (__instance.specialInputHandler != null)
-            {
-                __instance.specialInputHandler.disableVirtualCursor = true;
-            }
-            PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
-            __instance.GenericShow();
-            __instance.gameObject.SetActive(true);
-            __instance.countOverlay.gameObject.SetActive(true);
-            __instance.infectedOverlay.gameObject.SetActive(true);
-            __instance.taskOverlay.Hide();
-            __instance.ColorControl.SetColor(Palette.ImpostorRed);
-            DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
-            ConsoleJoystick.SetMode_Sabotage();
-
             // サボタージュアイコンのレイアウトを変更
             Vector3 halfScale = new Vector3(0.5f, 0.5f, 0.5f);
             Transform comms = __instance.infectedOverlay.transform.FindChild("Comms");
@@ -296,6 +296,102 @@ namespace TheOtherRoles.Patches
             brig.FindChild("Doors").localPosition = new Vector3(0f, 1.3f, -1f);
             kitchen.FindChild("Doors").localPosition = new Vector3(0f, 1.25f, -1f);
             medbay.FindChild("Doors").localPosition = new Vector3(0.2f, 0f, -1f);
+
+        }
+
+        private static void evilTrackerFixedUpdate(MapBehaviour __instance)
+        {
+            // ターゲットの位置をマップに表示
+            if (EvilTracker.target != null)
+            {
+                if (targetHerePoint == null)
+                {
+                    targetHerePoint = GameObject.Instantiate<SpriteRenderer>(__instance.HerePoint, __instance.HerePoint.transform.parent);
+                }
+                GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(EvilTracker.target.PlayerId);
+                PlayerMaterial.SetColors((playerById != null) ? playerById.DefaultOutfit.ColorId : 0, targetHerePoint);
+                Vector3 pos = new Vector3(EvilTracker.target.transform.position.x, EvilTracker.target.transform.position.y, EvilTracker.target.transform.position.z);
+                pos /= ShipStatus.Instance.MapScale;
+                pos.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
+                pos.z = -1;
+                targetHerePoint.transform.localPosition = pos;
+            }
+
+            // インポスターの位置をマップに表示
+            if (impostorHerePoint == null) impostorHerePoint = new();
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+            {
+                if (p.isImpostor() && p != PlayerControl.LocalPlayer)
+                {
+                    if (!impostorHerePoint.ContainsKey(p.PlayerId))
+                    {
+                        impostorHerePoint[p.PlayerId] = GameObject.Instantiate<SpriteRenderer>(__instance.HerePoint, __instance.HerePoint.transform.parent);
+                    }
+                    GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(p.PlayerId);
+                    PlayerMaterial.SetColors(0, impostorHerePoint[p.PlayerId]);
+                    Vector3 pos = new Vector3(p.transform.position.x, p.transform.position.y, p.transform.position.z);
+                    pos /= ShipStatus.Instance.MapScale;
+                    pos.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
+                    pos.z = -1;
+                    impostorHerePoint[p.PlayerId].transform.localPosition = pos;
+                }
+            }
+        }
+        private static bool evilTrackerShowMap(MapBehaviour __instance)
+        {
+            if (PlayerControl.GameOptions.MapId != 4 || MeetingHud.Instance) return true;
+            if (__instance.IsOpen)
+            {
+                __instance.Close();
+                return false;
+            }
+            if (!PlayerControl.LocalPlayer.CanMove)
+            {
+                return false;
+            }
+            if (__instance.specialInputHandler != null)
+            {
+                __instance.specialInputHandler.disableVirtualCursor = true;
+            }
+            PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
+            __instance.GenericShow();
+            __instance.gameObject.SetActive(true);
+            __instance.infectedOverlay.gameObject.SetActive(true);
+            __instance.taskOverlay.Hide();
+            __instance.ColorControl.SetColor(Palette.ImpostorRed);
+            DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
+            ConsoleJoystick.SetMode_Sabotage();
+
+            changeSabotageLayout(__instance);
+            return false;
+        }
+        private static bool evilHackerShowMap(MapBehaviour __instance)
+        {
+            if (PlayerControl.GameOptions.MapId != 4 || MeetingHud.Instance) return true;
+            if (__instance.IsOpen)
+            {
+                __instance.Close();
+                return false;
+            }
+            if (!PlayerControl.LocalPlayer.CanMove)
+            {
+                return false;
+            }
+            if (__instance.specialInputHandler != null)
+            {
+                __instance.specialInputHandler.disableVirtualCursor = true;
+            }
+            PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
+            __instance.GenericShow();
+            __instance.gameObject.SetActive(true);
+            __instance.countOverlay.gameObject.SetActive(true);
+            __instance.infectedOverlay.gameObject.SetActive(true);
+            __instance.taskOverlay.Hide();
+            __instance.ColorControl.SetColor(Palette.ImpostorRed);
+            DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
+            ConsoleJoystick.SetMode_Sabotage();
+
+            changeSabotageLayout(__instance);
             return false;
         }
 
@@ -329,13 +425,13 @@ namespace TheOtherRoles.Patches
             {
                 if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker))
                 {
-                    return evilTrackerShowMap(__instance);
+                    return evilTrackerShowTask(__instance);
                 }
                 return true;
             }
         }
 
-        private static bool evilTrackerShowMap(MapTaskOverlay __instance)
+        private static bool evilTrackerShowTask(MapTaskOverlay __instance)
         {
             if (!MeetingHud.Instance) return true;  // Only run in meetings, and then set the Position of the HerePoint to the Position before the Meeting!
             if (!PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker) || !CustomOptionHolder.evilTrackerCanSeeTargetTask.getBool()) return true;
