@@ -341,8 +341,16 @@
         "13": "\u5f53\u5185\u9b3c\u8fdb\u884c\u51fb\u6740\u53ef\u4ee5\u770b\u5230\u95ea\u5149"
     },
     "evilTrackerCanSeeTargetTask": {
-        "0": "Evil tracker can see target\u2019s task",
-        "11": "\u30bf\u30fc\u30b2\u30c3\u30c8\u306e\u30bf\u30b9\u30af\u3092\u898b\u308b\u3053\u3068\u304c\u3067\u304d\u308b"
+        "0": "Evil Tracker can see target\u2019s task on meeting",
+        "11": "\u4f1a\u8b70\u4e2d\u306b\u30bf\u30fc\u30b2\u30c3\u30c8\u306e\u30bf\u30b9\u30af\u3092\u898b\u308b\u3053\u3068\u304c\u3067\u304d\u308b"
+    },
+    "evilTrackerHasBetterMap": {
+        "0": "Evil Tracker has better map",
+        "11": "\u6539\u826f\u7248\u30de\u30c3\u30d7\u3092\u4f7f\u3046\u3053\u3068\u304c\u3067\u304d\u308b"
+    },
+    "evilTrackerCanSeeTargetPosition": {
+        "0": "Evil Tracker can see target position on map",
+        "11": "\u30bf\u30fc\u30b2\u30c3\u30c8\u306e\u4f4d\u7f6e\u3092\u30de\u30c3\u30d7\u4e0a\u3067\u898b\u308b\u3053\u3068\u304c\u3067\u304d\u308b"
     },
     "evilTrackerShortDesc": {
         "0": "track players",
@@ -660,6 +668,10 @@
         "0": "EvilHacker Can Move Even If Uses Admin",
         "11": "\u30a2\u30c9\u30df\u30f3\u4f7f\u7528\u4e2d\u3067\u3082\u79fb\u52d5\u3067\u304d\u308b",
         "13": "\u90aa\u6076\u7684\u9ed1\u5ba2\u53ef\u4ee5\u5728\u8fdc\u7a0b\u89c2\u770b\u5730\u56fe\u65f6\u79fb\u52a8"
+    },
+    "evilHackerHasBetterMap": {
+        "0": "EvilHacker Can Use Better Map",
+        "11": "\u6539\u826f\u7248\u30de\u30c3\u30d7\u3092\u4f7f\u3046\u3053\u3068\u304c\u3067\u304d\u308b"
     },
     "createdMadmateCanDieToSheriff": {
         "0": "Madmate Can Die To Sheriff",

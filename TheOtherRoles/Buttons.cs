@@ -405,7 +405,9 @@ namespace TheOtherRoles
                 {
                     return EvilHacker.evilHacker != null &&
                     EvilHacker.evilHacker == PlayerControl.LocalPlayer &&
-                    PlayerControl.LocalPlayer.isAlive();
+                    PlayerControl.LocalPlayer.isAlive() &&
+                    !CustomOptionHolder.evilHackerHasBetterMap.getBool();
+
                 },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => { },
@@ -486,7 +488,7 @@ namespace TheOtherRoles
                        DestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
 
                    if (Hacker.cantMove) PlayerControl.LocalPlayer.moveable = false;
-                   PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+                   PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement
                    Hacker.chargesAdminTable--;
                },
                () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && MapOptions.couldUseAdmin && PlayerControl.LocalPlayer.isAlive(); },
@@ -555,7 +557,7 @@ namespace TheOtherRoles
                    }
 
                    if (Hacker.cantMove) PlayerControl.LocalPlayer.moveable = false;
-                   PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+                   PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement
 
                    Hacker.chargesVitals--;
                },
@@ -1124,7 +1126,7 @@ namespace TheOtherRoles
                     SecurityGuard.charges--;
 
                     if (SecurityGuard.cantMove) PlayerControl.LocalPlayer.moveable = false;
-                    PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+                    PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement
                 },
                 () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews < Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice) && SubmergedCompatibility.isSubmerged(); },
                 () =>
@@ -1374,7 +1376,7 @@ namespace TheOtherRoles
                     if (randomNumber == 0) msg = string.Format(ModTranslation.getString("mediumQuestion1"), RoleInfo.GetRolesString(Medium.target.player, false, includeHidden: true)) + name;
                     else if (randomNumber == 1) msg = string.Format(ModTranslation.getString("mediumQuestion2"), typeOfColor) + name;
                     else if (randomNumber == 2) msg = string.Format(ModTranslation.getString("mediumQuestion3"), Math.Round(timeSinceDeath / 1000)) + name;
-                    else msg = string.Format(ModTranslation.getString("mediumQuestion4"), RoleInfo.GetRolesString(Medium.target.killerIfExisting, false, includeHidden: true)) + name; ; // Excludes mini 
+                    else msg = string.Format(ModTranslation.getString("mediumQuestion4"), RoleInfo.GetRolesString(Medium.target.killerIfExisting, false, includeHidden: true)) + name; ; // Excludes mini
 
                     bool CensorChat = SaveManager.CensorChat;
                     if (CensorChat) SaveManager.CensorChat = false;
@@ -1533,7 +1535,7 @@ namespace TheOtherRoles
                 buttonText = ModTranslation.getString("WitchText")
             };
 
-            // Assassin mark and assassinate button 
+            // Assassin mark and assassinate button
             assassinButton = new CustomButton(
                 () =>
                 {

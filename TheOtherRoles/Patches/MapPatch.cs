@@ -113,7 +113,7 @@ namespace TheOtherRoles.Patches
 
             static void Postfix(MapBehaviour __instance)
             {
-                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker))
+                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker) && EvilTracker.canSeeTargetPosition)
                 {
                     evilTrackerFixedUpdate(__instance);
                 }
@@ -339,7 +339,7 @@ namespace TheOtherRoles.Patches
         }
         private static bool evilTrackerShowMap(MapBehaviour __instance)
         {
-            if (PlayerControl.GameOptions.MapId != 4 || MeetingHud.Instance) return true;
+            if (!EvilTracker.hasBetterMap || MeetingHud.Instance) return true;
             if (__instance.IsOpen)
             {
                 __instance.Close();
@@ -367,7 +367,7 @@ namespace TheOtherRoles.Patches
         }
         private static bool evilHackerShowMap(MapBehaviour __instance)
         {
-            if (PlayerControl.GameOptions.MapId != 4 || MeetingHud.Instance) return true;
+            if (!CustomOptionHolder.evilHackerHasBetterMap.getBool() || MeetingHud.Instance) return true;
             if (__instance.IsOpen)
             {
                 __instance.Close();
