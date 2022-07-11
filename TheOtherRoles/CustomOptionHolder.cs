@@ -652,7 +652,7 @@ namespace TheOtherRoles
             madmateExilePlayer = CustomOption.Create(10370, CustomOptionType.Modifier, "madmateExileCrewmate", false, madmateSpawnRate);
 
             miniSpawnRate = new CustomRoleOption(180, CustomOptionType.Modifier, "mini", Mini.color, 15);
-            miniGrowingUpDuration = CustomOption.Create(181, CustomOptionType.Neutral, "miniGrowingUpDuration", 400f, 100f, 1500f, 100f, miniSpawnRate, format: "unitSeconds");
+            miniGrowingUpDuration = CustomOption.Create(181, CustomOptionType.Modifier, "miniGrowingUpDuration", 400f, 100f, 1500f, 100f, miniSpawnRate, format: "unitSeconds");
 
             loversSpawnRate = new CustomRoleOption(50, CustomOptionType.Modifier, "lovers", Lovers.color, 1);
             loversImpLoverRate = CustomOption.Create(51, CustomOptionType.Modifier, "loversImpLoverRate", rates, loversSpawnRate);
