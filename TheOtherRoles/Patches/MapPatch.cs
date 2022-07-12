@@ -268,7 +268,7 @@ namespace TheOtherRoles.Patches
         private static void changeSabotageLayout(MapBehaviour __instance)
         {
             // サボタージュアイコンのレイアウトを変更
-            Vector3 halfScale = new Vector3(0.5f, 0.5f, 0.5f);
+            Vector3 halfScale = new Vector3(0.75f, 0.75f, 0.75f);
             Transform comms = __instance.infectedOverlay.transform.FindChild("Comms");
             Transform electrical = __instance.infectedOverlay.transform.FindChild("Electrical");
             Transform mainHall = __instance.infectedOverlay.transform.FindChild("MainHall");
@@ -287,16 +287,15 @@ namespace TheOtherRoles.Patches
             kitchen.localScale = halfScale;
             medbay.localScale = halfScale;
 
-            comms.FindChild("bomb").localPosition = new Vector3(-0.3f, 1.25f, -1f);
-            comms.FindChild("Doors").localPosition = new Vector3(0.75f, 0.55f, -1f);
-            electrical.FindChild("lightsOut").localPosition = new Vector3(0f, -0.75f, -1f);
-            mainHall.FindChild("Doors").localPosition = new Vector3(-0.25f, -0.4f, -1f);
-            gapRoom.FindChild("meltdown").localPosition = new Vector3(-0.5f, 0f, -1f);
-            records.FindChild("Doors").localPosition = new Vector3(0f, 1.7f, -1f);
-            brig.FindChild("Doors").localPosition = new Vector3(0f, 1.3f, -1f);
-            kitchen.FindChild("Doors").localPosition = new Vector3(0f, 1.25f, -1f);
+            comms.FindChild("bomb").localPosition = new Vector3(-0.1f, 0.9f, -1f);
+            comms.FindChild("Doors").localPosition = new Vector3(0.5f, 0.45f, -1f);
+            electrical.FindChild("lightsOut").localPosition = new Vector3(0f, -0.6f, -1f);
+            mainHall.FindChild("Doors").localPosition = new Vector3(-0.18f, -0.35f, -1f);
+            gapRoom.FindChild("meltdown").localPosition = new Vector3(-0.34f, 0f, -1f);
+            records.FindChild("Doors").localPosition = new Vector3(0.01f, 1.2f, -1f);
+            brig.FindChild("Doors").localPosition = new Vector3(0f, 0.9f, -1f);
+            kitchen.FindChild("Doors").localPosition = new Vector3(0.1f, 0.9f, -1f);
             medbay.FindChild("Doors").localPosition = new Vector3(0.2f, 0f, -1f);
-
         }
 
         private static void evilTrackerFixedUpdate(MapBehaviour __instance)
