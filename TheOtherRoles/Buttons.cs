@@ -399,6 +399,7 @@ namespace TheOtherRoles
                 {
                     PlayerControl.LocalPlayer.NetTransform.Halt();
                     Action<MapBehaviour> tmpAction = (MapBehaviour m) => { m.ShowCountOverlay(); };
+                    Patches.AdminPatch.isEvilHackerAdmin = true;
                     DestroyableSingleton<HudManager>.Instance.ShowMap(tmpAction);
                 },
                 () =>

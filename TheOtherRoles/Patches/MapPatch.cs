@@ -367,6 +367,7 @@ namespace TheOtherRoles.Patches
                 {
                     targetHerePoint = GameObject.Instantiate<SpriteRenderer>(__instance.HerePoint, __instance.HerePoint.transform.parent);
                 }
+                targetHerePoint.gameObject.SetActive(EvilTracker.target.isAlive());
                 GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(EvilTracker.target.PlayerId);
                 PlayerMaterial.SetColors((playerById != null) ? playerById.DefaultOutfit.ColorId : 0, targetHerePoint);
                 Vector3 pos = new Vector3(EvilTracker.target.transform.position.x, EvilTracker.target.transform.position.y, EvilTracker.target.transform.position.z);
@@ -386,6 +387,7 @@ namespace TheOtherRoles.Patches
                     {
                         impostorHerePoint[p.PlayerId] = GameObject.Instantiate<SpriteRenderer>(__instance.HerePoint, __instance.HerePoint.transform.parent);
                     }
+                    impostorHerePoint[p.PlayerId].gameObject.SetActive(p.isAlive());
                     GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(p.PlayerId);
                     PlayerMaterial.SetColors(0, impostorHerePoint[p.PlayerId]);
                     Vector3 pos = new Vector3(p.transform.position.x, p.transform.position.y, p.transform.position.z);
@@ -443,6 +445,7 @@ namespace TheOtherRoles.Patches
             PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
             __instance.GenericShow();
             __instance.gameObject.SetActive(true);
+            AdminPatch.isEvilHackerAdmin = true;
             __instance.countOverlay.gameObject.SetActive(true);
             __instance.infectedOverlay.gameObject.SetActive(true);
             __instance.taskOverlay.Hide();

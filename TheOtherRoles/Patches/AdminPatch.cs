@@ -16,6 +16,7 @@ namespace TheOtherRoles.Patches
         static TMPro.TextMeshPro OutOfTime;
         static TMPro.TextMeshPro TimeRemaining;
         static bool clearedIcons = false;
+        public static bool isEvilHackerAdmin = false;
         static Sprite adminCockpitSprite;
         static Sprite adminRecordsSprite;
         static GameObject map;
@@ -76,13 +77,16 @@ namespace TheOtherRoles.Patches
         static void UseAdminTime()
         {
             // Don't waste network traffic if we're out of time.
-            if (MapOptions.restrictDevices > 0 && MapOptions.restrictAdmin && MapOptions.restrictAdminTime > 0f && PlayerControl.LocalPlayer.isAlive() &&
-                    !(PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || PlayerControl.LocalPlayer.isRole(RoleType.MimicA)))
+            if (!isEvilHackerAdmin)
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseAdminTime, Hazel.SendOption.Reliable, -1);
-                writer.Write(adminTimer);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.useAdminTime(adminTimer);
+                if (MapOptions.restrictDevices > 0 && MapOptions.restrictAdmin && MapOptions.restrictAdminTime > 0f && PlayerControl.LocalPlayer.isAlive() &&
+                        !PlayerControl.LocalPlayer.isRole(RoleType.MimicA))
+                {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseAdminTime, Hazel.SendOption.Reliable, -1);
+                    writer.Write(adminTimer);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.useAdminTime(adminTimer);
+                }
             }
             adminTimer = 0f;
         }
@@ -115,16 +119,16 @@ namespace TheOtherRoles.Patches
 
                 // 現在地からどのアドミンを使っているか特定する
                 room = Helpers.getPlainShipRoom(PlayerControl.LocalPlayer);
-                if(room == null) return;
+                if (room == null) return;
 
                 // アドミンの画像を差し替える
                 if (!PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) && PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipRestrictedAdmin.getBool() && (room.name == "Cockpit" || room.name == "Records"))
                 {
-                    if ( room.name == "Cockpit" && !adminCockpitSprite) adminCockpitSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.admin_cockpit.png", 100f);
-                    if ( room.name == "Records" && !adminRecordsSprite) adminRecordsSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.admin_records.png", 100f);
+                    if (room.name == "Cockpit" && !adminCockpitSprite) adminCockpitSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.admin_cockpit.png", 100f);
+                    if (room.name == "Records" && !adminRecordsSprite) adminRecordsSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.admin_records.png", 100f);
                     if (!map)
                     {
-                        map = DestroyableSingleton<MapBehaviour>.Instance.gameObject.GetComponentsInChildren<SpriteRenderer>().Where( x=> x.name == "Background").FirstOrDefault().gameObject;
+                        map = DestroyableSingleton<MapBehaviour>.Instance.gameObject.GetComponentsInChildren<SpriteRenderer>().Where(x => x.name == "Background").FirstOrDefault().gameObject;
                     }
                     if (!newmap) newmap = UnityEngine.Object.Instantiate(map, map.transform.parent);
 
@@ -154,6 +158,7 @@ namespace TheOtherRoles.Patches
             static void Prefix(MapCountOverlay __instance)
             {
                 UseAdminTime();
+                isEvilHackerAdmin = false;
                 if (newmap) newmap.SetActive(false);
             }
         }
@@ -196,13 +201,13 @@ namespace TheOtherRoles.Patches
                         TimeRemaining.color = Palette.White;
                     }
 
-                    if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || PlayerControl.LocalPlayer.isRole(RoleType.MimicA))
+                    if (PlayerControl.LocalPlayer.isRole(RoleType.MimicA))
                     {
                         TimeRemaining.gameObject.SetActive(false);
                     }
                     else
                     {
-                        if (MapOptions.restrictAdminTime <= 0f)
+                        if (MapOptions.restrictAdminTime <= 0f && !PlayerControl.LocalPlayer.isImpostor())
                         {
                             __instance.BackgroundColor.SetColor(Palette.DisabledGrey);
                             OutOfTime.gameObject.SetActive(true);
