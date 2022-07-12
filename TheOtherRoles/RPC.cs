@@ -139,7 +139,7 @@ namespace TheOtherRoles
             AdminPatch.ResetData();
             CameraPatch.ResetData();
             VitalsPatch.ResetData();
-            MapBehaviorPatch.resetIcons();
+            MapBehaviorPatch.reset();
             CustomOverlays.resetOverlays();
             SpecimenVital.clearAndReload();
             AdditionalVents.clearAndReload();

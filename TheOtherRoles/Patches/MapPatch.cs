@@ -14,6 +14,9 @@ namespace TheOtherRoles.Patches
         public static Dictionary<byte, SpriteRenderer> corpseIcons = null;
 
         public static Sprite corpseSprite;
+        public static Sprite doorClosedSprite;
+        public static Dictionary<String, SpriteRenderer> doorMarks;
+        public static UnhollowerBaseLib.Il2CppArrayBase<PlainDoor> plainDoors;
         private static Vector3 useButtonPos;
 
         public static SpriteRenderer targetHerePoint;
@@ -26,7 +29,7 @@ namespace TheOtherRoles.Patches
             return corpseSprite;
         }
 
-        public static void resetIcons()
+        public static void reset()
         {
             if (mapIcons != null)
             {
@@ -57,6 +60,19 @@ namespace TheOtherRoles.Patches
                 }
                 impostorHerePoint.Clear();
                 impostorHerePoint = null;
+            }
+            if (doorMarks != null)
+            {
+                foreach (var mark in doorMarks.Values)
+                {
+                    UnityEngine.Object.Destroy(mark.gameObject);
+                }
+                doorMarks.Clear();
+                doorMarks = null;
+            }
+            if (plainDoors != null)
+            {
+                plainDoors = null;
             }
         }
 
@@ -116,6 +132,11 @@ namespace TheOtherRoles.Patches
                 if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker) && EvilTracker.canSeeTargetPosition)
                 {
                     evilTrackerFixedUpdate(__instance);
+                }
+
+                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker))
+                {
+                    evilHackerFixedUpdate(__instance);
                 }
 
                 if (PlayerControl.LocalPlayer.isGM())
@@ -265,9 +286,40 @@ namespace TheOtherRoles.Patches
                 }
             }
         }
+        private static void showDoorStatus(MapBehaviour __instance)
+        {
+            if (doorClosedSprite == null)
+            {
+                doorClosedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.cross.png", 500f);
+            }
+            if (plainDoors == null) plainDoors = GameObject.FindObjectsOfType<PlainDoor>();
+            if (doorMarks == null) doorMarks = new();
+
+            foreach (var door in plainDoors)
+            {
+                Vector3 pos = door.gameObject.transform.position / ShipStatus.Instance.MapScale;
+                pos.z = -1f;
+                String key = $"{pos.x},{pos.y}";
+                SpriteRenderer mark;
+                mark = doorMarks.ContainsKey(key) ? doorMarks[key] : GameObject.Instantiate<SpriteRenderer>(__instance.HerePoint, __instance.HerePoint.transform.parent);
+                if (!door.Open)
+                {
+                    mark.gameObject.SetActive(true);
+                    mark.sprite = doorClosedSprite;
+                    mark.transform.localPosition = pos;
+                    mark.gameObject.SetActive(true);
+                    if (!doorMarks.ContainsKey(key)) doorMarks.Add(key, mark);
+                }
+                else
+                {
+                    mark.gameObject.SetActive(false);
+                }
+            }
+
+        }
         private static void changeSabotageLayout(MapBehaviour __instance)
         {
-            if(PlayerControl.GameOptions.MapId == 4)
+            if (PlayerControl.GameOptions.MapId == 4)
             {
                 // サボタージュアイコンのレイアウトを変更
                 Vector3 halfScale = new Vector3(0.75f, 0.75f, 0.75f);
@@ -299,6 +351,11 @@ namespace TheOtherRoles.Patches
                 kitchen.FindChild("Doors").localPosition = new Vector3(0.1f, 0.9f, -1f);
                 medbay.FindChild("Doors").localPosition = new Vector3(0.2f, 0f, -1f);
             }
+        }
+
+        private static void evilHackerFixedUpdate(MapBehaviour __instance)
+        {
+            showDoorStatus(__instance);
         }
 
         private static void evilTrackerFixedUpdate(MapBehaviour __instance)
@@ -394,6 +451,7 @@ namespace TheOtherRoles.Patches
             ConsoleJoystick.SetMode_Sabotage();
 
             changeSabotageLayout(__instance);
+            showDoorStatus(__instance);
             return false;
         }
 
