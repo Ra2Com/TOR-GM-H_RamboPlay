@@ -168,7 +168,7 @@ namespace TheOtherRoles
                 }
 
                 // ターゲットの位置を示すArrowを描画
-                if (target != null)
+                if (target != null && !target.isDead())
                 {
                     Arrow arrow = new(Palette.CrewmateBlue);
                     arrow.arrow.SetActive(true);
