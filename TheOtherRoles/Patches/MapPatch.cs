@@ -292,7 +292,7 @@ namespace TheOtherRoles.Patches
             {
                 doorClosedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.cross.png", 500f);
             }
-            if (plainDoors == null) plainDoors = GameObject.FindObjectsOfType<PlainDoor>();
+            // if (plainDoors == null) plainDoors = GameObject.FindObjectsOfType<PlainDoor>();
             if (doorMarks == null) doorMarks = new();
 
             foreach (var door in plainDoors)
@@ -306,6 +306,7 @@ namespace TheOtherRoles.Patches
                 {
                     mark.gameObject.SetActive(true);
                     mark.sprite = doorClosedSprite;
+                    PlayerMaterial.SetColors(0, mark);
                     mark.transform.localPosition = pos;
                     mark.gameObject.SetActive(true);
                     if (!doorMarks.ContainsKey(key)) doorMarks.Add(key, mark);
@@ -442,6 +443,7 @@ namespace TheOtherRoles.Patches
             {
                 __instance.specialInputHandler.disableVirtualCursor = true;
             }
+            plainDoors = GameObject.FindObjectsOfType<PlainDoor>();
             PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
             __instance.GenericShow();
             __instance.gameObject.SetActive(true);
@@ -454,7 +456,6 @@ namespace TheOtherRoles.Patches
             ConsoleJoystick.SetMode_Sabotage();
 
             changeSabotageLayout(__instance);
-            showDoorStatus(__instance);
             return false;
         }
 
