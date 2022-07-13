@@ -302,7 +302,15 @@ namespace TheOtherRoles.Patches
                 pos.z = -1f;
                 String key = $"{pos.x},{pos.y}";
                 SpriteRenderer mark;
-                mark = doorMarks.ContainsKey(key) ? doorMarks[key] : GameObject.Instantiate<SpriteRenderer>(__instance.HerePoint, __instance.HerePoint.transform.parent);
+                if(doorMarks.ContainsKey(key))
+                {
+                    mark = doorMarks[key];
+                }
+                else
+                {
+                    mark = GameObject.Instantiate<SpriteRenderer>(__instance.HerePoint, __instance.HerePoint.transform.parent);
+                    doorMarks.Add(key, mark);
+                }
                 if (!door.Open)
                 {
                     mark.gameObject.SetActive(true);
@@ -310,7 +318,6 @@ namespace TheOtherRoles.Patches
                     PlayerMaterial.SetColors(0, mark);
                     mark.transform.localPosition = pos;
                     mark.gameObject.SetActive(true);
-                    if (!doorMarks.ContainsKey(key)) doorMarks.Add(key, mark);
                 }
                 else
                 {
