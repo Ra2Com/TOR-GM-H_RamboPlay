@@ -41,7 +41,7 @@ namespace TheOtherRoles.Patches
         private static bool filterAdmin(SystemTypes type)
         {
             // イビルハッカーのアドミンは今まで通り
-            if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker)) return true;
+            if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) return true;
 
             if (CustomOptionHolder.airshipRestrictedAdmin.getBool())
             {
@@ -122,7 +122,7 @@ namespace TheOtherRoles.Patches
                 if (room == null) return;
 
                 // アドミンの画像を差し替える
-                if (!PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) && PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipRestrictedAdmin.getBool() && (room.name == "Cockpit" || room.name == "Records"))
+                if (!PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) && !EvilHacker.isInherited() && PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipRestrictedAdmin.getBool() && (room.name == "Cockpit" || room.name == "Records"))
                 {
                     if (room.name == "Cockpit" && !adminCockpitSprite) adminCockpitSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.admin_cockpit.png", 100f);
                     if (room.name == "Records" && !adminRecordsSprite) adminRecordsSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.admin_records.png", 100f);
@@ -398,7 +398,7 @@ namespace TheOtherRoles.Patches
                                 }
                                 renderer.material.SetColor("_VisorColor", Palette.VisorColor);
                             }
-                            else if ((PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) && EvilHacker.canHasBetterAdmin) || PlayerControl.LocalPlayer.isRole(RoleType.MimicA))
+                            else if (((PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker)|| EvilHacker.isInherited()) && EvilHacker.canHasBetterAdmin) || PlayerControl.LocalPlayer.isRole(RoleType.MimicA))
                             {
                                 renderer.material = newMat;
                                 var color = colors[i];

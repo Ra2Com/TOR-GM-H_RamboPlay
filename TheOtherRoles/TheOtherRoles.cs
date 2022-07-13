@@ -309,6 +309,7 @@ namespace TheOtherRoles
             public static bool canCreateMadmate = false;
             public static bool canCreateMadmateFromFox { get { return CustomOptionHolder.evilHackerCanCreateMadmateFromFox.getBool(); } }
             public static bool canCreateMadmateFromJackal { get { return CustomOptionHolder.evilHackerCanCreateMadmateFromJackal.getBool(); } }
+            public static bool canInheritAbility {get {return CustomOptionHolder.evilHackerCanInheritAbility.getBool();}}
             public static PlayerControl fakeMadmate;
             public static PlayerControl currentTarget;
 
@@ -334,6 +335,11 @@ namespace TheOtherRoles
                 if (madmateButtonSprite) return madmateButtonSprite;
                 madmateButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SidekickButton.png", 115f);
                 return madmateButtonSprite;
+            }
+
+            public static bool isInherited()
+            {
+                return canInheritAbility && EvilHacker.evilHacker.isDead() && PlayerControl.LocalPlayer.isImpostor();
             }
 
             public static void clearAndReload()

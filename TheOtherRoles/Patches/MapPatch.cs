@@ -3,6 +3,7 @@ using HarmonyLib;
 using UnityEngine;
 using System;
 using Hazel;
+using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Patches
 
@@ -134,7 +135,7 @@ namespace TheOtherRoles.Patches
                     evilTrackerFixedUpdate(__instance);
                 }
 
-                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker))
+                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited())
                 {
                     evilHackerFixedUpdate(__instance);
                 }
@@ -261,7 +262,7 @@ namespace TheOtherRoles.Patches
         {
             static bool Prefix(ref bool __result, MapBehaviour __instance)
             {
-                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) && CustomOptionHolder.evilHackerCanMoveEvenIfUsesAdmin.getBool())
+                if ((PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) && CustomOptionHolder.evilHackerCanMoveEvenIfUsesAdmin.getBool())
                 {
                     __result = false;
                     return false;
@@ -277,7 +278,7 @@ namespace TheOtherRoles.Patches
                 Vector3 pos = __instance.HerePoint.transform.parent.transform.position;
                 __instance.HerePoint.transform.parent.transform.position = new Vector3(pos.x, pos.y, -60f);
                 changeSabotageLayout(__instance);
-                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker)) return evilHackerShowMap(__instance);
+                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) return evilHackerShowMap(__instance);
                 if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker)) return evilTrackerShowMap(__instance);
                 return true;
             }
