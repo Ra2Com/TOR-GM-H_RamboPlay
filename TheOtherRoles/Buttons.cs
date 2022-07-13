@@ -407,7 +407,7 @@ namespace TheOtherRoles
                     return EvilHacker.evilHacker != null &&
                     EvilHacker.evilHacker == PlayerControl.LocalPlayer &&
                     PlayerControl.LocalPlayer.isAlive() &&
-                    !CustomOptionHolder.evilHackerHasBetterMap.getBool();
+                    !TheOtherRolesPlugin.BetterSabotageMap.Value;
 
                 },
                 () => { return PlayerControl.LocalPlayer.CanMove; },

@@ -27,6 +27,7 @@ namespace TheOtherRoles.Patches
             new SelectionBehaviour("hideTaskArrows", () => MapOptions.hideTaskArrows = TheOtherRolesPlugin.HideTaskArrows.Value = !TheOtherRolesPlugin.HideTaskArrows.Value, TheOtherRolesPlugin.HideTaskArrows.Value),
             new SelectionBehaviour("offlineHats", () => MapOptions.offlineHats = TheOtherRolesPlugin.OfflineHats.Value = !TheOtherRolesPlugin.OfflineHats.Value, TheOtherRolesPlugin.OfflineHats.Value),
             new SelectionBehaviour("hideFakeTasks", () => MapOptions.hideFakeTasks = TheOtherRolesPlugin.HideFakeTasks.Value = !TheOtherRolesPlugin.HideFakeTasks.Value, TheOtherRolesPlugin.HideFakeTasks.Value),
+            new SelectionBehaviour("betterSabotageMap", () => MapOptions.betterSabotageMap = TheOtherRolesPlugin.BetterSabotageMap.Value = !TheOtherRolesPlugin.BetterSabotageMap.Value, TheOtherRolesPlugin.BetterSabotageMap.Value),
         };
 
         private static GameObject popUp;

@@ -274,6 +274,7 @@ namespace TheOtherRoles.Patches
         {
             static bool Prefix(MapBehaviour __instance)
             {
+                changeSabotageLayout(__instance);
                 if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker)) return evilHackerShowMap(__instance);
                 if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker)) return evilTrackerShowMap(__instance);
                 return true;
@@ -324,6 +325,8 @@ namespace TheOtherRoles.Patches
             {
                 // サボタージュアイコンのレイアウトを変更
                 Vector3 halfScale = new Vector3(0.75f, 0.75f, 0.75f);
+                Vector3 originalScale = new Vector3(1f, 1f, 1f);
+                Vector3 scale = TheOtherRolesPlugin.BetterSabotageMap.Value ? halfScale : originalScale;
                 Transform comms = __instance.infectedOverlay.transform.FindChild("Comms");
                 Transform electrical = __instance.infectedOverlay.transform.FindChild("Electrical");
                 Transform mainHall = __instance.infectedOverlay.transform.FindChild("MainHall");
@@ -333,24 +336,40 @@ namespace TheOtherRoles.Patches
                 Transform kitchen = __instance.infectedOverlay.transform.FindChild("Kitchen");
                 Transform medbay = __instance.infectedOverlay.transform.FindChild("Medbay");
 
-                comms.localScale = halfScale;
-                electrical.localScale = halfScale;
-                mainHall.localScale = halfScale;
-                gapRoom.localScale = halfScale;
-                records.localScale = halfScale;
-                brig.localScale = halfScale;
-                kitchen.localScale = halfScale;
-                medbay.localScale = halfScale;
 
-                comms.FindChild("bomb").localPosition = new Vector3(-0.1f, 0.9f, -1f);
-                comms.FindChild("Doors").localPosition = new Vector3(0.5f, 0.45f, -1f);
-                electrical.FindChild("lightsOut").localPosition = new Vector3(0f, -0.6f, -1f);
-                mainHall.FindChild("Doors").localPosition = new Vector3(-0.18f, -0.35f, -1f);
-                gapRoom.FindChild("meltdown").localPosition = new Vector3(-0.34f, 0f, -1f);
-                records.FindChild("Doors").localPosition = new Vector3(0.01f, 1.2f, -1f);
-                brig.FindChild("Doors").localPosition = new Vector3(0f, 0.9f, -1f);
-                kitchen.FindChild("Doors").localPosition = new Vector3(0.1f, 0.9f, -1f);
-                medbay.FindChild("Doors").localPosition = new Vector3(0.2f, 0f, -1f);
+                comms.localScale = scale;
+                electrical.localScale = scale;
+                mainHall.localScale = scale;
+                gapRoom.localScale = scale;
+                records.localScale = scale;
+                brig.localScale = scale;
+                kitchen.localScale = scale;
+                medbay.localScale = scale;
+
+                if (TheOtherRolesPlugin.BetterSabotageMap.Value)
+                {
+                    comms.FindChild("bomb").localPosition = new Vector3(-0.1f, 0.9f, -1f);
+                    comms.FindChild("Doors").localPosition = new Vector3(0.5f, 0.45f, -1f);
+                    electrical.FindChild("lightsOut").localPosition = new Vector3(0f, -0.6f, -1f);
+                    mainHall.FindChild("Doors").localPosition = new Vector3(-0.18f, -0.35f, -1f);
+                    gapRoom.FindChild("meltdown").localPosition = new Vector3(-0.34f, 0f, -1f);
+                    records.FindChild("Doors").localPosition = new Vector3(0.01f, 1.2f, -1f);
+                    brig.FindChild("Doors").localPosition = new Vector3(0f, 0.9f, -1f);
+                    kitchen.FindChild("Doors").localPosition = new Vector3(0.1f, 0.9f, -1f);
+                    medbay.FindChild("Doors").localPosition = new Vector3(0.2f, 0f, -1f);
+                }
+                else
+                {
+                    comms.FindChild("bomb").localPosition = new Vector3(-0.3f, 0f, -0.5f);
+                    comms.FindChild("Doors").localPosition = new Vector3(0.3f, 0f, -0.5f);
+                    electrical.FindChild("lightsOut").localPosition = new Vector3(0f, 0f, -0.5f);
+                    mainHall.FindChild("Doors").localPosition = new Vector3(0f, 0f, -0.5f);
+                    gapRoom.FindChild("meltdown").localPosition = new Vector3(0f, 0f, -0.5f);
+                    records.FindChild("Doors").localPosition = new Vector3(0f, 0f, -0.5f);
+                    brig.FindChild("Doors").localPosition = new Vector3(0f, 0f, -0.5f);
+                    kitchen.FindChild("Doors").localPosition = new Vector3(0f, 0f, -0.5f);
+                    medbay.FindChild("Doors").localPosition = new Vector3(0f, 0f, -0.5f);
+                }
             }
         }
 
@@ -401,7 +420,7 @@ namespace TheOtherRoles.Patches
         }
         private static bool evilTrackerShowMap(MapBehaviour __instance)
         {
-            if (!EvilTracker.hasBetterMap || MeetingHud.Instance) return true;
+            if (MeetingHud.Instance) return true;
             if (__instance.IsOpen)
             {
                 __instance.Close();
@@ -419,17 +438,23 @@ namespace TheOtherRoles.Patches
             __instance.GenericShow();
             __instance.gameObject.SetActive(true);
             __instance.infectedOverlay.gameObject.SetActive(true);
-            __instance.taskOverlay.Hide();
+             if (TheOtherRolesPlugin.HideFakeTasks.Value)
+            {
+                __instance.taskOverlay.Hide();
+            }
+            else
+            {
+                __instance.taskOverlay.Show();
+            }
             __instance.ColorControl.SetColor(Palette.ImpostorRed);
             DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
             ConsoleJoystick.SetMode_Sabotage();
 
-            changeSabotageLayout(__instance);
             return false;
         }
         private static bool evilHackerShowMap(MapBehaviour __instance)
         {
-            if (!CustomOptionHolder.evilHackerHasBetterMap.getBool() || MeetingHud.Instance) return true;
+            if (MeetingHud.Instance) return true;
             if (__instance.IsOpen)
             {
                 __instance.Close();
@@ -450,12 +475,18 @@ namespace TheOtherRoles.Patches
             AdminPatch.isEvilHackerAdmin = true;
             __instance.countOverlay.gameObject.SetActive(true);
             __instance.infectedOverlay.gameObject.SetActive(true);
-            __instance.taskOverlay.Hide();
+            if (TheOtherRolesPlugin.HideFakeTasks.Value)
+            {
+                __instance.taskOverlay.Hide();
+            }
+            else
+            {
+                __instance.taskOverlay.Show();
+            }
             __instance.ColorControl.SetColor(Palette.ImpostorRed);
             DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
             ConsoleJoystick.SetMode_Sabotage();
 
-            changeSabotageLayout(__instance);
             return false;
         }
 

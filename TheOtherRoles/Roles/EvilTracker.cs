@@ -15,7 +15,6 @@ namespace TheOtherRoles
         public static bool canSeeDeathFlash { get { return CustomOptionHolder.evilTrackerCanSeeDeathFlash.getBool(); } }
         public static bool canSeeTargetTask { get { return CustomOptionHolder.evilTrackerCanSeeTargetTask.getBool(); } }
         public static bool canSeeTargetPosition { get {return CustomOptionHolder.evilTrackerCanSeeTargetPosition.getBool(); }}
-        public static bool hasBetterMap { get {return CustomOptionHolder.evilTrackerHasBetterMap.getBool(); }}
         public static PlayerControl target;
         public static PlayerControl currentTarget;
         public static CustomButton trackerButton;

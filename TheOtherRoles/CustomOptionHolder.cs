@@ -45,7 +45,6 @@ namespace TheOtherRoles
         public static CustomOption evilHackerCanCreateMadmateFromFox;
         public static CustomOption evilHackerCanCreateMadmateFromJackal;
         public static CustomOption evilHackerCanMoveEvenIfUsesAdmin;
-        public static CustomOption evilHackerHasBetterMap;
         public static CustomOption createdMadmateCanDieToSheriff;
         public static CustomOption createdMadmateCanEnterVents;
         public static CustomOption createdMadmateHasImpostorVision;
@@ -430,7 +429,6 @@ namespace TheOtherRoles
         public static CustomOption evilTrackerCanSeeDeathFlash;
         public static CustomOption evilTrackerCanSeeTargetTask;
         public static CustomOption evilTrackerCanSeeTargetPosition;
-        public static CustomOption evilTrackerHasBetterMap;
 
         public static CustomRoleOption puppeteerSpawnRate;
         public static CustomOption puppeteerNumKills;
@@ -529,7 +527,6 @@ namespace TheOtherRoles
             evilHackerCanHasBetterAdmin = CustomOption.Create(1912, CustomOptionType.Impostor, "evilHackerCanHasBetterAdmin", false, evilHackerSpawnRate);
             evilHackerCanCreateMadmate = CustomOption.Create(1901, CustomOptionType.Impostor, "evilHackerCanCreateMadmate", false, evilHackerSpawnRate);
             evilHackerCanMoveEvenIfUsesAdmin = CustomOption.Create(1913, CustomOptionType.Impostor, "evilHackerCanMoveEvenIfUsesAdmin", true, evilHackerSpawnRate);
-            evilHackerHasBetterMap = CustomOption.Create(1914, CustomOptionType.Impostor, "evilHackerHasBetterMap", true, evilHackerSpawnRate);
             createdMadmateCanDieToSheriff = CustomOption.Create(1902, CustomOptionType.Impostor, "createdMadmateCanDieToSheriff", false, evilHackerCanCreateMadmate);
             createdMadmateCanEnterVents = CustomOption.Create(1903, CustomOptionType.Impostor, "createdMadmateCanEnterVents", false, evilHackerCanCreateMadmate);
             evilHackerCanCreateMadmateFromFox = CustomOption.Create(1904, CustomOptionType.Impostor, "evilHackerCanCreateMadmateFromFox", false, evilHackerCanCreateMadmate);
@@ -623,7 +620,6 @@ namespace TheOtherRoles
             evilTrackerCanSeeDeathFlash = CustomOption.Create(1054, CustomOptionType.Impostor, "evilTrackerCanSeeDeathFlash", true, evilTrackerSpawnRate);
             evilTrackerCanSeeTargetTask = CustomOption.Create(1055, CustomOptionType.Impostor, "evilTrackerCanSeeTargetTask", true, evilTrackerSpawnRate);
             evilTrackerCanSeeTargetPosition = CustomOption.Create(1056, CustomOptionType.Impostor, "evilTrackerCanSeeTargetPosition", true, evilTrackerSpawnRate);
-            evilTrackerHasBetterMap = CustomOption.Create(1057, CustomOptionType.Impostor, "evilTrackerHasBetterMap", true, evilTrackerSpawnRate);
 
             mimicSpawnRate = new CustomRoleOption(1080, CustomOptionType.Impostor, "mimic", MimicK.color, 1);
             mimicCountAsOne = CustomOption.Create(1081, CustomOptionType.Impostor, "mimicCountAsOne", true, mimicSpawnRate);
