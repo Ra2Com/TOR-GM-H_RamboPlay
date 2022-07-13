@@ -274,6 +274,8 @@ namespace TheOtherRoles.Patches
         {
             static bool Prefix(MapBehaviour __instance)
             {
+                Vector3 pos = __instance.HerePoint.transform.parent.transform.position;
+                __instance.HerePoint.transform.parent.transform.position = new Vector3(pos.x, pos.y, -60f);
                 changeSabotageLayout(__instance);
                 if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker)) return evilHackerShowMap(__instance);
                 if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker)) return evilTrackerShowMap(__instance);
@@ -299,10 +301,10 @@ namespace TheOtherRoles.Patches
             foreach (var door in plainDoors)
             {
                 Vector3 pos = door.gameObject.transform.position / ShipStatus.Instance.MapScale;
-                pos.z = -1f;
+                pos.z = -10f;
                 String key = $"{pos.x},{pos.y}";
                 SpriteRenderer mark;
-                if(doorMarks.ContainsKey(key))
+                if (doorMarks.ContainsKey(key))
                 {
                     mark = doorMarks[key];
                 }
@@ -400,7 +402,7 @@ namespace TheOtherRoles.Patches
                 Vector3 pos = new Vector3(EvilTracker.target.transform.position.x, EvilTracker.target.transform.position.y, EvilTracker.target.transform.position.z);
                 pos /= ShipStatus.Instance.MapScale;
                 pos.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
-                pos.z = -1;
+                pos.z = -10;
                 targetHerePoint.transform.localPosition = pos;
             }
 
@@ -420,7 +422,7 @@ namespace TheOtherRoles.Patches
                     Vector3 pos = new Vector3(p.transform.position.x, p.transform.position.y, p.transform.position.z);
                     pos /= ShipStatus.Instance.MapScale;
                     pos.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
-                    pos.z = -1;
+                    pos.z = -10;
                     impostorHerePoint[p.PlayerId].transform.localPosition = pos;
                 }
             }
@@ -445,7 +447,7 @@ namespace TheOtherRoles.Patches
             __instance.GenericShow();
             __instance.gameObject.SetActive(true);
             __instance.infectedOverlay.gameObject.SetActive(true);
-             if (TheOtherRolesPlugin.HideFakeTasks.Value)
+            if (TheOtherRolesPlugin.HideFakeTasks.Value)
             {
                 __instance.taskOverlay.Hide();
             }
