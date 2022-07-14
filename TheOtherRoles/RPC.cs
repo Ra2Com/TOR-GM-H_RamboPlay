@@ -121,6 +121,7 @@ namespace TheOtherRoles
         PlaceAssassinTrace,
         SetOddIsJekyll,
         ShareRealTasks,
+        WorkaroundSetRoles,
     }
 
     public static class RPCProcedure
@@ -183,8 +184,22 @@ namespace TheOtherRoles
                 }
             }
         }
+        public static void workaroundSetRoles(byte numberOfRoles, MessageReader reader)
+        {
+                for (int i = 0; i < numberOfRoles; i++)
+                {
+                    byte playerId = (byte) reader.ReadPackedUInt32();
+                    byte roleId = (byte) reader.ReadPackedUInt32();
+                    try {
+                        setRole(roleId, playerId);
+                    } catch (Exception e) {
+                        TheOtherRolesPlugin.Logger.LogError("Error while deserializing roles: " + e.Message);
+                    }
+            }
 
-        public static void setRole(byte roleId, byte playerId, byte flag)
+        }
+
+        public static void setRole(byte roleId, byte playerId)
         {
             Logger.info($"{GameData.Instance.GetPlayerById(playerId).PlayerName}({playerId}): {Enum.GetName(typeof(RoleType), roleId)}", "setRole");
             PlayerControl.AllPlayerControls.ToArray().DoIf(
@@ -1406,8 +1421,7 @@ namespace TheOtherRoles
                         case (byte)CustomRPC.SetRole:
                             byte roleId = reader.ReadByte();
                             byte playerId = reader.ReadByte();
-                            byte flag = reader.ReadByte();
-                            RPCProcedure.setRole(roleId, playerId, flag);
+                            RPCProcedure.setRole(roleId, playerId);
                             break;
                         case (byte)CustomRPC.SetLovers:
                             RPCProcedure.setLovers(reader.ReadByte(), reader.ReadByte());
@@ -1760,6 +1774,9 @@ namespace TheOtherRoles
                             taskTmp = reader.ReadBytes(4);
                             float taskY = System.BitConverter.ToSingle(taskTmp, 0);
                             RPCProcedure.shareRealTasks(tmpid, new Vector2(taskX, taskY));
+                            break;
+                        case (byte)CustomRPC.WorkaroundSetRoles:
+                            RPCProcedure.workaroundSetRoles(reader.ReadByte(), reader);
                             break;
                     }
                 }

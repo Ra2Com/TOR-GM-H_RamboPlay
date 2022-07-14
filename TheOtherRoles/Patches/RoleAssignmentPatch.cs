@@ -26,6 +26,7 @@ namespace TheOtherRoles.Patches
         private static List<byte> blockLovers = new();
         public static int blockedAssignments = 0;
         public static int maxBlocks = 10;
+        private static List<Tuple<byte, byte>> playerRoleMap = new List<Tuple<byte, byte>>();
 
         public static void Postfix()
         {
@@ -99,6 +100,7 @@ namespace TheOtherRoles.Patches
             assignChanceRoles(data); // Assign roles that may or may not be in the game last
             assignRoleTargets(data);
             assignRoleModifiers(data);
+            setRolesAgain();
         }
 
         private static RoleAssignmentData getRoleAssignmentData()
@@ -430,8 +432,8 @@ namespace TheOtherRoles.Patches
                 if (data.crewmates.Count > 0 && data.maxNeutralRoles > 0 && ensuredNeutralRoles.Count > 0) rolesToAssign.Add(TeamType.Neutral, ensuredNeutralRoles);
                 if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && ensuredImpostorRoles.Count > 0) rolesToAssign.Add(TeamType.Impostor, ensuredImpostorRoles);
 
-                // Randomly select a pool of roles to assign a role from next (Crewmate role, Neutral role or Impostor role) 
-                // then select one of the roles from the selected pool to a player 
+                // Randomly select a pool of roles to assign a role from next (Crewmate role, Neutral role or Impostor role)
+                // then select one of the roles from the selected pool to a player
                 // and remove the role (and any potentially blocked role pairings) from the pool(s)
                 var roleType = rolesToAssign.Keys.ElementAt(rnd.Next(0, rolesToAssign.Keys.Count()));
                 var players = roleType is TeamType.Crewmate or TeamType.Neutral ? data.crewmates : data.impostors;
@@ -497,8 +499,8 @@ namespace TheOtherRoles.Patches
                 if (data.crewmates.Count > 0 && data.maxNeutralRoles > 0 && neutralTickets.Count > 0) rolesToAssign.Add(TeamType.Neutral, neutralTickets);
                 if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && impostorTickets.Count > 0) rolesToAssign.Add(TeamType.Impostor, impostorTickets);
 
-                // Randomly select a pool of role tickets to assign a role from next (Crewmate role, Neutral role or Impostor role) 
-                // then select one of the roles from the selected pool to a player 
+                // Randomly select a pool of role tickets to assign a role from next (Crewmate role, Neutral role or Impostor role)
+                // then select one of the roles from the selected pool to a player
                 // and remove all tickets of this role (and any potentially blocked role pairings) from the pool(s)
                 var roleType = rolesToAssign.Keys.ElementAt(rnd.Next(0, rolesToAssign.Keys.Count()));
                 var players = roleType is TeamType.Crewmate or TeamType.Neutral ? data.crewmates : data.impostors;
@@ -535,16 +537,15 @@ namespace TheOtherRoles.Patches
             }
         }
 
-        private static byte setRoleToHost(byte roleId, PlayerControl host, byte flag = 0)
+        private static byte setRoleToHost(byte roleId, PlayerControl host)
         {
             byte playerId = host.PlayerId;
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
             writer.Write(roleId);
             writer.Write(playerId);
-            writer.Write(flag);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.setRole(roleId, playerId, flag);
+            RPCProcedure.setRole(roleId, playerId);
             return playerId;
         }
 
@@ -652,7 +653,7 @@ namespace TheOtherRoles.Patches
             }
         }
 
-        private static byte setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList, byte flag = 0, bool removePlayer = true)
+        private static byte setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList, bool removePlayer = true)
         {
             var index = rnd.Next(0, playerList.Count);
             byte playerId = playerList[index].PlayerId;
@@ -664,13 +665,13 @@ namespace TheOtherRoles.Patches
             }
 
             if (removePlayer) playerList.RemoveAt(index);
+            playerRoleMap.Add(new Tuple<byte, byte>(playerId, roleId));
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
             writer.Write(roleId);
             writer.Write(playerId);
-            writer.Write(flag);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.setRole(roleId, playerId, flag);
+            RPCProcedure.setRole(roleId, playerId);
             return playerId;
         }
 
@@ -690,6 +691,25 @@ namespace TheOtherRoles.Patches
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.addModifier(modId, playerId);
             return playerId;
+        }
+
+        private static void setRolesAgain()
+        {
+
+            while (playerRoleMap.Any())
+            {
+                byte amount = (byte)Math.Min(playerRoleMap.Count, 20);
+                var writer = AmongUsClient.Instance!.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WorkaroundSetRoles, SendOption.Reliable, -1);
+                writer.Write(amount);
+                for (int i = 0; i < amount; i++)
+                {
+                    var option = playerRoleMap[0];
+                    playerRoleMap.RemoveAt(0);
+                    writer.WritePacked((uint)option.Item1);
+                    writer.WritePacked((uint)option.Item2);
+                }
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+            }
         }
 
         private class RoleAssignmentData
