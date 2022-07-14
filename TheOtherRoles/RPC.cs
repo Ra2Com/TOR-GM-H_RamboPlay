@@ -149,6 +149,7 @@ namespace TheOtherRoles
             AssassinTrace.clearTraces();
             SpawnInMinigamePatch.reset();
             ElectricPatch.reset();
+            MapBehaviorPatch.resetRealTasks();
 
             KillAnimationCoPerformKillPatch.hideNextAnimation = false;
         }
