@@ -339,7 +339,7 @@ namespace TheOtherRoles
 
             public static bool isInherited()
             {
-                return canInheritAbility && EvilHacker.evilHacker.isDead() && PlayerControl.LocalPlayer.isImpostor();
+                return canInheritAbility &&  EvilHacker.evilHacker != null && EvilHacker.evilHacker.isDead() && PlayerControl.LocalPlayer.isImpostor();
             }
 
             public static void clearAndReload()
