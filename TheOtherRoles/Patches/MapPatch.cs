@@ -116,9 +116,6 @@ namespace TheOtherRoles.Patches
             static bool Prefix(MapBehaviour __instance)
             {
                 if (!MeetingHud.Instance) return true;  // Only run in meetings, and then set the Position of the HerePoint to the Position before the Meeting!
-                // if (!ShipStatus.Instance) {
-                //     return false;
-                // }
                 Vector3 vector = AntiTeleport.position != null ? AntiTeleport.position : PlayerControl.LocalPlayer.transform.position;
                 vector /= ShipStatus.Instance.MapScale;
                 vector.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
@@ -193,13 +190,20 @@ namespace TheOtherRoles.Patches
             {
                 if (!MeetingHud.Instance || __instance.IsOpen) return true;  // Only run in meetings and when the map is closed
 
+                if (PlayerControl.LocalPlayer.isImpostor())
+                {
+                    Vector3 pos = __instance.HerePoint.transform.parent.transform.position;
+                    __instance.HerePoint.transform.parent.transform.position = new Vector3(pos.x, pos.y, -60f);
+                    changeSabotageLayout(__instance);
+                    if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) return evilHackerShowMap(__instance);
+                    if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker)) return evilTrackerShowMap(__instance);
+                }
                 PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
                 __instance.GenericShow();
                 __instance.taskOverlay.Show();
                 __instance.ColorControl.SetColor(new Color(0.05f, 0.2f, 1f, 1f));
                 DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
                 return false;
-
             }
         }
 
@@ -275,6 +279,9 @@ namespace TheOtherRoles.Patches
         {
             static bool Prefix(MapBehaviour __instance)
             {
+                // サボタージュマップを改変したくない人向け設定
+                if (TheOtherRolesPlugin.ForceNormalSabotageMap.Value) return true;
+
                 Vector3 pos = __instance.HerePoint.transform.parent.transform.position;
                 __instance.HerePoint.transform.parent.transform.position = new Vector3(pos.x, pos.y, -60f);
                 changeSabotageLayout(__instance);
@@ -292,6 +299,15 @@ namespace TheOtherRoles.Patches
         }
         private static void showDoorStatus(MapBehaviour __instance)
         {
+            if (MeetingHud.Instance == null && TheOtherRolesPlugin.ForceNormalSabotageMap.Value)
+            {
+                foreach (var mark in doorMarks.Values)
+                {
+                    mark.gameObject.SetActive(false);
+                }
+                return;
+            }
+
             if (doorClosedSprite == null)
             {
                 doorClosedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.cross.png", 500f);
@@ -430,16 +446,16 @@ namespace TheOtherRoles.Patches
         }
         private static bool evilTrackerShowMap(MapBehaviour __instance)
         {
-            if (MeetingHud.Instance) return true;
+            // if (MeetingHud.Instance) return true;
             if (__instance.IsOpen)
             {
                 __instance.Close();
                 return false;
             }
-            if (!PlayerControl.LocalPlayer.CanMove)
-            {
-                return false;
-            }
+            // if (!PlayerControl.LocalPlayer.CanMove)
+            // {
+            //     return false;
+            // }
             if (__instance.specialInputHandler != null)
             {
                 __instance.specialInputHandler.disableVirtualCursor = true;
@@ -447,8 +463,8 @@ namespace TheOtherRoles.Patches
             PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
             __instance.GenericShow();
             __instance.gameObject.SetActive(true);
-            __instance.infectedOverlay.gameObject.SetActive(true);
-            if (TheOtherRolesPlugin.HideFakeTasks.Value)
+            __instance.infectedOverlay.gameObject.SetActive(MeetingHud.Instance ? false : true);
+            if (TheOtherRolesPlugin.HideFakeTasks.Value && !(PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker) && EvilTracker.target != null))
             {
                 __instance.taskOverlay.Hide();
             }
@@ -464,16 +480,16 @@ namespace TheOtherRoles.Patches
         }
         private static bool evilHackerShowMap(MapBehaviour __instance)
         {
-            if (MeetingHud.Instance) return true;
+            // if (MeetingHud.Instance) return true;
             if (__instance.IsOpen)
             {
                 __instance.Close();
                 return false;
             }
-            if (!PlayerControl.LocalPlayer.CanMove)
-            {
-                return false;
-            }
+            // if (!PlayerControl.LocalPlayer.CanMove)
+            // {
+            //     return false;
+            // }
             if (__instance.specialInputHandler != null)
             {
                 __instance.specialInputHandler.disableVirtualCursor = true;
@@ -484,7 +500,7 @@ namespace TheOtherRoles.Patches
             __instance.gameObject.SetActive(true);
             AdminPatch.isEvilHackerAdmin = true;
             __instance.countOverlay.gameObject.SetActive(true);
-            __instance.infectedOverlay.gameObject.SetActive(true);
+            __instance.infectedOverlay.gameObject.SetActive(MeetingHud.Instance ? false : true);
             if (TheOtherRolesPlugin.HideFakeTasks.Value)
             {
                 __instance.taskOverlay.Hide();

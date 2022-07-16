@@ -922,6 +922,10 @@
         "0": "Better Sabotage Map",
         "11": "\u6539\u826f\u7248\u30b5\u30dc\u30bf\u30fc\u30b8\u30e5\u30de\u30c3\u30d7"
     },
+    "forceNormalSabotageMap": {
+        "0": "Force Normal Sabotage Map",
+        "11": "\u901a\u5e38\u30b5\u30dc\u30bf\u30fc\u30b8\u30e5\u30de\u30c3\u30d7\u3092\u5f37\u5236"
+    },
     "torSettings": {
         "0": "The Other Roles Settings",
         "11": "The Other Roles\u306e\u8a2d\u5b9a",

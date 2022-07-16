@@ -404,16 +404,16 @@ namespace TheOtherRoles
                 },
                 () =>
                 {
-                    return EvilHacker.evilHacker != null &&
+                    return ((EvilHacker.evilHacker != null &&
                     EvilHacker.evilHacker == PlayerControl.LocalPlayer &&
-                    PlayerControl.LocalPlayer.isAlive() &&
+                    PlayerControl.LocalPlayer.isAlive()) ||
+                    (EvilHacker.isInherited() && PlayerControl.LocalPlayer.isImpostor())) &&
                     !TheOtherRolesPlugin.BetterSabotageMap.Value;
-
                 },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => { },
                 EvilHacker.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                new Vector3(0f, 2.0f, 0),
                 __instance,
                 __instance.KillButton,
                 KeyCode.F,

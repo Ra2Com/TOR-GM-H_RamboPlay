@@ -43,6 +43,7 @@ namespace TheOtherRoles
         public static bool offlineHats = false;
         public static bool hideFakeTasks = false;
         public static bool betterSabotageMap = false;
+        public static bool forceNormalSabotageMap= false;
 
         // Updating values
         public static int meetingsCount = 0;
