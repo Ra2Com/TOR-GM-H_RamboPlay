@@ -231,6 +231,9 @@ namespace TheOtherRoles
 
                 if (player.cosmetics.visor != null)
                     player.cosmetics.visor.Image.color = color;
+
+                if (player.cosmetics.colorBlindText != null)
+                    player.cosmetics.colorBlindText.color = color;
             }
             catch { }
         }
