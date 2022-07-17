@@ -792,30 +792,39 @@ namespace TheOtherRoles
         }
         public static PlainShipRoom getPlainShipRoom(PlayerControl p)
         {
-                PlainShipRoom[] array = null;
-                UnhollowerBaseLib.Il2CppReferenceArray<Collider2D> buffer = new Collider2D[10];
-                ContactFilter2D filter = default(ContactFilter2D);
-                filter.layerMask = Constants.PlayersOnlyMask;
-                filter.useLayerMask = true;
-                filter.useTriggers = false;
-                array = DestroyableSingleton<ShipStatus>.Instance?.AllRooms;
-                if(array == null) return null;
-                foreach (PlainShipRoom plainShipRoom in array)
+            PlainShipRoom[] array = null;
+            UnhollowerBaseLib.Il2CppReferenceArray<Collider2D> buffer = new Collider2D[10];
+            ContactFilter2D filter = default(ContactFilter2D);
+            filter.layerMask = Constants.PlayersOnlyMask;
+            filter.useLayerMask = true;
+            filter.useTriggers = false;
+            array = DestroyableSingleton<ShipStatus>.Instance?.AllRooms;
+            if(array == null) return null;
+            foreach (PlainShipRoom plainShipRoom in array)
+            {
+                if (plainShipRoom.roomArea)
                 {
-                    if (plainShipRoom.roomArea)
+                    int hitCount = plainShipRoom.roomArea.OverlapCollider(filter, buffer);
+                    if (hitCount == 0) continue;
+                    for (int i = 0; i < hitCount; i++)
                     {
-                        int hitCount = plainShipRoom.roomArea.OverlapCollider(filter, buffer);
-                        if (hitCount == 0) continue;
-                        for (int i = 0; i < hitCount; i++)
+                        if (buffer[i]?.gameObject == p.gameObject)
                         {
-                            if (buffer[i]?.gameObject == p.gameObject)
-                            {
-                                return plainShipRoom;
-                            }
+                            return plainShipRoom;
                         }
                     }
                 }
-                return null;
+            }
+            return null;
+        }
+
+        public static bool isCrewmateAlive()
+        {
+            foreach(var p in PlayerControl.AllPlayerControls)
+            {
+                if(p.isCrew() && !p.isRole(RoleType.JekyllAndHyde) && !p.hasModifier(ModifierType.Madmate) && p.isAlive()) return true;
+            }
+            return false;
         }
     }
 }

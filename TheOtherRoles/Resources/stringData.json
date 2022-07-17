@@ -926,6 +926,10 @@
         "0": "Force Normal Sabotage Map",
         "11": "\u901a\u5e38\u30b5\u30dc\u30bf\u30fc\u30b8\u30e5\u30de\u30c3\u30d7\u3092\u5f37\u5236"
     },
+    "canWinByTaskWithoutLivingPlayer": {
+        "0": "Can win by task without living player",
+        "11": "\u751f\u5b58\u8005\u304c\u3044\u306a\u304f\u3066\u3082\u30bf\u30b9\u30af\u52dd\u5229\u3067\u304d\u308b"
+    },
     "torSettings": {
         "0": "The Other Roles Settings",
         "11": "The Other Roles\u306e\u8a2d\u5b9a",

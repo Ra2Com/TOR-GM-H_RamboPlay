@@ -97,6 +97,20 @@ namespace TheOtherRoles.Patches
         }
     }
 
+    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CheckTaskCompletion))]
+    public class ShipStatusCheckTaskCompletionPatch
+    {
+        public static bool Prefix(ref bool __result, ShipStatus __instance)
+        {
+            // クルーメイトが生存していない場合はタスク勝利できない
+            if (!CustomOptionHolder.canWinByTaskWithoutLivingPlayer.getBool() &&  !Helpers.isCrewmateAlive())
+            {
+                __result = false;
+                return false;
+            }
+            return true;
+        }
+    }
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class OnGameEndPatch
