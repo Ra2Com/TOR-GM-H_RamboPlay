@@ -282,8 +282,8 @@ namespace TheOtherRoles
 
         public CustomDualRoleOption(int id, CustomOptionType type, string name, Color color, RoleType roleType, int max = 15, bool roleEnabled = true) : base(id, type, name, color, max, roleEnabled)
         {
-            roleAssignEqually = new CustomOption(id + 10011, type, "roleAssignEqually", new string[] { "optionOn", "optionOff" }, "optionOff", this, false, isHidden, "");
-            roleImpChance = Create(id + 10010, type, "roleImpChance", CustomOptionHolder.rates, roleAssignEqually, false, isHidden);
+            roleAssignEqually = new CustomOption(id + 10001, type, "roleAssignEqually", new string[] { "optionOn", "optionOff" }, "optionOff", this, false, isHidden, "");
+            roleImpChance = Create(id + 10000, type, "roleImpChance", CustomOptionHolder.rates, roleAssignEqually, false, isHidden);
 
             this.roleType = roleType;
             dualRoles.Add(this);
@@ -686,7 +686,7 @@ namespace TheOtherRoles
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance)
         {
-            // Return Menu Update if in normal among us settings 
+            // Return Menu Update if in normal among us settings
             var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
             if (gameSettingMenu.RegularGameSettings.active || gameSettingMenu.RolesSettings.gameObject.active) return;
 
