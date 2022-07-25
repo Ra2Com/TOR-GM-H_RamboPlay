@@ -1171,6 +1171,8 @@ namespace TheOtherRoles.Patches
 
                 // always reduce kill cooldown if setting is on
                 reduceKillCooldown(__instance);
+
+                SoulPlayer.FixedUpdate();
             }
 
             TheOtherRolesGM.FixedUpdate(__instance);

@@ -1,17 +1,23 @@
 using HarmonyLib;
 using TheOtherRoles.Objects;
 using UnityEngine;
+using System.Collections.Generic;
+using Hazel;
 
 namespace TheOtherRoles
 {
     [HarmonyPatch]
-    public class SoulPlayer : RoleBase<Template>
+    public class SoulPlayer
     {
         public static Color color = Palette.CrewmateBlue;
         private static CustomButton senriganButton;
         private static bool enableSenrigan { get { return CustomOptionHolder.enableSenrigan.getBool(); } }
         public static bool toggle = false;
         public static Sprite senriganIcon;
+        public static Dictionary<byte, float> killTimers;
+        public static float updateInterval = 0.25f;
+        public static float timer = 0;
+        public static TMPro.TMP_Text statusText = null;
         public static void senrigan()
         {
             var hm = DestroyableSingleton<HudManager>.Instance;
@@ -30,20 +36,23 @@ namespace TheOtherRoles
             toggle = !toggle;
         }
 
-        public SoulPlayer()
+        public static void FixedUpdate()
         {
-            RoleType = roleId = RoleType.NoRole;
+            if(PlayerControl.LocalPlayer.isImpostor() && PlayerControl.LocalPlayer.isAlive())
+            {
+                timer += Time.fixedDeltaTime;
+                if (timer >= updateInterval)
+                {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SyncKillTimer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    writer.Write(PlayerControl.LocalPlayer.killTimer);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.syncKillTimer(PlayerControl.LocalPlayer.PlayerId, PlayerControl.LocalPlayer.killTimer);
+                    timer = 0;
+                }
+            }
+            UpdateStatusText();
         }
-
-        public override void OnMeetingStart()
-        {
-        }
-        public override void OnMeetingEnd() { }
-        public override void FixedUpdate() { }
-        public override void OnKill(PlayerControl target) { }
-        public override void OnDeath(PlayerControl killer = null) { }
-        public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
-
         public static void MakeButtons(HudManager hm)
         {
             senriganButton = new CustomButton(
@@ -83,6 +92,55 @@ namespace TheOtherRoles
         public static void Clear()
         {
             toggle = false;
+            if (statusText)
+            {
+                UnityEngine.GameObject.Destroy(statusText);
+            }
+            statusText = null;
+            killTimers = new();
+        }
+        public static void UpdateStatusText()
+        {
+            if (MeetingHud.Instance != null)
+            {
+                if (statusText != null)
+                {
+                    statusText.gameObject.SetActive(false);
+                }
+                return;
+            }
+
+            if (PlayerControl.LocalPlayer.isDead() && PlayerControl.LocalPlayer.isImpostor())
+            {
+                if (statusText == null)
+                {
+                    GameObject gameObject = UnityEngine.Object.Instantiate(HudManager.Instance?.roomTracker.gameObject);
+                    gameObject.transform.SetParent(HudManager.Instance.transform);
+                    gameObject.SetActive(true);
+                    UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
+                    statusText = gameObject.GetComponent<TMPro.TMP_Text>();
+                    gameObject.transform.localPosition = new Vector3(-2.7f, -0.1f, gameObject.transform.localPosition.z);
+
+                    statusText.transform.localScale = new Vector3(1f, 1f, 1f);
+                    statusText.fontSize = 1.5f;
+                    statusText.fontSizeMin = 1.5f;
+                    statusText.fontSizeMax = 1.5f;
+                    statusText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                }
+
+                statusText.gameObject.SetActive(true);
+                string text = "KillTimer\n";
+                foreach (var item in killTimers)
+                {
+                    if(item.Key == PlayerControl.LocalPlayer.PlayerId) continue;
+                    PlayerControl p = Helpers.playerById(item.Key);
+                    if(p.isDead()) continue;
+                    text += $"{p.name}: {item.Value:F2}s";
+                    text += "\n";
+                }
+
+                statusText.text = text;
+            }
         }
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.StartMeeting))]

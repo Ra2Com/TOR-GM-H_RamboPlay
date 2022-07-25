@@ -122,6 +122,7 @@ namespace TheOtherRoles
         SetOddIsJekyll,
         ShareRealTasks,
         WorkaroundSetRoles,
+        SyncKillTimer,
     }
 
     public static class RPCProcedure
@@ -187,15 +188,18 @@ namespace TheOtherRoles
         }
         public static void workaroundSetRoles(byte numberOfRoles, MessageReader reader)
         {
-                for (int i = 0; i < numberOfRoles; i++)
+            for (int i = 0; i < numberOfRoles; i++)
+            {
+                byte playerId = (byte)reader.ReadPackedUInt32();
+                byte roleId = (byte)reader.ReadPackedUInt32();
+                try
                 {
-                    byte playerId = (byte) reader.ReadPackedUInt32();
-                    byte roleId = (byte) reader.ReadPackedUInt32();
-                    try {
-                        setRole(roleId, playerId);
-                    } catch (Exception e) {
-                        TheOtherRolesPlugin.Logger.LogError("Error while deserializing roles: " + e.Message);
-                    }
+                    setRole(roleId, playerId);
+                }
+                catch (Exception e)
+                {
+                    TheOtherRolesPlugin.Logger.LogError("Error while deserializing roles: " + e.Message);
+                }
             }
 
         }
@@ -1365,6 +1369,18 @@ namespace TheOtherRoles
             MapBehaviorPatch.realTasks[playerId].Add(pos);
         }
 
+        public static void syncKillTimer(byte playerId, float timer)
+        {
+            if(!SoulPlayer.killTimers.ContainsKey(playerId))
+            {
+                SoulPlayer.killTimers.Add(playerId, timer);
+            }
+            else
+            {
+                SoulPlayer.killTimers[playerId] = timer;
+            }
+        }
+
         [HarmonyPatch(typeof(CustomNetworkTransform), nameof(CustomNetworkTransform.HandleRpc))]
         class CustomNetworkTransformRPCHandlerPatch
         {
@@ -1775,6 +1791,12 @@ namespace TheOtherRoles
                             taskTmp = reader.ReadBytes(4);
                             float taskY = System.BitConverter.ToSingle(taskTmp, 0);
                             RPCProcedure.shareRealTasks(tmpid, new Vector2(taskX, taskY));
+                            break;
+                        case (byte)CustomRPC.SyncKillTimer:
+                            byte impostorId = reader.ReadByte();
+                            byte[] timerTmp = reader.ReadBytes(4);
+                            float timer = System.BitConverter.ToSingle(timerTmp, 0);
+                            RPCProcedure.syncKillTimer(impostorId, timer);
                             break;
                         case (byte)CustomRPC.WorkaroundSetRoles:
                             RPCProcedure.workaroundSetRoles(reader.ReadByte(), reader);
