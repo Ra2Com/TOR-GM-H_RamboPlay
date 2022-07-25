@@ -163,8 +163,9 @@ namespace TheOtherRoles.Patches
 
             foreach (var button in modButtons)
             {
-                GameObject.Destroy(button.gameObject);
+                if (button != null) GameObject.Destroy(button.gameObject);
             }
+
             modButtons = new List<ToggleButtonBehaviour>();
             int length = (page * 10) < AllOptions.Count ? page * 10 : AllOptions.Count;
 
