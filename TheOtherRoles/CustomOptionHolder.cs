@@ -46,6 +46,7 @@ namespace TheOtherRoles
         public static CustomOption evilHackerCanCreateMadmateFromJackal;
         public static CustomOption evilHackerCanMoveEvenIfUsesAdmin;
         public static CustomOption evilHackerCanInheritAbility;
+        public static CustomOption evilHackerCanSeeDoorStatus;
         public static CustomOption createdMadmateCanDieToSheriff;
         public static CustomOption createdMadmateCanEnterVents;
         public static CustomOption createdMadmateHasImpostorVision;
@@ -530,6 +531,7 @@ namespace TheOtherRoles
             evilHackerCanCreateMadmate = CustomOption.Create(1901, CustomOptionType.Impostor, "evilHackerCanCreateMadmate", false, evilHackerSpawnRate);
             evilHackerCanMoveEvenIfUsesAdmin = CustomOption.Create(1913, CustomOptionType.Impostor, "evilHackerCanMoveEvenIfUsesAdmin", true, evilHackerSpawnRate);
             evilHackerCanInheritAbility = CustomOption.Create(1914, CustomOptionType.Impostor, "evilHackerCanInheritAbility", false, evilHackerSpawnRate);
+            evilHackerCanSeeDoorStatus = CustomOption.Create(1915, CustomOptionType.Impostor, "evilHackerCanSeeDoorStatus", true, evilHackerSpawnRate);
             createdMadmateCanDieToSheriff = CustomOption.Create(1902, CustomOptionType.Impostor, "createdMadmateCanDieToSheriff", false, evilHackerCanCreateMadmate);
             createdMadmateCanEnterVents = CustomOption.Create(1903, CustomOptionType.Impostor, "createdMadmateCanEnterVents", false, evilHackerCanCreateMadmate);
             evilHackerCanCreateMadmateFromFox = CustomOption.Create(1904, CustomOptionType.Impostor, "evilHackerCanCreateMadmateFromFox", false, evilHackerCanCreateMadmate);

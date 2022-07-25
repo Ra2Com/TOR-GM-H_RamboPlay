@@ -310,6 +310,7 @@ namespace TheOtherRoles
             public static bool canCreateMadmateFromFox { get { return CustomOptionHolder.evilHackerCanCreateMadmateFromFox.getBool(); } }
             public static bool canCreateMadmateFromJackal { get { return CustomOptionHolder.evilHackerCanCreateMadmateFromJackal.getBool(); } }
             public static bool canInheritAbility {get {return CustomOptionHolder.evilHackerCanInheritAbility.getBool();}}
+            public static bool canSeeDoorStatus {get {return CustomOptionHolder.evilHackerCanSeeDoorStatus.getBool();}}
             public static PlayerControl fakeMadmate;
             public static PlayerControl currentTarget;
 

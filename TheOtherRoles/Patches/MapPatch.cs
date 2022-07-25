@@ -299,6 +299,7 @@ namespace TheOtherRoles.Patches
         }
         private static void showDoorStatus(MapBehaviour __instance)
         {
+            if (!EvilHacker.canSeeDoorStatus) return;
             if (MeetingHud.Instance == null && TheOtherRolesPlugin.ForceNormalSabotageMap.Value)
             {
                 foreach (var mark in doorMarks.Values)

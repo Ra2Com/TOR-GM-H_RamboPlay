@@ -688,6 +688,10 @@
         "0": "EvilHacker Succeed Ability to Remaining Impostor",
         "11": "\u6b8b\u3063\u305f\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306b\u80fd\u529b\u3092\u7d99\u627f\u3059\u308b\u3053\u3068\u304c\u3067\u304d\u308b"
     },
+    "evilHackerCanSeeDoorStatus": {
+        "0": "EvilHacker Can See Door Status",
+        "11": "\u30c9\u30a2\u306e\u72b6\u614b\u3092\u898b\u308b\u3053\u3068\u304c\u3067\u304d\u308b"
+    },
     "createdMadmateCanDieToSheriff": {
         "0": "Madmate Can Die To Sheriff",
         "11": "\u30b7\u30a7\u30ea\u30d5\u304c\u30de\u30c3\u30c9\u30e1\u30a4\u30c8\u3092\u6bba\u305b\u308b",
