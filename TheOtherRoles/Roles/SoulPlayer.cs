@@ -15,7 +15,7 @@ namespace TheOtherRoles
         public static bool toggle = false;
         public static Sprite senriganIcon;
         public static Dictionary<byte, float> killTimers;
-        public static float updateInterval = 0.25f;
+        public static float updateInterval = 1f;
         public static float timer = 0;
         public static TMPro.TMP_Text statusText = null;
         public static void senrigan()
@@ -43,12 +43,12 @@ namespace TheOtherRoles
                 timer += Time.fixedDeltaTime;
                 if (timer >= updateInterval)
                 {
+                    timer = 0;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SyncKillTimer, Hazel.SendOption.Reliable, -1);
                     writer.Write(PlayerControl.LocalPlayer.PlayerId);
                     writer.Write(PlayerControl.LocalPlayer.killTimer);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.syncKillTimer(PlayerControl.LocalPlayer.PlayerId, PlayerControl.LocalPlayer.killTimer);
-                    timer = 0;
                 }
             }
             UpdateStatusText();
@@ -114,6 +114,7 @@ namespace TheOtherRoles
             {
                 if (statusText == null)
                 {
+                    Logger.info("Instantiate statusText");
                     GameObject gameObject = UnityEngine.Object.Instantiate(HudManager.Instance?.roomTracker.gameObject);
                     gameObject.transform.SetParent(HudManager.Instance.transform);
                     gameObject.SetActive(true);
@@ -135,6 +136,7 @@ namespace TheOtherRoles
                     if(item.Key == PlayerControl.LocalPlayer.PlayerId) continue;
                     PlayerControl p = Helpers.playerById(item.Key);
                     if(p.isDead()) continue;
+                    killTimers[item.Key] -= item.Value - Time.fixedDeltaTime;
                     text += $"{p.name}: {item.Value:F2}s";
                     text += "\n";
                 }
