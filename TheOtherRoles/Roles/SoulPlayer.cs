@@ -2,6 +2,7 @@ using HarmonyLib;
 using TheOtherRoles.Objects;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using Hazel;
 
 namespace TheOtherRoles
@@ -38,7 +39,7 @@ namespace TheOtherRoles
 
         public static void FixedUpdate()
         {
-            if(PlayerControl.LocalPlayer.isImpostor() && PlayerControl.LocalPlayer.isAlive())
+            if (CustomOptionHolder.deadImpostorCanSeeKillColdown.getBool() && PlayerControl.LocalPlayer.isImpostor() && PlayerControl.LocalPlayer.isAlive())
             {
                 timer += Time.fixedDeltaTime;
                 if (timer >= updateInterval)
@@ -101,47 +102,56 @@ namespace TheOtherRoles
         }
         public static void UpdateStatusText()
         {
-            if (MeetingHud.Instance != null)
+            if (CustomOptionHolder.deadImpostorCanSeeKillColdown.getBool())
             {
-                if (statusText != null)
+                if (MeetingHud.Instance != null)
                 {
-                    statusText.gameObject.SetActive(false);
-                }
-                return;
-            }
-
-            if (PlayerControl.LocalPlayer.isDead() && PlayerControl.LocalPlayer.isImpostor())
-            {
-                if (statusText == null)
-                {
-                    Logger.info("Instantiate statusText");
-                    GameObject gameObject = UnityEngine.Object.Instantiate(HudManager.Instance?.roomTracker.gameObject);
-                    gameObject.transform.SetParent(HudManager.Instance.transform);
-                    gameObject.SetActive(true);
-                    UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
-                    statusText = gameObject.GetComponent<TMPro.TMP_Text>();
-                    gameObject.transform.localPosition = new Vector3(-2.7f, -0.1f, gameObject.transform.localPosition.z);
-
-                    statusText.transform.localScale = new Vector3(1f, 1f, 1f);
-                    statusText.fontSize = 1.5f;
-                    statusText.fontSizeMin = 1.5f;
-                    statusText.fontSizeMax = 1.5f;
-                    statusText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                    if (statusText != null)
+                    {
+                        statusText.gameObject.SetActive(false);
+                    }
+                    return;
                 }
 
-                statusText.gameObject.SetActive(true);
-                string text = "KillTimer\n";
-                foreach (var item in killTimers)
+                if (PlayerControl.LocalPlayer.isDead() && PlayerControl.LocalPlayer.isImpostor())
                 {
-                    if(item.Key == PlayerControl.LocalPlayer.PlayerId) continue;
-                    PlayerControl p = Helpers.playerById(item.Key);
-                    if(p.isDead()) continue;
-                    killTimers[item.Key] -= item.Value - Time.fixedDeltaTime;
-                    text += $"{p.name}: {item.Value:F2}s";
-                    text += "\n";
-                }
+                    if (statusText == null)
+                    {
+                        GameObject gameObject = UnityEngine.Object.Instantiate(HudManager.Instance?.roomTracker.gameObject);
+                        gameObject.transform.SetParent(HudManager.Instance.transform);
+                        gameObject.SetActive(true);
+                        UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
+                        statusText = gameObject.GetComponent<TMPro.TMP_Text>();
+                        gameObject.transform.localPosition = new Vector3(-2.7f, -0.1f, gameObject.transform.localPosition.z);
 
-                statusText.text = text;
+                        statusText.transform.localScale = new Vector3(1f, 1f, 1f);
+                        statusText.fontSize = 1.5f;
+                        statusText.fontSizeMin = 1.5f;
+                        statusText.fontSizeMax = 1.5f;
+                        statusText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                    }
+
+                    statusText.gameObject.SetActive(true);
+                    string text = "KillTimer\n";
+                    killTimers.Keys.ToList().ForEach(key =>
+                    {
+                        if (key == PlayerControl.LocalPlayer.PlayerId) return;
+                        PlayerControl p = Helpers.playerById(key);
+                        if (p.isDead()) return;
+                        if (killTimers[key] > 0)
+                        {
+                            killTimers[key] -= Time.fixedDeltaTime;
+                        }
+                        else
+                        {
+                            killTimers[key] = 0;
+                        }
+                        text += $"{p.name}: {killTimers[key]:F2}s";
+                        text += "\n";
+
+                    });
+                    statusText.text = text;
+                }
             }
         }
 

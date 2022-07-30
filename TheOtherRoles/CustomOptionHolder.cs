@@ -466,6 +466,7 @@ namespace TheOtherRoles
         public static CustomOption strongRandomGen;
         public static CustomOption enableSenrigan;
         public static CustomOption canWinByTaskWithoutLivingPlayer;
+        public static CustomOption deadImpostorCanSeeKillColdown;
 
 
 
@@ -888,6 +889,7 @@ namespace TheOtherRoles
             numWireTask = CustomOption.Create(9913, CustomOptionType.General, "numWireTask", 3f, 1f, 10f, 1f, randomWireTask);
             enableSenrigan = CustomOption.Create(9920, CustomOptionType.General, "enableSenrigan", true, mapOptions, true);
             canWinByTaskWithoutLivingPlayer = CustomOption.Create(9932, CustomOptionType.General, "canWinByTaskWithoutLivingPlayer", true, mapOptions, false);
+            deadImpostorCanSeeKillColdown = CustomOption.Create(9933, CustomOptionType.General, "deadImpostorCanSeeKillCooldown", true, mapOptions);
             disableVentAnimation = CustomOption.Create(9910, CustomOptionType.General, "disableVentAnimation", false, mapOptions);
             alwaysReduceCooldown = CustomOption.Create(9911, CustomOptionType.General, "alwaysReduceCooldown", false, mapOptions);
             exceptInVent = CustomOption.Create(9912, CustomOptionType.General, "exceptInVent", false, alwaysReduceCooldown);
