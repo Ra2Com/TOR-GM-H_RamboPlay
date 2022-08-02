@@ -99,8 +99,6 @@ namespace TheOtherRoles
             CustomOptionHolder.Load();
             RoleInfo.Load();
             CustomColors.Load();
-            RandomGenerator.Initialize();
-
             Harmony.PatchAll();
             Patches.SubmergedPatch.Patch();
             SubmergedCompatibility.Initialize();

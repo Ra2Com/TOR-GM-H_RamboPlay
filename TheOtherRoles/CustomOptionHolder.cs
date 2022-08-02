@@ -463,7 +463,6 @@ namespace TheOtherRoles
         public static CustomOption additionalVents;
         public static CustomOption specimenVital;
         public static CustomOption polusRandomSpawn;
-        public static CustomOption strongRandomGen;
         public static CustomOption enableSenrigan;
         public static CustomOption canWinByTaskWithoutLivingPlayer;
         public static CustomOption deadImpostorCanSeeKillColdown;
@@ -926,7 +925,6 @@ namespace TheOtherRoles
             lastImpostorResults = CustomOption.Create(9903, CustomOptionType.General, "fortuneTellerResults ", new string[] { "fortuneTellerResultCrew", "fortuneTellerResultTeam", "fortuneTellerResultRole" }, lastImpostorEnable);
             lastImpostorNumShots = CustomOption.Create(9904, CustomOptionType.General, "lastImpostorNumShots", 1f, 1f, 15f, 1f, lastImpostorEnable);
 
-            strongRandomGen = CustomOption.Create(9915, CustomOptionType.General, "strongRandomGen", true, specialOptions, true);
 
             maxNumberOfMeetings = CustomOption.Create(3, CustomOptionType.General, "maxNumberOfMeetings", 10, 0, 15, 1, specialOptions, true);
             blockSkippingInEmergencyMeetings = CustomOption.Create(4, CustomOptionType.General, "blockSkippingInEmergencyMeetings", false, specialOptions);

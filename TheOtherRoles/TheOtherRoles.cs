@@ -11,7 +11,8 @@ namespace TheOtherRoles
     public static class TheOtherRoles
     {
         // public static System.Random rnd = new System.Random((int)DateTime.Now.Ticks);
-        public static PermutedCongruentialGenerator rnd { get { return RandomGenerator.Instance; } }
+        // public static PermutedCongruentialGenerator rnd { get { return RandomGenerator.Instance; } }
+        public static System.Random rnd = new MersenneTwister((int)DateTime.Now.Ticks);
 
         public enum Teams
         {

@@ -12,12 +12,8 @@ namespace TheOtherRoles.Patches
             ref int __result,
             [HarmonyArgument(0)] int maxInt)
         {
-            if (RandomGenerator.useStrongGen)
-            {
-                __result = RandomGenerator.Instance.Next(maxInt);
-                return false;
-            }
-            return true;
+            __result = TheOtherRoles.rnd.Next(maxInt);
+            return false;
         }
     }
     [HarmonyPatch(
@@ -30,12 +26,8 @@ namespace TheOtherRoles.Patches
             ref int __result,
             [HarmonyArgument(0)] int maxInt)
         {
-            if (RandomGenerator.useStrongGen)
-            {
-                __result = RandomGenerator.Instance.Next(maxInt);
-                return false;
-            }
-            return true;
+            __result = TheOtherRoles.rnd.Next(maxInt);
+            return false;
         }
     }
 }
