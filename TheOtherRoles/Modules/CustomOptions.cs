@@ -283,7 +283,7 @@ namespace TheOtherRoles
         public CustomDualRoleOption(int id, CustomOptionType type, string name, Color color, RoleType roleType, int max = 15, bool roleEnabled = true) : base(id, type, name, color, max, roleEnabled)
         {
             roleAssignEqually = new CustomOption(id + 10001, type, "roleAssignEqually", new string[] { "optionOn", "optionOff" }, "optionOff", this, false, isHidden, "");
-            roleImpChance = Create(id + 10000, type, "roleImpChance", CustomOptionHolder.rates, roleAssignEqually, false, isHidden);
+            roleImpChance = Create(id + 100000, type, "roleImpChance", CustomOptionHolder.rates, roleAssignEqually, false, isHidden);
 
             this.roleType = roleType;
             dualRoles.Add(this);
