@@ -27,6 +27,8 @@ namespace TheOtherRoles
         Munou,
         AntiTeleport,
         Mini,
+        AkujoHonmei,
+        AkujoKeep,
 
         // don't put anything below this
         NoModifier = int.MaxValue
@@ -43,6 +45,8 @@ namespace TheOtherRoles
             { ModifierType.Munou, typeof(ModifierBase<Munou>) },
             { ModifierType.AntiTeleport, typeof(ModifierBase<AntiTeleport>) },
             { ModifierType.Mini, typeof(ModifierBase<Mini>) },
+            { ModifierType.AkujoHonmei, typeof(ModifierBase<AkujoHonmei>)},
+            { ModifierType.AkujoKeep, typeof(ModifierBase<AkujoKeep>)},
         };
     }
 
@@ -59,6 +63,9 @@ namespace TheOtherRoles
         public abstract void OnDeath(PlayerControl killer = null);
         public abstract void HandleDisconnect(PlayerControl player, DisconnectReasons reason);
         public virtual void ResetModifier() { }
+        public virtual string modifyNameText(string nameText) { return nameText; }
+        public virtual string modifyRoleText(string roleText, List<RoleInfo> roleInfo, bool useColors = true, bool includeHidden = false) { return roleText; }
+        public virtual string meetingInfoText() { return ""; }
 
         public static void ClearAll()
         {
@@ -71,6 +78,7 @@ namespace TheOtherRoles
     {
         public static List<T> players = new();
         public static ModifierType ModType;
+        public static List<RoleType> persistRoleChange = new List<RoleType>();
 
         public void Init(PlayerControl player)
         {
@@ -127,17 +135,24 @@ namespace TheOtherRoles
             return players.Any(x => x.player == player);
         }
 
-        public static void addModifier(PlayerControl player)
+        public static T addModifier(PlayerControl player)
         {
-            T mod = new();
+            T mod = new T();
             mod.Init(player);
+            return mod;
         }
 
-        public static void eraseModifier(PlayerControl player)
+        public static void eraseModifier(PlayerControl player, RoleType newRole = RoleType.NoRole)
         {
-            players.DoIf(x => x.player == player, x => x.ResetModifier());
-            players.RemoveAll(x => x.player == player && x.modId == ModType);
-            allModifiers.RemoveAll(x => x.player == player && x.modId == ModType);
+            List<T> toRemove = new List<T>();
+
+            foreach (var p in players)
+            {
+                if (p.player == player && p.modId == ModType && !persistRoleChange.Contains(newRole))
+                    toRemove.Add(p);
+            }
+            players.RemoveAll(x => toRemove.Contains(x));
+            allModifiers.RemoveAll(x => toRemove.Contains(x));
         }
 
         public static void swapModifier(PlayerControl p1, PlayerControl p2)

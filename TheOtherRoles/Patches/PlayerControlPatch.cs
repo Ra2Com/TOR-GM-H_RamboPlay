@@ -584,8 +584,10 @@ namespace TheOtherRoles.Patches
             {
                 if (p == null) continue;
 
+                bool isAkujo = Akujo.isPartner(PlayerControl.LocalPlayer, p);
+
                 var canSeeInfo =
-                    canSeeEverything ||
+                    canSeeEverything || isAkujo ||
                     p == PlayerControl.LocalPlayer || p.isGM() ||
                     (Lawyer.lawyerKnowsRole && PlayerControl.LocalPlayer == Lawyer.lawyer && p == Lawyer.target);
 
@@ -623,6 +625,8 @@ namespace TheOtherRoles.Patches
 
                     var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
                     string roleNames = RoleInfo.GetRolesString(p, true, new RoleType[] { RoleType.Lovers });
+                    string roleNamesFull = RoleInfo.GetRolesString(p, true, new RoleType[] { RoleType.Lovers }, true);
+
 
                     var completedStr = commsActive ? "?" : tasksCompleted.ToString();
                     string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
@@ -638,6 +642,22 @@ namespace TheOtherRoles.Patches
                             tabText.SetText($"{TranslationController.Instance.GetString(StringNames.Tasks)} {taskInfo}");
                         }
                         meetingInfoText = $"{roleNames} {taskInfo}".Trim();
+                    }
+                    else if (PlayerControl.LocalPlayer.isAlive() && isAkujo)
+                    {
+                        if (Akujo.knowsRoles)
+                        {
+                            playerInfoText = roleNamesFull;
+                            meetingInfoText = roleNamesFull;
+                        }
+                        else if (p.hasModifier(ModifierType.AkujoHonmei))
+                        {
+                            playerInfoText = Helpers.cs(Akujo.color, ModTranslation.getString("akujoHonmei"));
+                        }
+                        else if (p.hasModifier(ModifierType.AkujoKeep))
+                        {
+                            playerInfoText = Helpers.cs(Akujo.color, ModTranslation.getString("akujoKeep"));
+                        }
                     }
                     else if (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks)
                     {

@@ -451,6 +451,7 @@ namespace TheOtherRoles
         public static CustomTasksOption jekyllAndHydeTasks;
         public static CustomOption jekyllAndHydeNumTasks;
 
+
         public static CustomOption enabledHorseMode;
         public static CustomOption delayBeforeMeeting;
         public static CustomOption randomWireTask;
@@ -467,7 +468,11 @@ namespace TheOtherRoles
         public static CustomOption canWinByTaskWithoutLivingPlayer;
         public static CustomOption deadImpostorCanSeeKillColdown;
 
-
+        public static CustomRoleOption akujoSpawnRate;
+        public static CustomOption akujoTimeLimit;
+        public static CustomOption akujoKnowsRoles;
+        public static CustomOption akujoNumKeeps;
+        public static CustomOption akujoSheriffKillsHonmei;
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new();
 
@@ -740,6 +745,12 @@ namespace TheOtherRoles
 
 
             watcherSpawnRate = new CustomDualRoleOption(1040, CustomOptionType.Neutral, "watcher", Watcher.color, RoleType.Watcher, 15);
+
+            akujoSpawnRate = new CustomRoleOption(1120, CustomOptionType.Neutral, "akujo", Akujo.color, 7, roleEnabled: true);
+            akujoTimeLimit = CustomOption.Create(1121, CustomOptionType.Neutral, "akujoTimeLimit", 300f, 30f, 1200f, 30f, akujoSpawnRate, format: "unitSeconds");
+            akujoKnowsRoles = CustomOption.Create(1122, CustomOptionType.Neutral, "akujoKnowsRoles", false, akujoSpawnRate);
+            akujoNumKeeps = CustomOption.Create(1113, CustomOptionType.Neutral, "akujoNumKeeps", 1f, 1f, 15f, 1f, akujoSpawnRate, format: "unitPlayers");
+            akujoSheriffKillsHonmei = CustomOption.Create(1114, CustomOptionType.Neutral, "akujoSheriffKillsHonmei", true, akujoSpawnRate);
 
 
             foxSpawnRate = new CustomRoleOption(910, CustomOptionType.Neutral, "fox", Fox.color, 1);

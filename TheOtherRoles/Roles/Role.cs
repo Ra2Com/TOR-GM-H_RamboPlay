@@ -75,6 +75,7 @@ namespace TheOtherRoles
         MimicK,
         MimicA,
         JekyllAndHyde,
+        Akujo,
         EvilHacker,
 
 
@@ -115,6 +116,7 @@ namespace TheOtherRoles
             { RoleType.SchrodingersCat, typeof(RoleBase<SchrodingersCat>) },
             { RoleType.Puppeteer, typeof(RoleBase<Puppeteer>) },
             { RoleType.JekyllAndHyde, typeof(RoleBase<JekyllAndHyde>) },
+            { RoleType.Akujo, typeof(RoleBase<Akujo>) },
 
             // Other
             { RoleType.Watcher, typeof(RoleBase<Watcher>) },
@@ -134,6 +136,9 @@ namespace TheOtherRoles
         public abstract void OnDeath(PlayerControl killer = null);
         public abstract void HandleDisconnect(PlayerControl player, DisconnectReasons reason);
         public virtual void ResetRole() { }
+        public virtual void PostInit() { }
+        public virtual string modifyNameText(string nameText) { return nameText; }
+        public virtual string meetingInfoText() { return ""; }
 
         public static void ClearAll()
         {
@@ -595,6 +600,37 @@ namespace TheOtherRoles
             if (player.isRole(RoleType.Vulture)) Vulture.vulture = target;
             if (player.isRole(RoleType.Lawyer)) Lawyer.lawyer = target;
             if (player.isRole(RoleType.Pursuer)) Pursuer.pursuer = target;
+        }
+
+        public static string modifyNameText(this PlayerControl player, string nameText)
+        {
+            if (player == null || player.Data.Disconnected) return nameText;
+
+            foreach (var role in Role.allRoles)
+            {
+                if (role.player == player)
+                    nameText = role.modifyNameText(nameText);
+            }
+
+            foreach (var mod in Modifier.allModifiers)
+            {
+                if (mod.player == player)
+                    nameText = mod.modifyNameText(nameText);
+            }
+
+            nameText += Lovers.getIcon(player);
+
+            return nameText;
+        }
+
+        public static string modifyRoleText(this PlayerControl player, string roleText, List<RoleInfo> roleInfo, bool useColors = true, bool includeHidden = false)
+        {
+            foreach (var mod in Modifier.allModifiers)
+            {
+                if (mod.player == player)
+                    roleText = mod.modifyRoleText(roleText, roleInfo, useColors, includeHidden);
+            }
+            return roleText;
         }
 
         public static void OnKill(this PlayerControl player, PlayerControl target)

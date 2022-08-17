@@ -44,6 +44,7 @@ namespace TheOtherRoles
             Mini.Clear();
             AntiTeleport.Clear();
             JekyllAndHyde.Clear();
+            Akujo.Clear();
             Role.ClearAll();
         }
 

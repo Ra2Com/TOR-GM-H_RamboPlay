@@ -36,6 +36,16 @@ namespace TheOtherRoles
                       !ExileController.Instance;
             }
         }
+        public static bool ShowMeetingText
+        {
+            get
+            {
+                return MeetingHud.Instance != null &&
+                    (MeetingHud.Instance.state == MeetingHud.VoteStates.Voted ||
+                     MeetingHud.Instance.state == MeetingHud.VoteStates.NotVoted ||
+                     MeetingHud.Instance.state == MeetingHud.VoteStates.Discussion);
+            }
+        }
 
         public static bool GameStarted
         {
@@ -345,6 +355,7 @@ namespace TheOtherRoles
                     player.isRole(RoleType.Vulture) ||
                     player.isRole(RoleType.Lawyer) ||
                     player.isRole(RoleType.Pursuer) ||
+                    player.isRole(RoleType.Akujo) ||
                     (player.isRole(RoleType.Shifter) && Shifter.isNeutral));
         }
 
@@ -380,6 +391,28 @@ namespace TheOtherRoles
         public static bool isLovers(this PlayerControl player)
         {
             return player != null && Lovers.isLovers(player);
+        }
+
+        public static bool isAkujoLover(this PlayerControl player)
+        {
+            return player != null &&
+                (player.isRole(RoleType.Akujo) ||
+                 player.hasModifier(ModifierType.AkujoHonmei) ||
+                 player.hasModifier(ModifierType.AkujoKeep));
+        }
+
+        public static bool isAkujoPartners(this PlayerControl player, PlayerControl partner)
+        {
+            foreach (var akujo in Akujo.players)
+            {
+                if ((akujo.player == player && akujo.isPartner(partner)) ||
+                    (akujo.player == partner && akujo.isPartner(player)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static PlayerControl getPartner(this PlayerControl player)
@@ -799,7 +832,7 @@ namespace TheOtherRoles
             filter.useLayerMask = true;
             filter.useTriggers = false;
             array = DestroyableSingleton<ShipStatus>.Instance?.AllRooms;
-            if(array == null) return null;
+            if (array == null) return null;
             foreach (PlainShipRoom plainShipRoom in array)
             {
                 if (plainShipRoom.roomArea)
@@ -820,9 +853,9 @@ namespace TheOtherRoles
 
         public static bool isCrewmateAlive()
         {
-            foreach(var p in PlayerControl.AllPlayerControls)
+            foreach (var p in PlayerControl.AllPlayerControls)
             {
-                if(p.isCrew() && !p.isRole(RoleType.JekyllAndHyde) && !p.hasModifier(ModifierType.Madmate) && p.isAlive()) return true;
+                if (p.isCrew() && !p.isRole(RoleType.JekyllAndHyde) && !p.hasModifier(ModifierType.Madmate) && p.isAlive()) return true;
             }
             return false;
         }

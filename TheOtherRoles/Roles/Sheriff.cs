@@ -26,6 +26,7 @@ namespace TheOtherRoles
         public static bool madmateCanDieToSheriff { get { return CustomOptionHolder.madmateCanDieToSheriff.getBool(); } }
         public static bool createdMadmateCanDieToSheriff { get { return CustomOptionHolder.createdMadmateCanDieToSheriff.getBool(); } }
         public static bool sheriffCanKillNoDeadBody { get { return CustomOptionHolder.sheriffCanKillNoDeadBody.getBool(); } }
+        public static bool honmeiCanDieToSheriff { get { return CustomOptionHolder.akujoSheriffKillsHonmei.getBool(); } }
 
         public int numShots = 2;
         public bool canKill = sheriffCanKillNoDeadBody;
@@ -81,6 +82,7 @@ namespace TheOtherRoles
                             (Sheriff.madmateCanDieToSheriff && local.currentTarget.hasModifier(ModifierType.Madmate)) ||
                             (Sheriff.createdMadmateCanDieToSheriff && local.currentTarget.hasModifier(ModifierType.CreatedMadmate)) ||
                             (Sheriff.canKillNeutrals && local.currentTarget.isNeutral()) ||
+                            (Sheriff.honmeiCanDieToSheriff && local.currentTarget.hasModifier(ModifierType.AkujoHonmei)) ||
                             Jackal.jackal == local.currentTarget || Sidekick.sidekick == local.currentTarget)
                         {
                             //targetId = Sheriff.currentTarget.PlayerId;

@@ -8,7 +8,7 @@ using static TheOtherRoles.TheOtherRolesGM;
 
 namespace TheOtherRoles
 {
-    class RoleInfo
+    public class RoleInfo
     {
         public Color color;
         public virtual string name { get { return ModTranslation.getString(nameKey); } }
@@ -100,6 +100,7 @@ namespace TheOtherRoles
         public static RoleInfo fox;
         public static RoleInfo immoralist;
         public static RoleInfo fortuneTeller;
+        public static RoleInfo akujo;
         public static RoleInfo schrodingersCat;
         public static RoleInfo trapper;
         public static RoleInfo bomberA;
@@ -168,6 +169,7 @@ namespace TheOtherRoles
             fox = new RoleInfo("fox", Fox.color, CustomOptionHolder.foxSpawnRate, RoleType.Fox);
             immoralist = new RoleInfo("immoralist", Immoralist.color, CustomOptionHolder.foxSpawnRate, RoleType.Immoralist);
             fortuneTeller = new RoleInfo("fortuneTeller", FortuneTeller.color, CustomOptionHolder.fortuneTellerSpawnRate, RoleType.FortuneTeller);
+            akujo = new RoleInfo("akujo", Akujo.color, CustomOptionHolder.akujoSpawnRate, RoleType.Akujo);
             schrodingersCat = new RoleInfo("schrodingersCat", SchrodingersCat.color, CustomOptionHolder.schrodingersCatSpawnRate, RoleType.SchrodingersCat);
             trapper = new RoleInfo("trapper", Trapper.color, CustomOptionHolder.trapperSpawnRate, RoleType.Trapper);
             bomberA = new RoleInfo("bomber", BomberA.color, CustomOptionHolder.bomberSpawnRate, RoleType.BomberA);
@@ -236,6 +238,7 @@ namespace TheOtherRoles
                 fox,
                 immoralist,
                 fortuneTeller,
+                akujo,
                 schrodingersCat,
                 trapper,
                 bomberA,
@@ -325,6 +328,7 @@ namespace TheOtherRoles
                     infos.Add(info);
                 }
             }
+            if ( p.isRole(RoleType.Akujo)) infos.Add(akujo);
 
             // はおみんオリジナル
             if (p.isRole(RoleType.SchrodingersCat)) infos.Add(schrodingersCat);

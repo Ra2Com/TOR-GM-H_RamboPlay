@@ -123,6 +123,9 @@ namespace TheOtherRoles
         ShareRealTasks,
         WorkaroundSetRoles,
         SyncKillTimer,
+        AkujoSetHonmei,
+        AkujoSetKeep,
+        AkujoSuicide,
     }
 
     public static class RPCProcedure
@@ -949,6 +952,39 @@ namespace TheOtherRoles
             player.setRole(RoleType.Immoralist);
             player.clearAllTasks();
         }
+
+        public static void akujoSetHonmei(byte akujoId, byte targetId)
+        {
+            Akujo akujo = Akujo.getRole(Helpers.playerById(akujoId));
+            PlayerControl target = Helpers.playerById(targetId);
+
+            if (akujo != null)
+            {
+                akujo.setHonmei(target);
+            }
+        }
+
+        public static void akujoSetKeep(byte akujoId, byte targetId)
+        {
+            Akujo akujo = Akujo.getRole(Helpers.playerById(akujoId));
+            PlayerControl target = Helpers.playerById(targetId);
+
+            if (akujo != null)
+            {
+                akujo.setKeep(target);
+            }
+        }
+
+        public static void akujoSuicide(byte akujoId)
+        {
+            Akujo akujo = Akujo.getRole(Helpers.playerById(akujoId));
+            if (akujo != null)
+            {
+                akujo.player.MurderPlayer(akujo.player);
+                finalStatuses[akujo.player.PlayerId] = FinalStatus.Loneliness;
+            }
+        }
+
         public static void impostorPromotesToLastImpostor(byte targetId)
         {
             PlayerControl player = Helpers.playerById(targetId);
@@ -1685,6 +1721,15 @@ namespace TheOtherRoles
                             break;
                         case (byte)CustomRPC.FoxCreatesImmoralist:
                             RPCProcedure.foxCreatesImmoralist(reader.ReadByte());
+                            break;
+                        case (byte)CustomRPC.AkujoSetHonmei:
+                            RPCProcedure.akujoSetHonmei(reader.ReadByte(), reader.ReadByte());
+                            break;
+                        case (byte)CustomRPC.AkujoSetKeep:
+                            RPCProcedure.akujoSetKeep(reader.ReadByte(), reader.ReadByte());
+                            break;
+                        case (byte)CustomRPC.AkujoSuicide:
+                            RPCProcedure.akujoSuicide(reader.ReadByte());
                             break;
                         case (byte)CustomRPC.ImpostorPromotesToLastImpostor:
                             RPCProcedure.impostorPromotesToLastImpostor(reader.ReadByte());

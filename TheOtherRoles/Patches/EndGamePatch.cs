@@ -23,6 +23,7 @@ namespace TheOtherRoles.Patches
         FoxWin = 18,
         PuppeteerWin = 19,
         JekyllAndHydeWin = 20,
+        AkujoWin = 21,
     }
 
     enum WinCondition
@@ -45,6 +46,7 @@ namespace TheOtherRoles.Patches
         EveryoneDied,
         PuppeteerWin,
         JekyllAndHydeWin,
+        AkujoWin,
     }
 
     enum FinalStatus
@@ -60,6 +62,7 @@ namespace TheOtherRoles.Patches
         Revenge,
         Diseased,
         Divined,
+        Loneliness,
         GMExecuted,
         Disconnected
     }
@@ -103,7 +106,7 @@ namespace TheOtherRoles.Patches
         public static bool Prefix(ref bool __result, ShipStatus __instance)
         {
             // クルーメイトが生存していない場合はタスク勝利できない
-            if (!CustomOptionHolder.canWinByTaskWithoutLivingPlayer.getBool() &&  !Helpers.isCrewmateAlive())
+            if (!CustomOptionHolder.canWinByTaskWithoutLivingPlayer.getBool() && !Helpers.isCrewmateAlive())
             {
                 __result = false;
                 return false;
@@ -150,6 +153,7 @@ namespace TheOtherRoles.Patches
                 not ((GameOverReason)CustomGameOverReason.ArsonistWin) and
                 not ((GameOverReason)CustomGameOverReason.JesterWin) and
                 not ((GameOverReason)CustomGameOverReason.VultureWin) and
+                not ((GameOverReason)CustomGameOverReason.AkujoWin) and
                 not ((GameOverReason)CustomGameOverReason.PuppeteerWin) and
                 not ((GameOverReason)CustomGameOverReason.JekyllAndHydeWin) and
                 not ((GameOverReason)GameOverReason.HumansByTask) and
@@ -213,6 +217,8 @@ namespace TheOtherRoles.Patches
             notWinners.AddRange(Immoralist.allPlayers);
             notWinners.AddRange(Puppeteer.allPlayers);
             notWinners.AddRange(JekyllAndHyde.allPlayers);
+            notWinners.AddRange(Akujo.allPlayers);
+            notWinners.AddRange(AkujoHonmei.allPlayers);
             if (Puppeteer.dummy != null) notWinners.Add(Puppeteer.dummy);
             if (SchrodingersCat.team != SchrodingersCat.Team.Crew) notWinners.AddRange(SchrodingersCat.allPlayers);
 
@@ -252,6 +258,7 @@ namespace TheOtherRoles.Patches
             bool puppeteerWin = Puppeteer.exists && gameOverReason == (GameOverReason)CustomGameOverReason.PuppeteerWin;
             bool jekyllAndHydeWin = JekyllAndHyde.exists && gameOverReason == (GameOverReason)CustomGameOverReason.JekyllAndHydeWin;
             bool everyoneDead = AdditionalTempData.playerRoles.All(x => x.Status != FinalStatus.Alive);
+            bool akujoWin = Akujo.numAlive > 0 && gameOverReason != GameOverReason.HumansByTask;
 
 
             // Mini lose
@@ -336,6 +343,21 @@ namespace TheOtherRoles.Patches
                 WinningPlayerData wpd = new(Vulture.vulture.Data);
                 TempData.winners.Add(wpd);
                 AdditionalTempData.winCondition = WinCondition.VultureWin;
+            }
+
+            // Akujo win conditions
+            else if (akujoWin)
+            {
+                AdditionalTempData.winCondition = WinCondition.AkujoWin;
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                foreach (var akujo in Akujo.players)
+                {
+                    if (akujo.player.isAlive() && akujo.honmei?.player != null && akujo.honmei.player.isAlive())
+                    {
+                        TempData.winners.Add(new WinningPlayerData(akujo.player.Data));
+                        TempData.winners.Add(new WinningPlayerData(akujo.honmei.player.Data));
+                    }
+                }
             }
 
             // Lovers win conditions
@@ -663,6 +685,12 @@ namespace TheOtherRoles.Patches
                         textRenderer.color = Lovers.color;
                         __instance.BackgroundBar.material.SetColor("_Color", Lovers.color);
                     }
+                    else if (AdditionalTempData.winCondition == WinCondition.AkujoWin)
+                    {
+                        bonusText = "akujoWin";
+                        textRenderer.color = Akujo.color;
+                        __instance.BackgroundBar.material.SetColor("_Color", Akujo.color);
+                    }
                     else if (AdditionalTempData.winCondition == WinCondition.JackalWin)
                     {
                         bonusText = "jackalWin";
@@ -824,6 +852,7 @@ namespace TheOtherRoles.Patches
                     if (CheckAndEndGameForSabotageWin(__instance)) return false;
                     if (CheckAndEndGameForTaskWin(__instance)) return false;
                     if (CheckAndEndGameForLoverWin(__instance, statistics)) return false;
+                    if (CheckAndEndGameForAkujoWin(__instance, statistics)) return false;
                     if (CheckAndEndGameForJackalWin(__instance, statistics)) return false;
                     if (CheckAndEndGameForImpostorWin(__instance, statistics)) return false;
                     if (CheckAndEndGameForCrewmateWin(__instance, statistics)) return false;
@@ -995,6 +1024,17 @@ namespace TheOtherRoles.Patches
                     if (statistics.CouplesAlive == 1 && statistics.TotalAlive <= 3)
                     {
                         UncheckedEndGame(CustomGameOverReason.LoversWin);
+                        return true;
+                    }
+                    return false;
+                }
+
+                private static bool CheckAndEndGameForAkujoWin(ShipStatus __instance, PlayerStatistics statistics)
+                {
+                    // if we have a majority, akujo wins, same as lovers
+                    if (Akujo.numAlive == 1 && statistics.TotalAlive <= 3)
+                    {
+                        UncheckedEndGame(CustomGameOverReason.AkujoWin);
                         return true;
                     }
                     return false;
