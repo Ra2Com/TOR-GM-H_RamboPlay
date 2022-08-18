@@ -235,7 +235,7 @@ namespace TheOtherRoles.Patches
             }
 
             // Assign Lovers
-            if ( CustomOptionHolder.loversSpawnRate.enabled && !CustomOptionHolder.akujoSpawnRate.enabled)
+            if (CustomOptionHolder.loversSpawnRate.enabled && !CustomOptionHolder.akujoSpawnRate.enabled)
             {
                 for (int i = 0; i < CustomOptionHolder.loversNumCouples.getFloat(); i++)
                 {
@@ -736,5 +736,24 @@ namespace TheOtherRoles.Patches
             Impostor = 2
         }
 
+    }
+    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.AssignRolesFromList))]
+    public static class RoleManagerAssignRolesFromList
+    {
+        public static bool Prefix(Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> players, int teamMax, Il2CppSystem.Collections.Generic.List<RoleTypes> roleList, ref int rolesAssigned)
+        {
+            var ps = players.ToSystemList();
+            var rl = roleList.ToSystemList();
+            ps.shuffle();
+            rl.shuffle();
+            int counter = 0;
+            while (rl.Count > counter && ps.Count > counter && rolesAssigned < teamMax)
+            {
+                ps[counter].Object.RpcSetRole(rl[counter]);
+                rolesAssigned++;
+                counter++;
+            }
+            return false;
+        }
     }
 }
