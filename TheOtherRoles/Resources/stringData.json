@@ -4025,6 +4025,16 @@
         "11": "\u6b8b\u308a {0}\u4eba",
         "13": "\u5269\u4f59\u9b45\u60d1\u6570 {0}"
     },
+    "akujoWin": {
+        "0": "Akujo Wins",
+        "11": "\u60aa\u5973\u52dd\u5229",
+        "13": "\u574f\u5973\u4eba\uff01"
+    },
+    "akujoWinExtra": {
+        "0": "Akujo {0} Win",
+        "11": "\u60aa\u5973{0}\u52dd\u5229",
+        "13": "\u9b45\u9b54{0}\u80dc\u5229"
+    },
     "jesterFullDesc": {
         "0": "The Jester does not have any tasks.\nThey win the game as a solo if they get voted out during a meeting.",
         "11": "\u30fb\u4eba\u72fc\u3067\u3044\u3046\u300e\u3066\u308b\u3066\u308b\u300f\n\u30fb\u306a\u306b\u3082\u80fd\u529b\u3092\u6301\u305f\u306a\u3044\n\u30fb\u81ea\u8eab\u304c\u540a\u3089\u308c\u305f\u3068\u304d\u306b\u52dd\u5229\u3059\u308b",
