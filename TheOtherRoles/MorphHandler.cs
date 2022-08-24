@@ -18,7 +18,7 @@ namespace TheOtherRoles
 
             pc.RawSetName(outfit.PlayerName);
             pc.RawSetHat(outfit.HatId, outfit.ColorId);
-            pc.RawSetVisor(outfit.VisorId);
+            pc.RawSetVisor(outfit.VisorId, outfit.ColorId);
             pc.RawSetColor(outfit.ColorId);
             Helpers.setSkinWithAnim(pc.MyPhysics, outfit.SkinId);
 

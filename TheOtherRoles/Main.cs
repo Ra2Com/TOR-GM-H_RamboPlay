@@ -18,7 +18,7 @@ namespace TheOtherRoles
     {
         public const string Id = "me.eisbison.theotherroles";
 
-        public const string VersionString = "999.999.999";
+        public const string VersionString = "2022.8.24.1";
 
         public static System.Version Version = System.Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
