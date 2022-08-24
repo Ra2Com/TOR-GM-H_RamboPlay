@@ -208,11 +208,11 @@ namespace TheOtherRoles
             }
         }
 
-        public static void eraseAllModifiers(this PlayerControl player)
+        public static void eraseAllModifiers(this PlayerControl player, RoleType newRole = RoleType.NoRole)
         {
             foreach (var t in ModifierData.allModTypes)
             {
-                t.Value.GetMethod("eraseModifier", BindingFlags.Public | BindingFlags.Static)?.Invoke(null, new object[] { player });
+                t.Value.GetMethod("eraseModifier", BindingFlags.Public | BindingFlags.Static)?.Invoke(null, new object[] { player, newRole });
             }
         }
 
