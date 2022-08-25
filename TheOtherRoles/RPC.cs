@@ -178,7 +178,7 @@ namespace TheOtherRoles
 
         public static void forceEnd()
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
             {
                 Logger.info("ForceEnd", "Debug");
                 if (!player.Data.Role.IsImpostor)
@@ -381,7 +381,7 @@ namespace TheOtherRoles
         public static void timeMasterRewindTime()
         {
             TimeMaster.shieldActive = false; // Shield is no longer active when rewinding
-            if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer)
+            if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == CachedPlayer.LocalPlayer.PlayerControl)
             {
                 resetTimeMasterButton();
             }
@@ -392,8 +392,8 @@ namespace TheOtherRoles
                 if (p == 1f) HudManager.Instance.FullScreen.enabled = false;
             })));
 
-            if (TimeMaster.timeMaster == null || PlayerControl.LocalPlayer == TimeMaster.timeMaster) return; // Time Master himself does not rewind
-            if (PlayerControl.LocalPlayer.isGM()) return; // GM does not rewind
+            if (TimeMaster.timeMaster == null || CachedPlayer.LocalPlayer.PlayerControl == TimeMaster.timeMaster) return; // Time Master himself does not rewind
+            if (CachedPlayer.LocalPlayer.PlayerControl.isGM()) return; // GM does not rewind
 
             TimeMaster.isRewinding = true;
 
@@ -401,7 +401,7 @@ namespace TheOtherRoles
                 MapBehaviour.Instance.Close();
             if (Minigame.Instance)
                 Minigame.Instance.ForceClose();
-            PlayerControl.LocalPlayer.moveable = false;
+            CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
         }
 
         public static void timeMasterShield()
@@ -424,8 +424,8 @@ namespace TheOtherRoles
         {
             if (Medic.shielded == null || Medic.medic == null) return;
 
-            bool isShieldedAndShow = Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded;
-            bool isMedicAndShow = Medic.medic == PlayerControl.LocalPlayer && Medic.showAttemptToMedic;
+            bool isShieldedAndShow = Medic.shielded == CachedPlayer.LocalPlayer.PlayerControl && Medic.showAttemptToShielded;
+            bool isMedicAndShow = Medic.medic == CachedPlayer.LocalPlayer.PlayerControl && Medic.showAttemptToMedic;
 
             if ((isShieldedAndShow || isMedicAndShow) && HudManager.Instance?.FullScreen != null)
             {
@@ -494,7 +494,7 @@ namespace TheOtherRoles
             }
 
             // Set cooldowns to max for both players
-            if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
+            if (CachedPlayer.LocalPlayer.PlayerControl == oldShifter || CachedPlayer.LocalPlayer.PlayerControl == player)
                 CustomButton.ResetAllCooldowns();
         }
 
@@ -534,7 +534,7 @@ namespace TheOtherRoles
             }
 
             if (Vampire.vampire == null) return;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
             {
                 if (player.PlayerId == targetId && !player.Data.IsDead)
                 {
@@ -554,7 +554,7 @@ namespace TheOtherRoles
         public static void trackerUsedTracker(byte targetId)
         {
             Tracker.usedTracker = true;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
                 if (player.PlayerId == targetId)
                     Tracker.tracked = player;
         }
@@ -618,7 +618,7 @@ namespace TheOtherRoles
                 FastDestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
                 erasePlayerRoles(player.PlayerId, true, false);
                 Sidekick.sidekick = player;
-                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true;
+                if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId) CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
                 if (wasSpy || wasImpostor) Sidekick.wasTeamRed = true;
                 Sidekick.wasSpy = wasSpy;
                 Sidekick.wasImpostor = wasImpostor;
@@ -719,7 +719,7 @@ namespace TheOtherRoles
         {
             Trickster.lightsOutTimer = Trickster.lightsOutDuration;
             // If the local player is impostor indicate lights out
-            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
+            if (CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor)
             {
                 new CustomMessage("tricksterLightsOutText", Trickster.lightsOutDuration);
             }
@@ -794,7 +794,7 @@ namespace TheOtherRoles
             };
             if (PlayerControl.GameOptions.MapId is 2 or 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship
 
-            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard)
+            if (CachedPlayer.LocalPlayer.PlayerControl == SecurityGuard.securityGuard)
             {
                 camera.gameObject.SetActive(true);
                 camera.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
@@ -812,7 +812,7 @@ namespace TheOtherRoles
             if (vent == null) return;
 
             SecurityGuard.remainingScrews -= SecurityGuard.ventPrice;
-            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard)
+            if (CachedPlayer.LocalPlayer.PlayerControl == SecurityGuard.securityGuard)
             {
                 PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>();
                 animator?.Stop();
@@ -871,7 +871,7 @@ namespace TheOtherRoles
             Lawyer.clearAndReload();
             Pursuer.pursuer = player;
 
-            if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId && client != null)
+            if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId && client != null)
             {
                 Transform playerInfoTransform = client.cosmetics.nameText.transform.parent.FindChild("Info");
                 TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
@@ -897,13 +897,13 @@ namespace TheOtherRoles
 
             PlayerControl guesser = Helpers.playerById(killerId);
             if (HudManager.Instance != null && guesser != null)
-                if (PlayerControl.LocalPlayer == dyingTarget)
+                if (CachedPlayer.LocalPlayer.PlayerControl == dyingTarget)
                     HudManager.Instance.KillOverlay.ShowKillAnimation(guesser.Data, dyingTarget.Data);
-                else if (dyingLoverPartner != null && PlayerControl.LocalPlayer == dyingLoverPartner)
+                else if (dyingLoverPartner != null && CachedPlayer.LocalPlayer.PlayerControl == dyingLoverPartner)
                     HudManager.Instance.KillOverlay.ShowKillAnimation(dyingLoverPartner.Data, dyingLoverPartner.Data);
 
             PlayerControl guessedTarget = Helpers.playerById(guessedTargetId);
-            if (Guesser.showInfoInGhostChat && PlayerControl.LocalPlayer.Data.IsDead && guessedTarget != null)
+            if (Guesser.showInfoInGhostChat && CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && guessedTarget != null)
             {
                 RoleInfo roleInfo = RoleInfo.allRoleInfos.FirstOrDefault(x => (byte)x.roleType == guessedRoleType);
                 string msg = string.Format(ModTranslation.getString("guesserGuessChat"), roleInfo.name, guessedTarget.Data.PlayerName);
@@ -1009,9 +1009,9 @@ namespace TheOtherRoles
 
             if (HudManager.Instance != null && GM.gm != null)
             {
-                if (PlayerControl.LocalPlayer == target)
+                if (CachedPlayer.LocalPlayer.PlayerControl == target)
                     HudManager.Instance.KillOverlay.ShowKillAnimation(GM.gm.Data, target.Data);
-                else if (partner != null && PlayerControl.LocalPlayer == partner)
+                else if (partner != null && CachedPlayer.LocalPlayer.PlayerControl == partner)
                     HudManager.Instance.KillOverlay.ShowKillAnimation(GM.gm.Data, partner.Data);
             }
         }
@@ -1032,7 +1032,7 @@ namespace TheOtherRoles
                 finalStatuses[partner.PlayerId] = FinalStatus.Alive;
             }
 
-            if (PlayerControl.LocalPlayer.isGM())
+            if (CachedPlayer.LocalPlayer.PlayerControl.isGM())
             {
                 HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
             }
@@ -1129,7 +1129,7 @@ namespace TheOtherRoles
             // 呪殺
             if (target.isRole(RoleType.Fox) || target.isRole(RoleType.SchrodingersCat) || target.isRole(RoleType.Puppeteer))
             {
-                if (!PlayerControl.LocalPlayer.isRole(RoleType.FortuneTeller))
+                if (!CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.FortuneTeller))
                 {
                     KillAnimationCoPerformKillPatch.hideNextAnimation = true;
                     fortuneTeller.MurderPlayer(target);
@@ -1140,13 +1140,13 @@ namespace TheOtherRoles
                 }
             }
             // インポスターの場合は占い師の位置に矢印を表示 ラストインポスターの占いの場合は表示しない
-            if (fortuneTeller.isRole(RoleType.FortuneTeller) && PlayerControl.LocalPlayer.isImpostor())
+            if (fortuneTeller.isRole(RoleType.FortuneTeller) && CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
             {
                 FortuneTeller.fortuneTellerMessage(ModTranslation.getString("fortuneTellerDivinedSomeone"), 5f, Color.white);
                 FortuneTeller.setDivinedFlag(fortuneTeller, true);
             }
             // 占われたのが背徳者の場合は通知を表示
-            if (target.isRole(RoleType.Immoralist) && PlayerControl.LocalPlayer.isRole(RoleType.Immoralist))
+            if (target.isRole(RoleType.Immoralist) && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Immoralist))
             {
                 FortuneTeller.fortuneTellerMessage(ModTranslation.getString("fortuneTellerDivinedYou"), 5f, Color.white);
             }
@@ -1233,7 +1233,7 @@ namespace TheOtherRoles
                         5 => LaboSpawn,
                         _ => InitialSpawnCenter,
                     };
-                    foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                    foreach (PlayerControl player in CachedPlayer.AllPlayers)
                     {
                         if (player.Data.PlayerId == playerId)
                         {
@@ -1247,17 +1247,17 @@ namespace TheOtherRoles
         public static void plantBomb(byte playerId)
         {
             var p = Helpers.playerById(playerId);
-            if (PlayerControl.LocalPlayer.isRole(RoleType.BomberA)) BomberB.bombTarget = p;
-            if (PlayerControl.LocalPlayer.isRole(RoleType.BomberB)) BomberA.bombTarget = p;
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.BomberA)) BomberB.bombTarget = p;
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.BomberB)) BomberA.bombTarget = p;
         }
         public static void releaseBomb(byte killer, byte target)
         {
             // 同時押しでダブルキルが発生するのを防止するためにBomberAで一度受け取ってから実行する
-            if (PlayerControl.LocalPlayer.isRole(RoleType.BomberA))
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.BomberA))
             {
                 if (BomberA.bombTarget != null && BomberB.bombTarget != null)
                 {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.BomberKill, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.BomberKill, Hazel.SendOption.Reliable, -1);
                     writer.Write(killer);
                     writer.Write(target);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);

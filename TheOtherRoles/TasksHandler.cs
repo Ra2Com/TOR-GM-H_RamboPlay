@@ -15,7 +15,7 @@ namespace TheOtherRoles
             {
                 if (!MapOptions.hideTaskArrows) return;
                 bool commsActive = false;
-                foreach (PlayerTask t in PlayerControl.LocalPlayer.myTasks)
+                foreach (PlayerTask t in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
                 {
                     if (t.TaskType == TaskTypes.FixComms)
                     {
@@ -38,7 +38,7 @@ namespace TheOtherRoles
             {
                 if (!MapOptions.hideTaskArrows) return;
                 bool commsActive = false;
-                foreach (PlayerTask t in PlayerControl.LocalPlayer.myTasks)
+                foreach (PlayerTask t in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
                 {
                     if (t.TaskType == TaskTypes.FixComms)
                     {

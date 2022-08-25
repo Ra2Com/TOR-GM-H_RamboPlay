@@ -42,12 +42,12 @@ namespace TheOtherRoles
         public override void OnMeetingStart() { }
         public override void OnMeetingEnd()
         {
-            canKill = sheriffCanKillNoDeadBody || PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Any(p => p.Data.IsDead);
+            canKill = sheriffCanKillNoDeadBody || CachedPlayer.AllPlayers.ToArray().Any(p => p.Data.IsDead);
         }
 
         public override void FixedUpdate()
         {
-            if (player == PlayerControl.LocalPlayer && numShots > 0)
+            if (player == CachedPlayer.LocalPlayer.PlayerControl && numShots > 0)
             {
                 currentTarget = setTarget();
                 setPlayerOutline(currentTarget, Sheriff.color);
@@ -70,7 +70,7 @@ namespace TheOtherRoles
                         return;
                     }
 
-                    MurderAttemptResult murderAttemptResult = Helpers.checkMuderAttempt(PlayerControl.LocalPlayer, local.currentTarget);
+                    MurderAttemptResult murderAttemptResult = Helpers.checkMuderAttempt(CachedPlayer.LocalPlayer.PlayerControl, local.currentTarget);
                     if (murderAttemptResult == MurderAttemptResult.SuppressKill) return;
 
                     if (murderAttemptResult == MurderAttemptResult.PerformKill)
@@ -90,7 +90,7 @@ namespace TheOtherRoles
                         }
                         else
                         {
-                            //targetId = PlayerControl.LocalPlayer.PlayerId;
+                            //targetId = CachedPlayer.LocalPlayer.PlayerControl.PlayerId;
                             misfire = true;
                         }
 
@@ -99,18 +99,18 @@ namespace TheOtherRoles
                         {
                             misfire = true;
                         }
-                        MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SheriffKill, Hazel.SendOption.Reliable, -1);
-                        killWriter.Write(PlayerControl.LocalPlayer.Data.PlayerId);
+                        MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SheriffKill, Hazel.SendOption.Reliable, -1);
+                        killWriter.Write(CachedPlayer.LocalPlayer.PlayerControl.Data.PlayerId);
                         killWriter.Write(targetId);
                         killWriter.Write(misfire);
                         AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                        RPCProcedure.sheriffKill(PlayerControl.LocalPlayer.Data.PlayerId, targetId, misfire);
+                        RPCProcedure.sheriffKill(CachedPlayer.LocalPlayer.PlayerControl.Data.PlayerId, targetId, misfire);
                     }
 
                     sheriffKillButton.Timer = sheriffKillButton.MaxTimer;
                     local.currentTarget = null;
                 },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Sheriff) && local.numShots > 0 && !PlayerControl.LocalPlayer.Data.IsDead && local.canKill; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Sheriff) && local.numShots > 0 && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && local.canKill; },
                 () =>
                 {
                     if (sheriffNumShotsText != null)
@@ -120,7 +120,7 @@ namespace TheOtherRoles
                         else
                             sheriffNumShotsText.text = "";
                     }
-                    return local.currentTarget && PlayerControl.LocalPlayer.CanMove;
+                    return local.currentTarget && CachedPlayer.LocalPlayer.PlayerControl.CanMove;
                 },
                 () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer; },
                 hm.KillButton.graphic.sprite,

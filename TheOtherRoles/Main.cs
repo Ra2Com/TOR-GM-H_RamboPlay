@@ -148,7 +148,7 @@ namespace TheOtherRoles
                 //ゲーム強制終了
                 if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.F5))
                 {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.forceEnd();
                 }
@@ -173,7 +173,7 @@ namespace TheOtherRoles
                 // int color = random.Next(Palette.PlayerColors.Length);
                 // int nameplate = random.Next(HatManager.Instance.AllNamePlates.Count);
 
-                // playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
+                // playerControl.transform.position = CachedPlayer.LocalPlayer.PlayerControl.transform.position;
                 // playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 // playerControl.NetTransform.enabled = false;
                 // playerControl.SetName(RandomString(10));

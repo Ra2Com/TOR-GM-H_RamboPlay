@@ -49,7 +49,7 @@ namespace TheOtherRoles
             // 処理に自信がないので念の為tryで囲っておく
             try
             {
-                if (PlayerControl.LocalPlayer.isRole(RoleType.Trapper) && Trap.traps.Count != 0 && !Trap.hasTrappedPlayer() && !meetingFlag)
+                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Trapper) && Trap.traps.Count != 0 && !Trap.hasTrappedPlayer() && !meetingFlag)
                 {
                     // トラップを踏んだプレイヤーを動けなくする
                     foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
@@ -80,19 +80,19 @@ namespace TheOtherRoles
                                         UnityEngine.Object.Destroy(text.gameObject);
                                     }
                                 })));
-                                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ActivateTrap, Hazel.SendOption.Reliable, -1);
+                                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ActivateTrap, Hazel.SendOption.Reliable, -1);
                                 writer.Write(trap.Key);
-                                writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                                writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                                 writer.Write(p.PlayerId);
                                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                                RPCProcedure.activateTrap(trap.Key, PlayerControl.LocalPlayer.PlayerId, p.PlayerId);
+                                RPCProcedure.activateTrap(trap.Key, CachedPlayer.LocalPlayer.PlayerControl.PlayerId, p.PlayerId);
                                 break;
                             }
                         }
                     }
                 }
 
-                if (PlayerControl.LocalPlayer.isRole(RoleType.Trapper) && Trap.hasTrappedPlayer() && !meetingFlag)
+                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Trapper) && Trap.hasTrappedPlayer() && !meetingFlag)
                 {
                     // トラップにかかっているプレイヤーを救出する
                     foreach (var trap in Trap.traps)
@@ -106,7 +106,7 @@ namespace TheOtherRoles
                             float distance = Vector3.Distance(p1, p2);
                             if (distance < 0.5)
                             {
-                                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DisableTrap, Hazel.SendOption.Reliable, -1);
+                                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.DisableTrap, Hazel.SendOption.Reliable, -1);
                                 writer.Write(trap.Key);
                                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                                 RPCProcedure.disableTrap(trap.Key);
@@ -125,7 +125,7 @@ namespace TheOtherRoles
         public override void OnKill(PlayerControl target)
         {
             //　キルクールダウン設定
-            if (PlayerControl.LocalPlayer.isRole(RoleType.Trapper))
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Trapper))
             {
                 if (Trap.isTrapped(target) && !isTrapKill)  // トラップにかかっている対象をキルした場合のボーナス
                 {
@@ -148,7 +148,7 @@ namespace TheOtherRoles
                 if (!isTrapKill)
                 {
                     MessageWriter writer;
-                    writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ClearTrap, Hazel.SendOption.Reliable, -1);
+                    writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ClearTrap, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.clearTrap();
                 }
@@ -164,17 +164,17 @@ namespace TheOtherRoles
             trapperSetTrapButton = new CustomButton(
                 () =>
                 { // ボタンが押された時に実行
-                    if (!PlayerControl.LocalPlayer.CanMove || Trap.hasTrappedPlayer()) return;
+                    if (!CachedPlayer.LocalPlayer.PlayerControl.CanMove || Trap.hasTrappedPlayer()) return;
                     Trapper.setTrap();
                     trapperSetTrapButton.Timer = trapperSetTrapButton.MaxTimer;
                 },
                 () =>
                 { /*ボタン有効になる条件*/
-                    return PlayerControl.LocalPlayer.isRole(RoleType.Trapper) && !PlayerControl.LocalPlayer.Data.IsDead;
+                    return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Trapper) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead;
                 },
                 () =>
                 { /*ボタンが使える条件*/
-                    return PlayerControl.LocalPlayer.CanMove && !Trap.hasTrappedPlayer();
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove && !Trap.hasTrappedPlayer();
                 },
                 () =>
                 { /*ミーティング終了時*/
@@ -211,11 +211,11 @@ namespace TheOtherRoles
         }
         public static void setTrap()
         {
-            var pos = PlayerControl.LocalPlayer.transform.position;
+            var pos = CachedPlayer.LocalPlayer.PlayerControl.transform.position;
             byte[] buff = new byte[sizeof(float) * 2];
             Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0 * sizeof(float), sizeof(float));
             Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1 * sizeof(float), sizeof(float));
-            MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaceTrap, Hazel.SendOption.Reliable);
+            MessageWriter writer = AmongUsClient.Instance.StartRpc(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PlaceTrap, Hazel.SendOption.Reliable);
             writer.WriteBytesAndSize(buff);
             writer.EndMessage();
             RPCProcedure.placeTrap(buff);
@@ -236,7 +236,7 @@ namespace TheOtherRoles
             public static void Prefix(PlayerControl __instance)
             {
                 // トラップ中にミーティングが来たら直後に死亡する
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TrapperMeetingFlag, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.TrapperMeetingFlag, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.trapperMeetingFlag();
             }

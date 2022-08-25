@@ -102,7 +102,7 @@ namespace TheOtherRoles
 
             Vector3 fortuneTellerCalcPos(byte index)
             {
-                int adjIndex = index < PlayerControl.LocalPlayer.PlayerId ? index : index - 1;
+                int adjIndex = index < CachedPlayer.LocalPlayer.PlayerControl.PlayerId ? index : index - 1;
                 return new Vector3(-0.25f, -0.15f, 0) + Vector3.right * adjIndex * 0.55f;
             }
 
@@ -110,7 +110,7 @@ namespace TheOtherRoles
             {
                 return () =>
                 {
-                    if (PlayerControl.LocalPlayer.CanMove && local.numUsed < 1 && local.canDivine(index))
+                    if (CachedPlayer.LocalPlayer.PlayerControl.CanMove && local.numUsed < 1 && local.canDivine(index))
                     {
                         PlayerControl p = Helpers.playerById(index);
                         local.divine(p);
@@ -122,8 +122,8 @@ namespace TheOtherRoles
             {
                 return () =>
                 {
-                    return PlayerControl.LocalPlayer.isRole(RoleType.FortuneTeller);
-                    //var p = PlayerControl.LocalPlayer;
+                    return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.FortuneTeller);
+                    //var p = CachedPlayer.LocalPlayer.PlayerControl;
                     //if (!p.isRole(RoleType.FortuneTeller)) return false;
                 };
             }
@@ -146,7 +146,7 @@ namespace TheOtherRoles
             void setIconPos(byte index, bool transparent)
             {
                 MapOptions.playerIcons[index].transform.localScale = Vector3.one * 0.25f;
-                MapOptions.playerIcons[index].gameObject.SetActive(PlayerControl.LocalPlayer.CanMove);
+                MapOptions.playerIcons[index].gameObject.SetActive(CachedPlayer.LocalPlayer.PlayerControl.CanMove);
                 MapOptions.playerIcons[index].setSemiTransparent(transparent);
             }
 
@@ -156,10 +156,10 @@ namespace TheOtherRoles
                 {
                     //　占い師以外の場合、リソースがない場合はボタンを表示しない
                     if (!MapOptions.playerIcons.ContainsKey(index) ||
-                        !PlayerControl.LocalPlayer.isRole(RoleType.FortuneTeller) ||
-                        PlayerControl.LocalPlayer.isDead() ||
-                        PlayerControl.LocalPlayer.PlayerId == index ||
-                        !isCompletedNumTasks(PlayerControl.LocalPlayer) ||
+                        !CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.FortuneTeller) ||
+                        CachedPlayer.LocalPlayer.PlayerControl.isDead() ||
+                        CachedPlayer.LocalPlayer.PlayerControl.PlayerId == index ||
+                        !isCompletedNumTasks(CachedPlayer.LocalPlayer.PlayerControl) ||
                         local.numUsed >= 1)
                     {
                         if (MapOptions.playerIcons.ContainsKey(index))
@@ -193,10 +193,10 @@ namespace TheOtherRoles
                     // アイコンの位置と透明度を変更
                     setIconPos(index, !local.canDivine(index));
 
-                    MapOptions.playerIcons[index].gameObject.SetActive(Helpers.ShowButtons && PlayerControl.LocalPlayer.CanMove);
-                    fortuneTellerButtons[index].setActive(Helpers.ShowButtons && PlayerControl.LocalPlayer.CanMove);
+                    MapOptions.playerIcons[index].gameObject.SetActive(Helpers.ShowButtons && CachedPlayer.LocalPlayer.PlayerControl.CanMove);
+                    fortuneTellerButtons[index].setActive(Helpers.ShowButtons && CachedPlayer.LocalPlayer.PlayerControl.CanMove);
 
-                    return PlayerControl.LocalPlayer.CanMove && local.numUsed < 1 && local.canDivine(index);
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove && local.numUsed < 1 && local.canDivine(index);
                 };
             }
 
@@ -235,13 +235,13 @@ namespace TheOtherRoles
 
         private void fortuneTellerUpdate()
         {
-            if (player == PlayerControl.LocalPlayer && !meetingFlag)
+            if (player == CachedPlayer.LocalPlayer.PlayerControl && !meetingFlag)
             {
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (!progress.ContainsKey(p.PlayerId)) progress[p.PlayerId] = 0f;
                     if (p.isDead()) continue;
-                    var fortuneTeller = PlayerControl.LocalPlayer;
+                    var fortuneTeller = CachedPlayer.LocalPlayer.PlayerControl;
                     float distance = Vector3.Distance(p.transform.position, fortuneTeller.transform.position);
                     // 障害物判定
                     bool anythingBetween = PhysicsHelpers.AnythingBetween(p.GetTruePosition(), fortuneTeller.GetTruePosition(), Constants.ShipAndObjectsMask, false);
@@ -258,7 +258,7 @@ namespace TheOtherRoles
 
         public void impostorArrowUpdate()
         {
-            if (PlayerControl.LocalPlayer.isImpostor())
+            if (CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
             {
 
                 // 前フレームからの経過時間をマイナスする
@@ -364,11 +364,11 @@ namespace TheOtherRoles
             numUsed += 1;
 
             // 占いを実行したことで発火される処理を他クライアントに通知
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.FortuneTellerUsedDivine, Hazel.SendOption.Reliable, -1);
-            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.FortuneTellerUsedDivine, Hazel.SendOption.Reliable, -1);
+            writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
             writer.Write(p.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.fortuneTellerUsedDivine(PlayerControl.LocalPlayer.PlayerId, p.PlayerId);
+            RPCProcedure.fortuneTellerUsedDivine(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, p.PlayerId);
         }
 
         private static TMPro.TMP_Text text;

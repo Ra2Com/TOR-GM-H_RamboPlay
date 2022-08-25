@@ -57,12 +57,12 @@ namespace TheOtherRoles
                 SoundManager._Instance.PlaySound(laugh, false, 1f);
             }
             soundFlag = false;
-            if (!isAlive && (PlayerControl.LocalPlayer.isImpostor() || PlayerControl.LocalPlayer.isRole(RoleType.Jackal) || PlayerControl.LocalPlayer.isRole(RoleType.JekyllAndHyde)))
+            if (!isAlive && (CachedPlayer.LocalPlayer.PlayerControl.isImpostor() || CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Jackal) || CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.JekyllAndHyde)))
             {
                 string msg = $"人形遣いのカウント数 {counter}/{numKills}";
                 if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
                 {
-                    FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg);
+                    FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(CachedPlayer.LocalPlayer.PlayerControl, msg);
                 }
             }
 
@@ -73,14 +73,14 @@ namespace TheOtherRoles
             target = null;
             canSpawn = false;
             isActive = false;
-            if (PlayerControl.LocalPlayer.isRole(RoleType.Puppeteer))
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer))
             {
                 switchStealth(false);
             }
         }
         public override void FixedUpdate()
         {
-            if (PlayerControl.LocalPlayer.isRole(RoleType.Puppeteer))
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer))
             {
                 currentTarget = setTarget();
                 setPlayerOutline(currentTarget, Puppeteer.color);
@@ -123,7 +123,7 @@ namespace TheOtherRoles
                     }
                 },
                 // HasButton
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Puppeteer) && (PlayerControl.LocalPlayer.isAlive() || canControlDummyEvenIfDead); },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer) && (CachedPlayer.LocalPlayer.PlayerControl.isAlive() || canControlDummyEvenIfDead); },
                 // CouldUse
                 () =>
                 {
@@ -134,7 +134,7 @@ namespace TheOtherRoles
                         sampleButton.isEffectActive = false;
                     }
 
-                    return PlayerControl.LocalPlayer.CanMove && currentTarget != null;
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove && currentTarget != null;
                 },
                 // OnMeetingEnds
                 () =>
@@ -184,7 +184,7 @@ namespace TheOtherRoles
                     }
                 },
                 // HasButton
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Puppeteer) && (PlayerControl.LocalPlayer.isAlive() || canControlDummyEvenIfDead) && target != null; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer) && (CachedPlayer.LocalPlayer.PlayerControl.isAlive() || canControlDummyEvenIfDead) && target != null; },
                 // CouldUse
                 () =>
                 {
@@ -253,18 +253,18 @@ namespace TheOtherRoles
             if (dummy == null)
             {
                 var playerId = (byte)GameData.Instance.GetAvailableId();
-                writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SpawnDummy, Hazel.SendOption.Reliable, -1);
+                writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SpawnDummy, Hazel.SendOption.Reliable, -1);
                 writer.Write(playerId);
-                writer.Write(PlayerControl.LocalPlayer.transform.position.x);
-                writer.Write(PlayerControl.LocalPlayer.transform.position.y);
-                writer.Write(PlayerControl.LocalPlayer.transform.position.z);
+                writer.Write(CachedPlayer.LocalPlayer.PlayerControl.transform.position.x);
+                writer.Write(CachedPlayer.LocalPlayer.PlayerControl.transform.position.y);
+                writer.Write(CachedPlayer.LocalPlayer.PlayerControl.transform.position.z);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.spawnDummy(playerId, PlayerControl.LocalPlayer.transform.position);
+                RPCProcedure.spawnDummy(playerId, CachedPlayer.LocalPlayer.PlayerControl.transform.position);
             }
-            writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MoveDummy, Hazel.SendOption.Reliable, -1);
-            writer.Write(PlayerControl.LocalPlayer.transform.position.x);
-            writer.Write(PlayerControl.LocalPlayer.transform.position.y);
-            writer.Write(PlayerControl.LocalPlayer.transform.position.z);
+            writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.MoveDummy, Hazel.SendOption.Reliable, -1);
+            writer.Write(CachedPlayer.LocalPlayer.PlayerControl.transform.position.x);
+            writer.Write(CachedPlayer.LocalPlayer.PlayerControl.transform.position.y);
+            writer.Write(CachedPlayer.LocalPlayer.PlayerControl.transform.position.z);
             writer.Write(true);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             // 暫定遅延実行　何故か透明化が解除されないため
@@ -272,12 +272,12 @@ namespace TheOtherRoles
             {
                 if (p == 1)
                 {
-                    RPCProcedure.moveDummy(PlayerControl.LocalPlayer.transform.position);
+                    RPCProcedure.moveDummy(CachedPlayer.LocalPlayer.PlayerControl.transform.position);
                 }
             })));
             if (target != null)
             {
-                writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PuppeteerMorph, Hazel.SendOption.Reliable, -1);
+                writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PuppeteerMorph, Hazel.SendOption.Reliable, -1);
                 writer.Write(target.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.puppeteerMorph(target.PlayerId);
@@ -300,7 +300,7 @@ namespace TheOtherRoles
                 hm.UICamera.orthographicSize = originalZoom;
                 hm.transform.localScale = originalScale;
 
-                if (PlayerControl.LocalPlayer.isAlive())
+                if (CachedPlayer.LocalPlayer.PlayerControl.isAlive())
                 {
                     hm.ShadowQuad.gameObject.SetActive(true);
                 }
@@ -317,31 +317,31 @@ namespace TheOtherRoles
         {
             if (!flag)
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PuppeteerStealth, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PuppeteerStealth, Hazel.SendOption.Reliable, -1);
                 writer.Write(false);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.puppeteerStealth(false);
                 var hudManager = FastDestroyableSingleton<HudManager>.Instance;
-                hudManager.PlayerCam.SetTarget(PlayerControl.LocalPlayer);
+                hudManager.PlayerCam.SetTarget(CachedPlayer.LocalPlayer.PlayerControl);
                 senrigan(false);
-                var player = PlayerControl.LocalPlayer;
+                var player = CachedPlayer.LocalPlayer.PlayerControl;
                 player.myLight = UnityEngine.Object.Instantiate<LightSource>(player.LightPrefab);
                 player.myLight.transform.SetParent(player.transform);
                 player.myLight.transform.localPosition = player.Collider.offset;
-                PlayerControl.LocalPlayer.moveable = true;
+                CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
             }
             else
             {
                 // 常に自身の位置から人形をスタートさせる
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MoveDummy, Hazel.SendOption.Reliable, -1);
-                writer.Write(PlayerControl.LocalPlayer.transform.position.x);
-                writer.Write(PlayerControl.LocalPlayer.transform.position.y);
-                writer.Write(PlayerControl.LocalPlayer.transform.position.z);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.MoveDummy, Hazel.SendOption.Reliable, -1);
+                writer.Write(CachedPlayer.LocalPlayer.PlayerControl.transform.position.x);
+                writer.Write(CachedPlayer.LocalPlayer.PlayerControl.transform.position.y);
+                writer.Write(CachedPlayer.LocalPlayer.PlayerControl.transform.position.z);
                 writer.Write(true);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.moveDummy(PlayerControl.LocalPlayer.transform.position);
+                RPCProcedure.moveDummy(CachedPlayer.LocalPlayer.PlayerControl.transform.position);
 
-                writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PuppeteerStealth, Hazel.SendOption.Reliable, -1);
+                writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PuppeteerStealth, Hazel.SendOption.Reliable, -1);
                 writer.Write(true);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.puppeteerStealth(true);
@@ -360,8 +360,8 @@ namespace TheOtherRoles
                 dummy.myLight = UnityEngine.Object.Instantiate<LightSource>(dummy.LightPrefab);
                 dummy.myLight.transform.SetParent(dummy.transform);
                 dummy.myLight.transform.localPosition = dummy.Collider.offset;
-                PlayerControl.LocalPlayer.NetTransform.Halt();
-                PlayerControl.LocalPlayer.moveable = false;
+                CachedPlayer.LocalPlayer.PlayerControl.NetTransform.Halt();
+                CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
 
             }
         }
@@ -385,9 +385,9 @@ namespace TheOtherRoles
             {
                 counter += 1;
             }
-            if (counter >= numKills && PlayerControl.LocalPlayer.isRole(RoleType.Puppeteer))
+            if (counter >= numKills && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer))
             {
-                MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PuppeteerWin, Hazel.SendOption.Reliable, -1);
+                MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PuppeteerWin, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(winWriter);
                 RPCProcedure.puppeteerWin();
             }
@@ -408,12 +408,12 @@ namespace TheOtherRoles
             }
 
             // 人形遣い専用の処理なので人形遣い以外はreturn
-            if (!PlayerControl.LocalPlayer.isRole(RoleType.Puppeteer)) return;
+            if (!CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer)) return;
 
             // 勝利条件を満たしていたら勝利
             if (counter >= numKills)
             {
-                MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PuppeteerWin, Hazel.SendOption.Reliable, -1);
+                MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PuppeteerWin, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(winWriter);
                 RPCProcedure.puppeteerWin();
             }
@@ -421,7 +421,7 @@ namespace TheOtherRoles
             // ダミー死亡時に連動して発動するキル処理
             if (target.isAlive() && isAlive && !killer.isCrew())
             {
-                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PuppeteerKill, Hazel.SendOption.Reliable, -1);
+                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PuppeteerKill, Hazel.SendOption.Reliable, -1);
                 killWriter.Write(killer.PlayerId);
                 killWriter.Write(target.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(killWriter);
@@ -429,11 +429,11 @@ namespace TheOtherRoles
             }
             else if (isAlive && killer.isCrew()) // ダミーをクルーがキルした場合は人形遣いが死亡する
             {
-                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PuppeteerKill, Hazel.SendOption.Reliable, -1);
+                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PuppeteerKill, Hazel.SendOption.Reliable, -1);
                 killWriter.Write(killer.PlayerId);
-                killWriter.Write(PlayerControl.LocalPlayer.PlayerId);
+                killWriter.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                RPCProcedure.puppeteerKill(killer.PlayerId, PlayerControl.LocalPlayer.PlayerId);
+                RPCProcedure.puppeteerKill(killer.PlayerId, CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
             }
 
 
@@ -467,7 +467,7 @@ namespace TheOtherRoles
                 arrows = new List<Arrow>();
 
                 // インポスターの位置を示すArrowsを描画
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (p.Data.IsDead || !p.Data.Role) continue;
                     Arrow arrow;
@@ -515,7 +515,7 @@ namespace TheOtherRoles
 
                 if (dummy != null)
                 {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MoveDummy, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.MoveDummy, Hazel.SendOption.Reliable, -1);
                     writer.Write(Puppeteer.dummy.transform.position.x);
                     writer.Write(Puppeteer.dummy.transform.position.y);
                     writer.Write(Puppeteer.dummy.transform.position.z);
@@ -574,8 +574,8 @@ namespace TheOtherRoles
                     if (puppeteer == null || puppeteer.isDead()) return;
 
                     bool canSee =
-                        PlayerControl.LocalPlayer.isRole(RoleType.Puppeteer) ||
-                        PlayerControl.LocalPlayer.isDead();
+                        CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer) ||
+                        CachedPlayer.LocalPlayer.PlayerControl.isDead();
 
                     var opacity = canSee ? 0.1f : 0.0f;
 
@@ -596,8 +596,8 @@ namespace TheOtherRoles
                     if (dummy == null || dummy.isDead()) return;
 
                     bool canSee =
-                        PlayerControl.LocalPlayer.isRole(RoleType.Puppeteer) ||
-                        PlayerControl.LocalPlayer.isDead();
+                        CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer) ||
+                        CachedPlayer.LocalPlayer.PlayerControl.isDead();
 
                     var opacity = canSee ? 0.1f : 0.0f;
 
@@ -643,7 +643,7 @@ namespace TheOtherRoles
             }
             public static void Postfix(KeyboardJoystick __instance)
             {
-                if (!PlayerControl.LocalPlayer.isRole(RoleType.Puppeteer)) return;
+                if (!CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer)) return;
 
                 if (stealthed)
                 {
@@ -736,7 +736,7 @@ namespace TheOtherRoles
                             }
                             if (target != null)
                             {
-                                MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PuppeteerClimbRadder, Hazel.SendOption.Reliable, -1);
+                                MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PuppeteerClimbRadder, Hazel.SendOption.Reliable, -1);
                                 messageWriter.Write(dummy.PlayerId);
                                 messageWriter.Write(target.Id);
                                 AmongUsClient.Instance.FinishRpcImmediately(messageWriter);
@@ -754,7 +754,7 @@ namespace TheOtherRoles
                                 float distanceLeft = Vector2.Distance(rightPlatform.transform.position, dummy.transform.position);
                                 if (distanceRight < 0.8f || distanceLeft < 0.8f)
                                 {
-                                    MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PuppeteerUsePlatform, Hazel.SendOption.Reliable, -1);
+                                    MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PuppeteerUsePlatform, Hazel.SendOption.Reliable, -1);
                                     messageWriter.Write(dummy.PlayerId);
                                     AmongUsClient.Instance.FinishRpcImmediately(messageWriter);
                                     RPCProcedure.puppeteerUsePlatform(dummy.PlayerId);
@@ -764,7 +764,7 @@ namespace TheOtherRoles
                                     {
                                         if (t >= 1.0f)
                                         {
-                                            messageWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PuppeteerUsePlatform, Hazel.SendOption.Reliable, -1);
+                                            messageWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PuppeteerUsePlatform, Hazel.SendOption.Reliable, -1);
                                             messageWriter.Write(dummy.PlayerId);
                                             AmongUsClient.Instance.FinishRpcImmediately(messageWriter);
                                             RPCProcedure.puppeteerUsePlatform(dummy.PlayerId);
@@ -835,7 +835,7 @@ namespace TheOtherRoles
                         MessageWriter writer;
                         if (offset != Vector2.zero)
                         {
-                            writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WalkDummy, Hazel.SendOption.Reliable, -1);
+                            writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.WalkDummy, Hazel.SendOption.Reliable, -1);
                             writer.Write(offset.x);
                             writer.Write(offset.y);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -843,7 +843,7 @@ namespace TheOtherRoles
                         }
                         if (!(up || down || right || left) && dummy.NetTransform.targetSyncPosition != pos)
                         {
-                            writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MoveDummy, Hazel.SendOption.Reliable, -1);
+                            writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.MoveDummy, Hazel.SendOption.Reliable, -1);
                             writer.Write(Puppeteer.dummy.transform.position.x);
                             writer.Write(Puppeteer.dummy.transform.position.y);
                             writer.Write(Puppeteer.dummy.transform.position.z);

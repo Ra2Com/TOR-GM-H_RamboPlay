@@ -163,7 +163,7 @@ namespace TheOtherRoles
         {
             get
             {
-                return players.FirstOrDefault(x => x.player == PlayerControl.LocalPlayer);
+                return players.FirstOrDefault(x => x.player == CachedPlayer.LocalPlayer.PlayerControl);
             }
         }
 
@@ -198,7 +198,7 @@ namespace TheOtherRoles
 
         public static T getRole(PlayerControl player = null)
         {
-            player ??= PlayerControl.LocalPlayer;
+            player ??= CachedPlayer.LocalPlayer.PlayerControl;
             return players.FirstOrDefault(x => x.player == player);
         }
 

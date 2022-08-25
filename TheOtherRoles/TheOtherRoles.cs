@@ -341,7 +341,7 @@ namespace TheOtherRoles
 
             public static bool isInherited()
             {
-                return canInheritAbility && EvilHacker.evilHacker != null && EvilHacker.evilHacker.isDead() && PlayerControl.LocalPlayer.isImpostor();
+                return canInheritAbility && EvilHacker.evilHacker != null && EvilHacker.evilHacker.isDead() && CachedPlayer.LocalPlayer.PlayerControl.isImpostor();
             }
 
             public static void clearAndReload()
@@ -965,7 +965,7 @@ namespace TheOtherRoles
 
             public static void updateStatus()
             {
-                if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer)
+                if (Arsonist.arsonist != null && Arsonist.arsonist == CachedPlayer.LocalPlayer.PlayerControl)
                 {
                     dousedEveryone = dousedEveryoneAlive();
                 }
@@ -978,16 +978,16 @@ namespace TheOtherRoles
                     pp.gameObject.SetActive(false);
                 }
 
-                if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer)
+                if (Arsonist.arsonist != null && Arsonist.arsonist == CachedPlayer.LocalPlayer.PlayerControl)
                 {
                     int visibleCounter = 0;
                     Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
                     bottomLeft.x *= -1;
                     bottomLeft += new Vector3(-0.25f, -0.25f, 0);
 
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                    foreach (PlayerControl p in CachedPlayer.AllPlayers)
                     {
-                        if (p.PlayerId == PlayerControl.LocalPlayer.PlayerId) continue;
+                        if (p.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId) continue;
                         if (!MapOptions.playerIcons.ContainsKey(p.PlayerId)) continue;
 
                         if (p.Data.IsDead || p.Data.Disconnected)

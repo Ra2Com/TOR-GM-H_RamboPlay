@@ -84,7 +84,7 @@ namespace TheOtherRoles.Patches
             {
                 mapIcons = new Dictionary<byte, SpriteRenderer>();
                 corpseIcons = new Dictionary<byte, SpriteRenderer>();
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     players.Add(p);
                 }
@@ -116,30 +116,30 @@ namespace TheOtherRoles.Patches
             static bool Prefix(MapBehaviour __instance)
             {
                 if (!MeetingHud.Instance) return true;  // Only run in meetings, and then set the Position of the HerePoint to the Position before the Meeting!
-                Vector3 vector = AntiTeleport.position != null ? AntiTeleport.position : PlayerControl.LocalPlayer.transform.position;
+                Vector3 vector = AntiTeleport.position != null ? AntiTeleport.position : CachedPlayer.LocalPlayer.PlayerControl.transform.position;
                 vector /= MapUtilities.CachedShipStatus.MapScale;
                 vector.x *= Mathf.Sign(MapUtilities.CachedShipStatus.transform.localScale.x);
                 vector.z = -1f;
                 __instance.HerePoint.transform.localPosition = vector;
-                PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
+                CachedPlayer.LocalPlayer.PlayerControl.SetPlayerMaterialColors(__instance.HerePoint);
                 return false;
             }
 
             static void Postfix(MapBehaviour __instance)
             {
-                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker) && EvilTracker.canSeeTargetPosition)
+                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker) && EvilTracker.canSeeTargetPosition)
                 {
                     evilTrackerFixedUpdate(__instance);
                 }
 
-                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited())
+                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilHacker) || EvilHacker.isInherited())
                 {
                     evilHackerFixedUpdate(__instance);
                 }
 
-                if (PlayerControl.LocalPlayer.isGM())
+                if (CachedPlayer.LocalPlayer.PlayerControl.isGM())
                 {
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                    foreach (PlayerControl p in CachedPlayer.AllPlayers)
                     {
                         if (p == null || p.isGM()) continue;
 
@@ -190,15 +190,15 @@ namespace TheOtherRoles.Patches
             {
                 if (!MeetingHud.Instance || __instance.IsOpen) return true;  // Only run in meetings and when the map is closed
 
-                if (PlayerControl.LocalPlayer.isImpostor())
+                if (CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
                 {
                     Vector3 pos = __instance.HerePoint.transform.parent.transform.position;
                     __instance.HerePoint.transform.parent.transform.position = new Vector3(pos.x, pos.y, -60f);
                     changeSabotageLayout(__instance);
-                    if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) return evilHackerShowMap(__instance);
-                    if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker)) return evilTrackerShowMap(__instance);
+                    if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) return evilHackerShowMap(__instance);
+                    if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker)) return evilTrackerShowMap(__instance);
                 }
-                PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
+                CachedPlayer.LocalPlayer.PlayerControl.SetPlayerMaterialColors(__instance.HerePoint);
                 __instance.GenericShow();
                 __instance.taskOverlay.Show();
                 __instance.ColorControl.SetColor(new Color(0.05f, 0.2f, 1f, 1f));
@@ -214,7 +214,7 @@ namespace TheOtherRoles.Patches
         {
             static void Prefix(MapBehaviour __instance)
             {
-                if (PlayerControl.LocalPlayer.isGM())
+                if (CachedPlayer.LocalPlayer.PlayerControl.isGM())
                 {
                     useButtonPos = HudManager.Instance.UseButton.transform.localPosition;
                 }
@@ -225,7 +225,7 @@ namespace TheOtherRoles.Patches
 
             static void Postfix(MapBehaviour __instance)
             {
-                if (PlayerControl.LocalPlayer.isGM())
+                if (CachedPlayer.LocalPlayer.PlayerControl.isGM())
                 {
                     if (mapIcons == null || corpseIcons == null)
                         initializeIcons(__instance);
@@ -254,7 +254,7 @@ namespace TheOtherRoles.Patches
         {
             static void Postfix(MapBehaviour __instance)
             {
-                if (PlayerControl.LocalPlayer.isGM())
+                if (CachedPlayer.LocalPlayer.PlayerControl.isGM())
                 {
                     HudManager.Instance.UseButton.transform.localPosition = useButtonPos;
                 }
@@ -266,7 +266,7 @@ namespace TheOtherRoles.Patches
         {
             static bool Prefix(ref bool __result, MapBehaviour __instance)
             {
-                if ((PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) && CustomOptionHolder.evilHackerCanMoveEvenIfUsesAdmin.getBool())
+                if ((CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) && CustomOptionHolder.evilHackerCanMoveEvenIfUsesAdmin.getBool())
                 {
                     __result = false;
                     return false;
@@ -285,8 +285,8 @@ namespace TheOtherRoles.Patches
                 Vector3 pos = __instance.HerePoint.transform.parent.transform.position;
                 __instance.HerePoint.transform.parent.transform.position = new Vector3(pos.x, pos.y, -60f);
                 changeSabotageLayout(__instance);
-                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) return evilHackerShowMap(__instance);
-                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker)) return evilTrackerShowMap(__instance);
+                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) return evilHackerShowMap(__instance);
+                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker)) return evilTrackerShowMap(__instance);
                 return true;
             }
             static void Postfix(MapBehaviour __instance)
@@ -426,9 +426,9 @@ namespace TheOtherRoles.Patches
 
             // インポスターの位置をマップに表示
             if (impostorHerePoint == null) impostorHerePoint = new();
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl p in CachedPlayer.AllPlayers)
             {
-                if (p.isImpostor() && p != PlayerControl.LocalPlayer)
+                if (p.isImpostor() && p != CachedPlayer.LocalPlayer.PlayerControl)
                 {
                     if (!impostorHerePoint.ContainsKey(p.PlayerId))
                     {
@@ -453,7 +453,7 @@ namespace TheOtherRoles.Patches
                 __instance.Close();
                 return false;
             }
-            // if (!PlayerControl.LocalPlayer.CanMove)
+            // if (!CachedPlayer.LocalPlayer.PlayerControl.CanMove)
             // {
             //     return false;
             // }
@@ -461,11 +461,11 @@ namespace TheOtherRoles.Patches
             {
                 __instance.specialInputHandler.disableVirtualCursor = true;
             }
-            PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
+            CachedPlayer.LocalPlayer.PlayerControl.SetPlayerMaterialColors(__instance.HerePoint);
             __instance.GenericShow();
             __instance.gameObject.SetActive(true);
             __instance.infectedOverlay.gameObject.SetActive(MeetingHud.Instance ? false : true);
-            if (TheOtherRolesPlugin.HideFakeTasks.Value && !(PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker) && EvilTracker.target != null))
+            if (TheOtherRolesPlugin.HideFakeTasks.Value && !(CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker) && EvilTracker.target != null))
             {
                 __instance.taskOverlay.Hide();
             }
@@ -487,7 +487,7 @@ namespace TheOtherRoles.Patches
                 __instance.Close();
                 return false;
             }
-            // if (!PlayerControl.LocalPlayer.CanMove)
+            // if (!CachedPlayer.LocalPlayer.PlayerControl.CanMove)
             // {
             //     return false;
             // }
@@ -496,7 +496,7 @@ namespace TheOtherRoles.Patches
                 __instance.specialInputHandler.disableVirtualCursor = true;
             }
             plainDoors = GameObject.FindObjectsOfType<PlainDoor>();
-            PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
+            CachedPlayer.LocalPlayer.PlayerControl.SetPlayerMaterialColors(__instance.HerePoint);
             __instance.GenericShow();
             __instance.gameObject.SetActive(true);
             AdminPatch.isEvilHackerAdmin = true;
@@ -524,14 +524,14 @@ namespace TheOtherRoles.Patches
         }
         public static void shareRealTasks()
         {
-            foreach (var task in PlayerControl.LocalPlayer.myTasks)
+            foreach (var task in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
             {
                 if (!task.IsComplete && task.HasLocation && !PlayerTask.TaskIsEmergency(task))
                 {
                     foreach (var loc in task.Locations)
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareRealTasks, Hazel.SendOption.Reliable, -1);
-                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareRealTasks, Hazel.SendOption.Reliable, -1);
+                        writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                         writer.Write(loc.x);
                         writer.Write(loc.y);
                         writer.Write(task.TaskStep);
@@ -545,7 +545,7 @@ namespace TheOtherRoles.Patches
         {
             static bool Prefix(MapTaskOverlay __instance)
             {
-                if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker))
+                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker))
                 {
                     return evilTrackerShowTask(__instance);
                 }
@@ -556,7 +556,7 @@ namespace TheOtherRoles.Patches
         private static bool evilTrackerShowTask(MapTaskOverlay __instance)
         {
             if (!MeetingHud.Instance) return true;  // Only run in meetings, and then set the Position of the HerePoint to the Position before the Meeting!
-            if (!PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker) || !CustomOptionHolder.evilTrackerCanSeeTargetTask.getBool()) return true;
+            if (!CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker) || !CustomOptionHolder.evilTrackerCanSeeTargetTask.getBool()) return true;
             if (EvilTracker.target == null) return true;
             if (realTasks[EvilTracker.target.PlayerId] == null) return false;
             __instance.gameObject.SetActive(true);

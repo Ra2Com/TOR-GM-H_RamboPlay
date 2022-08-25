@@ -47,7 +47,7 @@ namespace TheOtherRoles.Patches
         {
             public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ClientData client)
             {
-                if (PlayerControl.LocalPlayer != null)
+                if (CachedPlayer.LocalPlayer.PlayerControl != null)
                 {
                     Helpers.shareGameVersion();
                 }
@@ -102,8 +102,8 @@ namespace TheOtherRoles.Patches
 
             public static void Postfix(GameStartManager __instance)
             {
-                // Send version as soon as PlayerControl.LocalPlayer exists
-                if (PlayerControl.LocalPlayer != null && !versionSent)
+                // Send version as soon as CachedPlayer.LocalPlayer.PlayerControl exists
+                if (CachedPlayer.LocalPlayer.PlayerControl != null && !versionSent)
                 {
                     versionSent = true;
                     Helpers.shareGameVersion();
@@ -258,7 +258,7 @@ namespace TheOtherRoles.Patches
                             possibleMaps.Add(5);
                         byte chosenMapId = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
 
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
                         writer.Write(chosenMapId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.dynamicMapOption(chosenMapId);

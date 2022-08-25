@@ -164,7 +164,7 @@ namespace TheOtherRoles.Patches
             }
             AdditionalTempData.clear();
 
-            //foreach (var pc in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            //foreach (var pc in CachedPlayer.AllPlayers)
             var excludeRoles = new RoleType[] { RoleType.Lovers };
             foreach (var p in GameData.Instance.AllPlayers)
             {
@@ -193,7 +193,7 @@ namespace TheOtherRoles.Patches
                 });
             }
 
-            AdditionalTempData.isGM = CustomOptionHolder.gmEnabled.getBool() && PlayerControl.LocalPlayer.isGM();
+            AdditionalTempData.isGM = CustomOptionHolder.gmEnabled.getBool() && CachedPlayer.LocalPlayer.PlayerControl.isGM();
             AdditionalTempData.plagueDoctorInfected = PlagueDoctor.infected;
             AdditionalTempData.plagueDoctorProgress = PlagueDoctor.progress;
 
@@ -1091,7 +1091,7 @@ namespace TheOtherRoles.Patches
                 private static void UncheckedEndGame(GameOverReason reason)
                 {
                     ShipStatus.RpcEndGame(reason, false);
-                    /*MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedEndGame, Hazel.SendOption.Reliable, -1);
+                    /*MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedEndGame, Hazel.SendOption.Reliable, -1);
                     writer.Write((byte)reason);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.uncheckedEndGame((byte)reason);*/

@@ -85,7 +85,7 @@ namespace TheOtherRoles
 
         public override void FixedUpdate()
         {
-            if (player == PlayerControl.LocalPlayer)
+            if (player == CachedPlayer.LocalPlayer.PlayerControl)
             {
                 if (timeLimitText != null)
                     timeLimitText.enabled = false;
@@ -109,7 +109,7 @@ namespace TheOtherRoles
                     }
                     else if (timeLeft <= 0 && (honmei == null || keepsLeft == numKeeps))
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.AkujoSuicide, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.AkujoSuicide, Hazel.SendOption.Reliable, -1);
                         writer.Write(player.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.akujoSuicide(player.PlayerId);
@@ -179,14 +179,14 @@ namespace TheOtherRoles
             honmeiButton = new CustomButton(
                 () =>
                 {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.AkujoSetHonmei, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.AkujoSetHonmei, Hazel.SendOption.Reliable, -1);
                     writer.Write(local.player.PlayerId);
                     writer.Write(local.currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     local.setHonmei(local.currentTarget);
                 },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Akujo) && !PlayerControl.LocalPlayer.Data.IsDead && local.honmei == null && local.timeLeft > 0; },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Akujo) && !PlayerControl.LocalPlayer.Data.IsDead && local.currentTarget != null && local.honmei == null && local.timeLeft > 0; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Akujo) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && local.honmei == null && local.timeLeft > 0; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Akujo) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && local.currentTarget != null && local.honmei == null && local.timeLeft > 0; },
                 () => { honmeiButton.Timer = honmeiButton.MaxTimer; },
                 getHonmeiSprite(),
                 new Vector3(0f, 1.0f, 0),
@@ -206,13 +206,13 @@ namespace TheOtherRoles
             keepButton = new CustomButton(
                 () =>
                 {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.AkujoSetKeep, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.AkujoSetKeep, Hazel.SendOption.Reliable, -1);
                     writer.Write(local.player.PlayerId);
                     writer.Write(local.currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     local.setKeep(local.currentTarget);
                 },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Akujo) && !PlayerControl.LocalPlayer.Data.IsDead && local.keepsLeft > 0 && local.timeLeft > 0; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Akujo) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && local.keepsLeft > 0 && local.timeLeft > 0; },
                 () =>
                 {
                     if (numKeepsText != null)
@@ -222,7 +222,7 @@ namespace TheOtherRoles
                         else
                             numKeepsText.text = "";
                     }
-                    return PlayerControl.LocalPlayer.isRole(RoleType.Akujo) && !PlayerControl.LocalPlayer.Data.IsDead && local.currentTarget != null && local.keepsLeft > 0 && local.timeLeft > 0;
+                    return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Akujo) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && local.currentTarget != null && local.keepsLeft > 0 && local.timeLeft > 0;
                 },
                 () => { keepButton.Timer = keepButton.MaxTimer; },
                 getKeepSprite(),

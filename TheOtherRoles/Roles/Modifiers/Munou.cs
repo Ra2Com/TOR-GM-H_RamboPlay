@@ -100,7 +100,7 @@ namespace TheOtherRoles
         }
         public override void OnMeetingEnd()
         {
-            if (player == PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.hasModifier(ModifierType.Munou) && PlayerControl.LocalPlayer.isAlive())
+            if (player == CachedPlayer.LocalPlayer.PlayerControl && CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.Munou) && CachedPlayer.LocalPlayer.PlayerControl.isAlive())
             {
                 randomColors();
             }
@@ -110,7 +110,7 @@ namespace TheOtherRoles
         public override void OnKill(PlayerControl target) { }
         public override void OnDeath(PlayerControl killer = null)
         {
-            if (player == PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.hasModifier(ModifierType.Munou)) resetColors();
+            if (player == CachedPlayer.LocalPlayer.PlayerControl && CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.Munou)) resetColors();
         }
         public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
 
@@ -139,7 +139,7 @@ namespace TheOtherRoles
             List<int> tempList = new();
             foreach (var p in allPlayers)
             {
-                if (p.PlayerId == PlayerControl.LocalPlayer.PlayerId) continue;
+                if (p.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId) continue;
                 if (p == Puppeteer.dummy) continue;
                 if (p.isAlive()) alivePlayers.Add(p.PlayerId);
             }
@@ -147,14 +147,14 @@ namespace TheOtherRoles
             List<byte> shuffleTargets = alivePlayers.Count > numShufflePlayers ? alivePlayers.Take(numShufflePlayers).ToList() : alivePlayers;
             foreach (byte id in shuffleTargets)
             {
-                if (id == PlayerControl.LocalPlayer.PlayerId) continue;
+                if (id == CachedPlayer.LocalPlayer.PlayerControl.PlayerId) continue;
                 var p = Helpers.playerById(id);
                 int rnd;
                 int coutner = 0;
                 while (true)
                 {
                     rnd = TheOtherRoles.rnd.Next(shuffleTargets.Count);
-                    if (shuffleTargets[rnd] == PlayerControl.LocalPlayer.PlayerId) continue;
+                    if (shuffleTargets[rnd] == CachedPlayer.LocalPlayer.PlayerControl.PlayerId) continue;
                     if (!tempList.Contains(rnd))
                     {
                         tempList.Add(rnd);
@@ -180,7 +180,7 @@ namespace TheOtherRoles
         public static void resetColors()
         {
             colorPairs = new Dictionary<byte, byte>();
-            var allPlayers = PlayerControl.AllPlayerControls.GetFastEnumerator();
+            var allPlayers = CachedPlayer.AllPlayers;
             foreach (var p in allPlayers)
             {
                 MorphHandler.morphToPlayer(p, p);

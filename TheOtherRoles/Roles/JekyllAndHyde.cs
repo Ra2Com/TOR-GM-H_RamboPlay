@@ -55,7 +55,7 @@ namespace TheOtherRoles
         }
         public override void FixedUpdate()
         {
-            if (player == PlayerControl.LocalPlayer && !isJekyll())
+            if (player == CachedPlayer.LocalPlayer.PlayerControl && !isJekyll())
             {
                 currentTarget = setTarget();
                 setPlayerOutline(currentTarget, JekyllAndHyde.color);
@@ -79,14 +79,14 @@ namespace TheOtherRoles
                 // OnClick
                 () =>
                 {
-                    if (Helpers.checkMuderAttemptAndKill(PlayerControl.LocalPlayer, currentTarget) == MurderAttemptResult.SuppressKill) return;
+                    if (Helpers.checkMuderAttemptAndKill(CachedPlayer.LocalPlayer.PlayerControl, currentTarget) == MurderAttemptResult.SuppressKill) return;
 
                     killButton.Timer = killButton.MaxTimer;
                     suicideButton.Timer = suicideButton.MaxTimer;
                     currentTarget = null;
                 },
                 // HasButton
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.JekyllAndHyde) && !JekyllAndHyde.isJekyll() && PlayerControl.LocalPlayer.isAlive(); },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.JekyllAndHyde) && !JekyllAndHyde.isJekyll() && CachedPlayer.LocalPlayer.PlayerControl.isAlive(); },
                 // CouldUse
                 () =>
                 {
@@ -94,7 +94,7 @@ namespace TheOtherRoles
                     {
                         text.text = $"{counter}/{numberToWin}";
                     }
-                    return currentTarget != null && PlayerControl.LocalPlayer.CanMove;
+                    return currentTarget != null && CachedPlayer.LocalPlayer.PlayerControl.CanMove;
                 },
                 // OnMeetingEnds
                 () =>
@@ -123,7 +123,7 @@ namespace TheOtherRoles
                 () =>
                 {
                     oddIsJekyll = !oddIsJekyll;
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetOddIsJekyll, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetOddIsJekyll, Hazel.SendOption.Reliable, -1);
                     writer.Write(oddIsJekyll);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     suicideButton.Timer = suicideButton.MaxTimer;
@@ -131,7 +131,7 @@ namespace TheOtherRoles
                     numUsed += 1;
                 },
                 // HasButton
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.JekyllAndHyde) && PlayerControl.LocalPlayer.isAlive() && numUsed < getNumDrugs(); },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.JekyllAndHyde) && CachedPlayer.LocalPlayer.PlayerControl.isAlive() && numUsed < getNumDrugs(); },
                 // CouldUse
                 () =>
                 {
@@ -139,7 +139,7 @@ namespace TheOtherRoles
                     {
                         drugText.text = $"{numUsed}/{getNumDrugs()}";
                     }
-                    return PlayerControl.LocalPlayer.CanMove;
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove;
                 },
                 // OnMeetingEnds
                 () =>
@@ -166,7 +166,7 @@ namespace TheOtherRoles
             // Suicide Countdown
             suicideButton = new CustomButton(
                 () => { },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.JekyllAndHyde) && !JekyllAndHyde.isJekyll() && PlayerControl.LocalPlayer.isAlive(); },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.JekyllAndHyde) && !JekyllAndHyde.isJekyll() && CachedPlayer.LocalPlayer.PlayerControl.isAlive(); },
                 () => { return true; },
                 () => { },
                 SerialKiller.getButtonSprite(),
@@ -187,8 +187,8 @@ namespace TheOtherRoles
         }
         public void suicide()
         {
-            byte targetId = PlayerControl.LocalPlayer.PlayerId;
-            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SerialKillerSuicide, Hazel.SendOption.Reliable, -1); killWriter.Write(targetId);
+            byte targetId = CachedPlayer.LocalPlayer.PlayerControl.PlayerId;
+            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SerialKillerSuicide, Hazel.SendOption.Reliable, -1); killWriter.Write(targetId);
             AmongUsClient.Instance.FinishRpcImmediately(killWriter);
             RPCProcedure.serialKillerSuicide(targetId);
         }
@@ -240,7 +240,7 @@ namespace TheOtherRoles
 
         public static int getNumDrugs()
         {
-            var p = players.Where(p => p.player == PlayerControl.LocalPlayer).FirstOrDefault();
+            var p = players.Where(p => p.player == CachedPlayer.LocalPlayer.PlayerControl).FirstOrDefault();
             int counter = p.player.Data.Tasks.ToArray().Where(t => t.Complete).Count();
             return (int)Math.Floor((float)counter / numTasks);
         }
@@ -255,11 +255,11 @@ namespace TheOtherRoles
         {
             public static void Postfix(ShipStatus __instance)
             {
-                if (PlayerControl.LocalPlayer.isRole(RoleType.JekyllAndHyde))
+                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.JekyllAndHyde))
                 {
                     local.assignTasks();
                     oddIsJekyll = TheOtherRoles.rnd.Next(0, 2) == 1;
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetOddIsJekyll, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetOddIsJekyll, Hazel.SendOption.Reliable, -1);
                     writer.Write(oddIsJekyll);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                 }

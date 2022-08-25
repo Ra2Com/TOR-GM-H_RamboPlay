@@ -141,7 +141,7 @@ namespace TheOtherRoles
         public static void ChangeFloor(bool toUpper)
         {
             if (!Loaded) return;
-            MonoBehaviour _floorHandler = ((Component)GetFloorHandlerMethod.Invoke(null, new object[] { PlayerControl.LocalPlayer })).TryCast(FloorHandlerType) as MonoBehaviour;
+            MonoBehaviour _floorHandler = ((Component)GetFloorHandlerMethod.Invoke(null, new object[] { CachedPlayer.LocalPlayer.PlayerControl })).TryCast(FloorHandlerType) as MonoBehaviour;
             RpcRequestChangeFloorMethod.Invoke(_floorHandler, new object[] { toUpper });
         }
 
@@ -157,7 +157,7 @@ namespace TheOtherRoles
             try
             {
                 MapUtilities.CachedShipStatus.RpcRepairSystem((SystemTypes)130, 64);
-                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceProperty.GetValue(null), new object[] { PlayerControl.LocalPlayer, (byte)64 });
+                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceProperty.GetValue(null), new object[] { CachedPlayer.LocalPlayer.PlayerControl, (byte)64 });
             }
             catch (System.NullReferenceException)
             {

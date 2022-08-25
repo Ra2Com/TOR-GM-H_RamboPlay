@@ -94,7 +94,7 @@ namespace TheOtherRoles
 
         public override void FixedUpdate()
         {
-            if (player == PlayerControl.LocalPlayer)
+            if (player == CachedPlayer.LocalPlayer.PlayerControl)
             {
                 arrowUpdate();
                 if (player.isAlive())
@@ -196,13 +196,13 @@ namespace TheOtherRoles
                         return;
                     }
 
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.FoxStealth, Hazel.SendOption.Reliable, -1);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.FoxStealth, Hazel.SendOption.Reliable, -1);
+                    writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                     writer.Write(true);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.foxStealth(PlayerControl.LocalPlayer.PlayerId, true);
+                    RPCProcedure.foxStealth(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, true);
                 },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Fox) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Fox) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
                 () =>
                 {
                     if (foxButton.isEffectActive)
@@ -213,7 +213,7 @@ namespace TheOtherRoles
                     {
                         foxButton.buttonText = ModTranslation.getString("FoxStealthText");
                     }
-                    return PlayerControl.LocalPlayer.CanMove;
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove;
                 },
                 () =>
                 {
@@ -229,11 +229,11 @@ namespace TheOtherRoles
                 () =>
                 {
                     foxButton.Timer = foxButton.MaxTimer = Fox.stealthCooldown;
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.FoxStealth, Hazel.SendOption.Reliable, -1);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.FoxStealth, Hazel.SendOption.Reliable, -1);
+                    writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                     writer.Write(false);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.foxStealth(PlayerControl.LocalPlayer.PlayerId, false);
+                    RPCProcedure.foxStealth(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, false);
                 }
             );
             foxButton.Timer = foxButton.MaxTimer = Fox.stealthCooldown;
@@ -244,16 +244,16 @@ namespace TheOtherRoles
                 () =>
                 {
                     bool sabotageActive = false;
-                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                    foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
                         if (task.TaskType is TaskTypes.FixLights or TaskTypes.RestoreOxy or TaskTypes.ResetReactor or TaskTypes.ResetSeismic or TaskTypes.FixComms or TaskTypes.StopCharles)
                             sabotageActive = true;
                     if (!sabotageActive) return;
 
-                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                    foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
                     {
                         if (task.TaskType == TaskTypes.FixLights)
                         {
-                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.EngineerFixLights, Hazel.SendOption.Reliable, -1);
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.EngineerFixLights, Hazel.SendOption.Reliable, -1);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
                             RPCProcedure.engineerFixLights();
                         }
@@ -283,14 +283,14 @@ namespace TheOtherRoles
                     }
                     numRepair -= 1;
                 },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Fox) && PlayerControl.LocalPlayer.isAlive() && numRepair > 0; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Fox) && CachedPlayer.LocalPlayer.PlayerControl.isAlive() && numRepair > 0; },
                 () =>
                 {
                     bool sabotageActive = false;
-                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                    foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
                         if (task.TaskType is TaskTypes.FixLights or TaskTypes.RestoreOxy or TaskTypes.ResetReactor or TaskTypes.ResetSeismic or TaskTypes.FixComms or TaskTypes.StopCharles)
                             sabotageActive = true;
-                    return sabotageActive && numRepair > 0 && PlayerControl.LocalPlayer.CanMove;
+                    return sabotageActive && numRepair > 0 && CachedPlayer.LocalPlayer.PlayerControl.CanMove;
                 },
                 () => { foxRepairButton.Timer = foxRepairButton.MaxTimer = 0f; },
                 Fox.getRepairButtonSprite(),
@@ -305,13 +305,13 @@ namespace TheOtherRoles
             foxImmoralistButton = new CustomButton(
                 () =>
                 {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.FoxCreatesImmoralist, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.FoxCreatesImmoralist, Hazel.SendOption.Reliable, -1);
                     writer.Write(currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.foxCreatesImmoralist(currentTarget.PlayerId);
                 },
-                () => { return !Immoralist.exists && canCreateImmoralist && PlayerControl.LocalPlayer.isRole(RoleType.Fox) && PlayerControl.LocalPlayer.isAlive(); },
-                () => { return canCreateImmoralist && Fox.currentTarget != null && PlayerControl.LocalPlayer.CanMove; },
+                () => { return !Immoralist.exists && canCreateImmoralist && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Fox) && CachedPlayer.LocalPlayer.PlayerControl.isAlive(); },
+                () => { return canCreateImmoralist && Fox.currentTarget != null && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
                 () => { foxImmoralistButton.Timer = foxImmoralistButton.MaxTimer = 20f; },
                 getImmoralistButtonSprite(),
                 new Vector3(-1.8f, 1f, 0),
@@ -347,11 +347,11 @@ namespace TheOtherRoles
                 arrows = new List<Arrow>();
 
                 // インポスターの位置を示すArrowsを描画
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (p.isDead()) continue;
                     Arrow arrow;
-                    // float distance = Vector2.Distance(p.transform.position, PlayerControl.LocalPlayer.transform.position);
+                    // float distance = Vector2.Distance(p.transform.position, CachedPlayer.LocalPlayer.PlayerControl.transform.position);
                     if (p.Data.Role.IsImpostor || p.isRole(RoleType.Jackal) || p.isRole(RoleType.Sheriff) || p.isRole(RoleType.JekyllAndHyde))
                     {
                         if (p.Data.Role.IsImpostor)
@@ -445,7 +445,7 @@ namespace TheOtherRoles
         {
             public static void Postfix(ShipStatus __instance)
             {
-                if (PlayerControl.LocalPlayer.isRole(RoleType.Fox))
+                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Fox))
                 {
                     local.assignTasks();
                 }
@@ -464,10 +464,10 @@ namespace TheOtherRoles
                     if (fox == null || fox.isDead()) return;
 
                     bool canSee =
-                        PlayerControl.LocalPlayer.isRole(RoleType.Fox) ||
-                        PlayerControl.LocalPlayer.isRole(RoleType.Immoralist) ||
-                        PlayerControl.LocalPlayer.isDead() ||
-                        (PlayerControl.LocalPlayer.isRole(RoleType.Lighter) && Lighter.isLightActive(PlayerControl.LocalPlayer));
+                        CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Fox) ||
+                        CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Immoralist) ||
+                        CachedPlayer.LocalPlayer.PlayerControl.isDead() ||
+                        (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Lighter) && Lighter.isLightActive(CachedPlayer.LocalPlayer.PlayerControl));
 
                     var opacity = canSee ? 0.1f : 0.0f;
 

@@ -50,7 +50,7 @@ namespace TheOtherRoles
         }
         public override void FixedUpdate()
         {
-            if (player == PlayerControl.LocalPlayer)
+            if (player == CachedPlayer.LocalPlayer.PlayerControl)
             {
                 currentTarget = setTarget();
                 setPlayerOutline(currentTarget, BomberA.color);
@@ -138,7 +138,7 @@ namespace TheOtherRoles
                     }
                 },
                 // HasButton
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.BomberA) && PlayerControl.LocalPlayer.isAlive() && BomberB.isAlive(); },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.BomberA) && CachedPlayer.LocalPlayer.PlayerControl.isAlive() && BomberB.isAlive(); },
                 // CouldUse
                 () =>
                 {
@@ -149,7 +149,7 @@ namespace TheOtherRoles
                         bomberButton.isEffectActive = false;
                     }
 
-                    return PlayerControl.LocalPlayer.CanMove && currentTarget != null;
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove && currentTarget != null;
                 },
                 // OnMeetingEnds
                 () =>
@@ -170,7 +170,7 @@ namespace TheOtherRoles
                 {
                     if (tmpTarget != null)
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlantBomb, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PlantBomb, Hazel.SendOption.Reliable, -1);
                         writer.Write(tmpTarget.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         BomberA.bombTarget = tmpTarget;
@@ -190,27 +190,27 @@ namespace TheOtherRoles
                 () =>
                 {
                     var bomberB = BomberB.allPlayers.FirstOrDefault();
-                    float distance = Vector2.Distance(PlayerControl.LocalPlayer.transform.localPosition, bomberB.transform.localPosition);
+                    float distance = Vector2.Distance(CachedPlayer.LocalPlayer.PlayerControl.transform.localPosition, bomberB.transform.localPosition);
 
-                    if (PlayerControl.LocalPlayer.CanMove && BomberA.bombTarget != null && BomberB.bombTarget != null && bomberB.isAlive() && distance < 1)
+                    if (CachedPlayer.LocalPlayer.PlayerControl.CanMove && BomberA.bombTarget != null && BomberB.bombTarget != null && bomberB.isAlive() && distance < 1)
                     {
                         var target = bombTarget;
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ReleaseBomb, Hazel.SendOption.Reliable, -1);
-                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ReleaseBomb, Hazel.SendOption.Reliable, -1);
+                        writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.releaseBomb(PlayerControl.LocalPlayer.PlayerId, target.PlayerId);
+                        RPCProcedure.releaseBomb(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, target.PlayerId);
                     }
                 },
                 // HasButton
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.BomberA) && PlayerControl.LocalPlayer.isAlive() && BomberB.isAlive(); },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.BomberA) && CachedPlayer.LocalPlayer.PlayerControl.isAlive() && BomberB.isAlive(); },
                 // CouldUse
                 () =>
                 {
                     var bomberB = BomberB.allPlayers.FirstOrDefault();
-                    float distance = Vector2.Distance(PlayerControl.LocalPlayer.transform.localPosition, bomberB.transform.localPosition);
+                    float distance = Vector2.Distance(CachedPlayer.LocalPlayer.PlayerControl.transform.localPosition, bomberB.transform.localPosition);
 
-                    return PlayerControl.LocalPlayer.CanMove && BomberA.bombTarget != null && BomberB.bombTarget != null && bomberB.isAlive() && distance < 1;
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove && BomberA.bombTarget != null && BomberB.bombTarget != null && bomberB.isAlive() && distance < 1;
                 },
                 // OnMeetingEnds
                 () =>
@@ -293,7 +293,7 @@ namespace TheOtherRoles
                 arrows = new List<Arrow>();
 
                 // 相方の位置を示すArrowsを描画
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (p.Data.IsDead) continue;
                     if (p.isRole(RoleType.BomberB))
@@ -315,10 +315,10 @@ namespace TheOtherRoles
         {
             public static void Prefix(IntroCutscene __instance)
             {
-                if (PlayerControl.LocalPlayer != null && HudManager.Instance != null)
+                if (CachedPlayer.LocalPlayer.PlayerControl != null && HudManager.Instance != null)
                 {
                     Vector3 bottomLeft = new(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                    foreach (PlayerControl p in CachedPlayer.AllPlayers)
                     {
                         GameData.PlayerInfo data = p.Data;
                         PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);

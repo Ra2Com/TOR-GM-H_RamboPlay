@@ -13,7 +13,7 @@ namespace TheOtherRoles.Patches
     {
         public static bool IsBlocked(PlayerTask task, PlayerControl pc)
         {
-            if (task == null || pc == null || pc != PlayerControl.LocalPlayer) return false;
+            if (task == null || pc == null || pc != CachedPlayer.LocalPlayer.PlayerControl) return false;
 
             bool isLights = task.TaskType == TaskTypes.FixLights;
             bool isComms = task.TaskType == TaskTypes.FixComms;
@@ -84,7 +84,7 @@ namespace TheOtherRoles.Patches
 
         public static bool IsBlocked(Console console, PlayerControl pc)
         {
-            if (console == null || pc == null || pc != PlayerControl.LocalPlayer)
+            if (console == null || pc == null || pc != CachedPlayer.LocalPlayer.PlayerControl)
             {
                 return false;
             }
@@ -95,7 +95,7 @@ namespace TheOtherRoles.Patches
 
         public static bool IsBlocked(SystemConsole console, PlayerControl pc)
         {
-            if (console == null || pc == null || pc != PlayerControl.LocalPlayer)
+            if (console == null || pc == null || pc != CachedPlayer.LocalPlayer.PlayerControl)
             {
                 return false;
             }
@@ -118,7 +118,7 @@ namespace TheOtherRoles.Patches
             MapConsole targetMapConsole = target.TryCast<MapConsole>();
 
             // Hydeの時にはタスクができない
-            if (PlayerControl.LocalPlayer.isRole(RoleType.JekyllAndHyde) && !JekyllAndHyde.isJekyll())
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.JekyllAndHyde) && !JekyllAndHyde.isJekyll())
             {
                 string name = targetSysConsole == null ? "" : targetSysConsole.name;
                 bool isSecurity = name is "task_cams" or "Surv_Panel" or "SurvLogConsole" or "SurvConsole";
@@ -179,7 +179,7 @@ namespace TheOtherRoles.Patches
                     switch (__instance.Id)
                     {
                         case 9:  // Cannot enter vent 9 (Engine Room Exit Only Vent)!
-                            if (PlayerControl.LocalPlayer.inVent) break;
+                            if (CachedPlayer.LocalPlayer.PlayerControl.inVent) break;
                             __result = float.MaxValue;
                             return canUse = couldUse = false;
                         case 14: // Lower Central
@@ -200,7 +200,7 @@ namespace TheOtherRoles.Patches
                 var usableDistance = __instance.UsableDistance;
                 if (__instance.name.StartsWith("JackInTheBoxVent_"))
                 {
-                    if (Trickster.trickster != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.isGM())
+                    if (Trickster.trickster != CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.PlayerControl.isGM())
                     {
                         // Only the Trickster can use the Jack-In-The-Boxes!
                         canUse = false;
@@ -252,31 +252,31 @@ namespace TheOtherRoles.Patches
         {
             public static bool Prefix(Vent __instance)
             {
-                __instance.CanUse(PlayerControl.LocalPlayer.Data, out bool canUse, out bool couldUse);
-                bool canMoveInVents = PlayerControl.LocalPlayer != Spy.spy && !PlayerControl.LocalPlayer.hasModifier(ModifierType.Madmate) && !PlayerControl.LocalPlayer.hasModifier(ModifierType.CreatedMadmate);
+                __instance.CanUse(CachedPlayer.LocalPlayer.PlayerControl.Data, out bool canUse, out bool couldUse);
+                bool canMoveInVents = CachedPlayer.LocalPlayer.PlayerControl != Spy.spy && !CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.Madmate) && !CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.CreatedMadmate);
                 if (!canUse) return false; // No need to execute the native method as using is disallowed anyways
 
-                bool isEnter = !PlayerControl.LocalPlayer.inVent;
+                bool isEnter = !CachedPlayer.LocalPlayer.PlayerControl.inVent;
 
                 if (__instance.name.StartsWith("JackInTheBoxVent_"))
                 {
                     __instance.SetButtons(isEnter && canMoveInVents);
-                    MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseUncheckedVent, Hazel.SendOption.Reliable);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpc(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UseUncheckedVent, Hazel.SendOption.Reliable);
                     writer.WritePacked(__instance.Id);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                     writer.Write(isEnter ? byte.MaxValue : (byte)0);
                     writer.EndMessage();
-                    RPCProcedure.useUncheckedVent(__instance.Id, PlayerControl.LocalPlayer.PlayerId, isEnter ? byte.MaxValue : (byte)0);
+                    RPCProcedure.useUncheckedVent(__instance.Id, CachedPlayer.LocalPlayer.PlayerControl.PlayerId, isEnter ? byte.MaxValue : (byte)0);
                     return false;
                 }
 
                 if (isEnter)
                 {
-                    PlayerControl.LocalPlayer.MyPhysics.RpcEnterVent(__instance.Id);
+                    CachedPlayer.LocalPlayer.PlayerControl.MyPhysics.RpcEnterVent(__instance.Id);
                 }
                 else
                 {
-                    PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(__instance.Id);
+                    CachedPlayer.LocalPlayer.PlayerControl.MyPhysics.RpcExitVent(__instance.Id);
                 }
                 __instance.SetButtons(isEnter && canMoveInVents);
                 return false;
@@ -336,7 +336,7 @@ namespace TheOtherRoles.Patches
             static void Postfix(VentButton __instance)
             {
                 // Trickster render special vent button
-                if (Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer)
+                if (Trickster.trickster != null && Trickster.trickster == CachedPlayer.LocalPlayer.PlayerControl)
                 {
                     if (defaultVentSprite == null) defaultVentSprite = __instance.graphic.sprite;
                     bool isSpecialVent = __instance.currentTarget != null && __instance.currentTarget.gameObject != null && __instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_");
@@ -351,29 +351,29 @@ namespace TheOtherRoles.Patches
         {
             public static bool Prefix(KillButton __instance)
             {
-                if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && PlayerControl.LocalPlayer.isAlive() && PlayerControl.LocalPlayer.CanMove)
+                if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && CachedPlayer.LocalPlayer.PlayerControl.isAlive() && CachedPlayer.LocalPlayer.PlayerControl.CanMove)
                 {
                     bool showAnimation = true;
-                    if (PlayerControl.LocalPlayer.isRole(RoleType.Ninja) && Ninja.isStealthed(PlayerControl.LocalPlayer))
+                    if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Ninja) && Ninja.isStealthed(CachedPlayer.LocalPlayer.PlayerControl))
                     {
                         showAnimation = false;
                     }
 
                     // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
-                    MurderAttemptResult res = Helpers.checkMuderAttemptAndKill(PlayerControl.LocalPlayer, __instance.currentTarget, showAnimation: showAnimation);
+                    MurderAttemptResult res = Helpers.checkMuderAttemptAndKill(CachedPlayer.LocalPlayer.PlayerControl, __instance.currentTarget, showAnimation: showAnimation);
                     // Handle blank kill
                     if (res == MurderAttemptResult.BlankKill)
                     {
-                        PlayerControl.LocalPlayer.killTimer = PlayerControl.GameOptions.KillCooldown;
-                        if (PlayerControl.LocalPlayer == Cleaner.cleaner)
+                        CachedPlayer.LocalPlayer.PlayerControl.killTimer = PlayerControl.GameOptions.KillCooldown;
+                        if (CachedPlayer.LocalPlayer.PlayerControl == Cleaner.cleaner)
                             Cleaner.cleaner.killTimer = HudManagerStartPatch.cleanerCleanButton.Timer = HudManagerStartPatch.cleanerCleanButton.MaxTimer;
-                        else if (PlayerControl.LocalPlayer == Warlock.warlock)
+                        else if (CachedPlayer.LocalPlayer.PlayerControl == Warlock.warlock)
                             Warlock.warlock.killTimer = HudManagerStartPatch.warlockCurseButton.Timer = HudManagerStartPatch.warlockCurseButton.MaxTimer;
-                        else if (PlayerControl.LocalPlayer.hasModifier(ModifierType.Mini) && PlayerControl.LocalPlayer.Data.Role.IsImpostor)
-                            PlayerControl.LocalPlayer.SetKillTimer(PlayerControl.GameOptions.KillCooldown * (Mini.isGrownUp(PlayerControl.LocalPlayer) ? 0.66f : 2f));
-                        else if (PlayerControl.LocalPlayer == Witch.witch)
+                        else if (CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.Mini) && CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor)
+                            CachedPlayer.LocalPlayer.PlayerControl.SetKillTimer(PlayerControl.GameOptions.KillCooldown * (Mini.isGrownUp(CachedPlayer.LocalPlayer.PlayerControl) ? 0.66f : 2f));
+                        else if (CachedPlayer.LocalPlayer.PlayerControl == Witch.witch)
                             Witch.witch.killTimer = HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
-                        else if (PlayerControl.LocalPlayer == Assassin.assassin)
+                        else if (CachedPlayer.LocalPlayer.PlayerControl == Assassin.assassin)
                             Assassin.assassin.killTimer = HudManagerStartPatch.assassinButton.Timer = HudManagerStartPatch.assassinButton.MaxTimer;
                     }
 
@@ -389,8 +389,8 @@ namespace TheOtherRoles.Patches
             static void Postfix()
             {
                 // Mafia disable sabotage button for Janitor and sometimes for Mafioso
-                bool blockSabotageJanitor = PlayerControl.LocalPlayer.isRole(RoleType.Janitor) && !Janitor.canSabotage;
-                bool blockSabotageMafioso = PlayerControl.LocalPlayer.isRole(RoleType.Mafioso) && !Mafioso.canSabotage;
+                bool blockSabotageJanitor = CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Janitor) && !Janitor.canSabotage;
+                bool blockSabotageMafioso = CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Mafioso) && !Mafioso.canSabotage;
                 if (blockSabotageJanitor || blockSabotageMafioso)
                 {
                     HudManager.Instance.SabotageButton.SetDisabled();
@@ -404,7 +404,7 @@ namespace TheOtherRoles.Patches
             public static bool Prefix(SabotageButton __instance)
             {
                 // The sabotage button behaves just fine if it's a regular impostor
-                if (PlayerControl.LocalPlayer.Data.Role.TeamType == RoleTeamTypes.Impostor) return true;
+                if (CachedPlayer.LocalPlayer.PlayerControl.Data.Role.TeamType == RoleTeamTypes.Impostor) return true;
 
                 FastDestroyableSingleton<HudManager>.Instance.ShowMap((Il2CppSystem.Action<MapBehaviour>)((m) => { m.ShowSabotageMap(); }));
                 return false;
@@ -416,7 +416,7 @@ namespace TheOtherRoles.Patches
         {
             static bool Prefix(UseButton __instance, [HarmonyArgument(0)] IUsable target)
             {
-                PlayerControl pc = PlayerControl.LocalPlayer;
+                PlayerControl pc = CachedPlayer.LocalPlayer.PlayerControl;
                 __instance.enabled = true;
 
                 if (IsBlocked(target, pc))
@@ -443,35 +443,35 @@ namespace TheOtherRoles.Patches
                 var statusText = "";
 
                 // Deactivate emergency button for GM
-                if (PlayerControl.LocalPlayer.isGM())
+                if (CachedPlayer.LocalPlayer.PlayerControl.isGM())
                 {
                     roleCanCallEmergency = false;
                     statusText = ModTranslation.getString("gmMeetingButton");
                 }
 
                 // Deactivate emergency button for FortuneTeller
-                if (PlayerControl.LocalPlayer.isRole(RoleType.FortuneTeller) && FortuneTeller.isCompletedNumTasks(PlayerControl.LocalPlayer))
+                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.FortuneTeller) && FortuneTeller.isCompletedNumTasks(CachedPlayer.LocalPlayer.PlayerControl))
                 {
                     roleCanCallEmergency = false;
                     statusText = ModTranslation.getString("fortuneTellerMeetingButton");
                 }
 
                 // Deactivate emergency button for Swapper
-                if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer && !Swapper.canCallEmergency)
+                if (Swapper.swapper != null && Swapper.swapper == CachedPlayer.LocalPlayer.PlayerControl && !Swapper.canCallEmergency)
                 {
                     roleCanCallEmergency = false;
                     statusText = ModTranslation.getString("swapperMeetingButton");
                 }
 
                 // Potentially deactivate emergency button for Jester
-                if (Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && !Jester.canCallEmergency)
+                if (Jester.jester != null && Jester.jester == CachedPlayer.LocalPlayer.PlayerControl && !Jester.canCallEmergency)
                 {
                     roleCanCallEmergency = false;
                     statusText = ModTranslation.getString("jesterMeetingButton");
                 }
 
                 // Potentially deactivate emergency button for Lawyer
-                if (Lawyer.lawyer != null && Lawyer.lawyer == PlayerControl.LocalPlayer && Lawyer.winsAfterMeetings)
+                if (Lawyer.lawyer != null && Lawyer.lawyer == CachedPlayer.LocalPlayer.PlayerControl && Lawyer.winsAfterMeetings)
                 {
                     roleCanCallEmergency = false;
                     statusText = String.Format(ModTranslation.getString("lawyerMeetingButton"), Lawyer.neededMeetings - Lawyer.meetings);
@@ -490,11 +490,11 @@ namespace TheOtherRoles.Patches
                 // Handle max number of meetings
                 if (__instance.state == 1)
                 {
-                    int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
+                    int localRemaining = CachedPlayer.LocalPlayer.PlayerControl.RemainingEmergencies;
                     int teamRemaining = Mathf.Max(0, maxNumberOfMeetings - meetingsCount);
-                    int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer) ? 1 : teamRemaining);
+                    int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == CachedPlayer.LocalPlayer.PlayerControl) ? 1 : teamRemaining);
 
-                    __instance.StatusText.text = "<size=100%>" + String.Format(ModTranslation.getString("meetingStatus"), PlayerControl.LocalPlayer.name) + "</size>";
+                    __instance.StatusText.text = "<size=100%>" + String.Format(ModTranslation.getString("meetingStatus"), CachedPlayer.LocalPlayer.PlayerControl.name) + "</size>";
                     __instance.NumberText.text = String.Format(ModTranslation.getString("meetingCount"), localRemaining.ToString(), teamRemaining.ToString());
                     __instance.ButtonActive = remaining > 0;
                     __instance.ClosedLid.gameObject.SetActive(!__instance.ButtonActive);
@@ -529,7 +529,7 @@ namespace TheOtherRoles.Patches
             {
                 public static bool Prefix(Console __instance)
                 {
-                    return !IsBlocked(__instance, PlayerControl.LocalPlayer);
+                    return !IsBlocked(__instance, CachedPlayer.LocalPlayer.PlayerControl);
                 }
             }
         }
@@ -554,7 +554,7 @@ namespace TheOtherRoles.Patches
             {
                 public static bool Prefix(SystemConsole __instance)
                 {
-                    return !IsBlocked(__instance, PlayerControl.LocalPlayer);
+                    return !IsBlocked(__instance, CachedPlayer.LocalPlayer.PlayerControl);
                 }
             }
         }
@@ -569,7 +569,7 @@ namespace TheOtherRoles.Patches
         {
             if (MapOptions.allowParallelMedBayScans)
             {
-                __instance.medscan.CurrentUser = PlayerControl.LocalPlayer.PlayerId;
+                __instance.medscan.CurrentUser = CachedPlayer.LocalPlayer.PlayerControl.PlayerId;
                 __instance.medscan.UsersList.Clear();
             }
         }

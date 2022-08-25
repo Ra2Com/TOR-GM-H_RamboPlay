@@ -53,8 +53,8 @@ namespace TheOtherRoles
                 {
                     local.lightActive = true;
                 },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Lighter) && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Lighter) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
                 () =>
                 {
                     if (local != null) local.lightActive = false;

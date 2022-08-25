@@ -25,7 +25,7 @@ namespace TheOtherRoles.Modules
                             handled = true;
                             if (!Int32.TryParse(text[6..], out LobbyLimit))
                             {
-                                __instance.AddChat(PlayerControl.LocalPlayer, "Invalid Size\nUsage: /size {amount}");
+                                __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, "Invalid Size\nUsage: /size {amount}");
                             }
                             else
                             {
@@ -34,12 +34,12 @@ namespace TheOtherRoles.Modules
                                 {
                                     PlayerControl.GameOptions.MaxPlayers = LobbyLimit;
                                     FastDestroyableSingleton<GameStartManager>.Instance.LastPlayerCount = LobbyLimit;
-                                    PlayerControl.LocalPlayer.RpcSyncSettings(PlayerControl.GameOptions);
-                                    __instance.AddChat(PlayerControl.LocalPlayer, $"Lobby Size changed to {LobbyLimit} players");
+                                    CachedPlayer.LocalPlayer.PlayerControl.RpcSyncSettings(PlayerControl.GameOptions);
+                                    __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"Lobby Size changed to {LobbyLimit} players");
                                 }
                                 else
                                 {
-                                    __instance.AddChat(PlayerControl.LocalPlayer, $"Lobby Size is already {LobbyLimit}");
+                                    __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"Lobby Size is already {LobbyLimit}");
                                 }
                             }
                         }

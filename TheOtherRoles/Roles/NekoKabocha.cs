@@ -55,20 +55,20 @@ namespace TheOtherRoles
                     else
                     {
                         killer.Exiled();
-                        if (PlayerControl.LocalPlayer == killer)
+                        if (CachedPlayer.LocalPlayer.PlayerControl == killer)
                             HudManager.Instance.KillOverlay.ShowKillAnimation(player.Data, killer.Data);
                     }
 
                     finalStatuses[killer.PlayerId] = FinalStatus.Revenge;
                 }
             }
-            else if (killer == null && revengeExile && PlayerControl.LocalPlayer == player)
+            else if (killer == null && revengeExile && CachedPlayer.LocalPlayer.PlayerControl == player)
             {
                 var candidates = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(x => x != player && x.isAlive()).ToList();
                 int targetID = rnd.Next(0, candidates.Count);
                 var target = candidates[targetID];
 
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.NekoKabochaExile, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.NekoKabochaExile, Hazel.SendOption.Reliable, -1);
                 writer.Write(target.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.nekoKabochaExile(target.PlayerId);

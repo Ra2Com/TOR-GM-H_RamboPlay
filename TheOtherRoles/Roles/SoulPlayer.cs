@@ -39,17 +39,17 @@ namespace TheOtherRoles
 
         public static void FixedUpdate()
         {
-            if (CustomOptionHolder.deadImpostorCanSeeKillColdown.getBool() && PlayerControl.LocalPlayer.isImpostor() && PlayerControl.LocalPlayer.isAlive())
+            if (CustomOptionHolder.deadImpostorCanSeeKillColdown.getBool() && CachedPlayer.LocalPlayer.PlayerControl.isImpostor() && CachedPlayer.LocalPlayer.PlayerControl.isAlive())
             {
                 timer += Time.fixedDeltaTime;
                 if (timer >= updateInterval)
                 {
                     timer = 0;
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SyncKillTimer, Hazel.SendOption.Reliable, -1);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
-                    writer.Write(PlayerControl.LocalPlayer.killTimer);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SyncKillTimer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+                    writer.Write(CachedPlayer.LocalPlayer.PlayerControl.killTimer);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.syncKillTimer(PlayerControl.LocalPlayer.PlayerId, PlayerControl.LocalPlayer.killTimer);
+                    RPCProcedure.syncKillTimer(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, CachedPlayer.LocalPlayer.PlayerControl.killTimer);
                 }
             }
             UpdateStatusText();
@@ -61,8 +61,8 @@ namespace TheOtherRoles
                 {/*ボタンが押されたとき*/
                     senrigan();
                 },
-                () => {/*ボタンが有効になる条件*/ return enableSenrigan && PlayerControl.LocalPlayer.isDead() && !PlayerControl.LocalPlayer.isRole(RoleType.Puppeteer); },
-                () => {/*ボタンが使える条件*/ return PlayerControl.LocalPlayer.isDead(); },
+                () => {/*ボタンが有効になる条件*/ return enableSenrigan && CachedPlayer.LocalPlayer.PlayerControl.isDead() && !CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer); },
+                () => {/*ボタンが使える条件*/ return CachedPlayer.LocalPlayer.PlayerControl.isDead(); },
                 () => {/*ミーティング終了時*/ },
                 getSenriganIcon(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -113,7 +113,7 @@ namespace TheOtherRoles
                     return;
                 }
 
-                if (PlayerControl.LocalPlayer.isDead() && PlayerControl.LocalPlayer.isImpostor())
+                if (CachedPlayer.LocalPlayer.PlayerControl.isDead() && CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
                 {
                     if (statusText == null)
                     {
@@ -135,7 +135,7 @@ namespace TheOtherRoles
                     string text = "KillTimer\n";
                     killTimers.Keys.ToList().ForEach(key =>
                     {
-                        if (key == PlayerControl.LocalPlayer.PlayerId) return;
+                        if (key == CachedPlayer.LocalPlayer.PlayerControl.PlayerId) return;
                         PlayerControl p = Helpers.playerById(key);
                         if (p.isDead()) return;
                         if (killTimers[key] > 0)
@@ -160,7 +160,7 @@ namespace TheOtherRoles
         {
             public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo meetingTarget)
             {
-                if (PlayerControl.LocalPlayer.Data.IsDead)
+                if (CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead)
                 {
                     if (toggle)
                     {
@@ -175,7 +175,7 @@ namespace TheOtherRoles
         {
             static void Prefix(Minigame __instance)
             {
-                if (PlayerControl.LocalPlayer.isDead())
+                if (CachedPlayer.LocalPlayer.PlayerControl.isDead())
                 {
                     if (toggle)
                     {

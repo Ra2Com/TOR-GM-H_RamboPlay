@@ -75,7 +75,7 @@ namespace TheOtherRoles.Patches
             public static void Prefix() { }
             public static void Postfix()
             {
-                PlayerControl.LocalPlayer.SetKillTimer(PlayerControl.GameOptions.KillCooldown);
+                CachedPlayer.LocalPlayer.PlayerControl.SetKillTimer(PlayerControl.GameOptions.KillCooldown);
                 MapUtilities.CachedShipStatus.EmergencyCooldown = (float)PlayerControl.GameOptions.EmergencyCooldown;
                 ExileControllerReEnableGameplayPatch.ReEnableGameplay();
             }

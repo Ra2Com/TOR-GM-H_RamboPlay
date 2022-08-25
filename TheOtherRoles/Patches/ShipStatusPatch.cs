@@ -27,7 +27,7 @@ namespace TheOtherRoles.Patches
             }
 
             // If player is Lighter with ability active
-            if (PlayerControl.LocalPlayer.isRole(RoleType.Lighter) && Lighter.isLightActive(PlayerControl.LocalPlayer))
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Lighter) && Lighter.isLightActive(CachedPlayer.LocalPlayer.PlayerControl))
             {
                 float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance, true));
                 __result = Mathf.Lerp(__instance.MaxLightRadius * Lighter.lighterModeLightsOffVision, __instance.MaxLightRadius * Lighter.lighterModeLightsOnVision, unlerped);
@@ -97,7 +97,7 @@ namespace TheOtherRoles.Patches
             if (CustomOptionHolder.uselessOptions.getBool() && CustomOptionHolder.playerColorRandom.getBool() && AmongUsClient.Instance.AmHost)
             {
                 List<int> colors = Enumerable.Range(0, Palette.PlayerColors.Count).ToList();
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     int i = TheOtherRoles.rnd.Next(0, colors.Count);
                     p.SetColor(colors[i]);
@@ -147,7 +147,7 @@ namespace TheOtherRoles.Patches
                 {
                     System.Random rand = new();
                     int randVal = rand.Next(0, 6);
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.RandomSpawn, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.RandomSpawn, Hazel.SendOption.Reliable, -1);
                     writer.Write((byte)player.Data.PlayerId);
                     writer.Write((byte)randVal);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);

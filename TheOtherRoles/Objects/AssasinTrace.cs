@@ -23,7 +23,7 @@ namespace TheOtherRoles.Objects
         {
             trace = new GameObject("AssassinTrace") { layer = 11 };
             trace.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
-            //Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.localPosition.z + 0.001f); // just behind player
+            //Vector3 position = new Vector3(p.x, p.y, CachedPlayer.LocalPlayer.PlayerControl.transform.localPosition.z + 0.001f); // just behind player
             Vector3 position = new(p.x, p.y, p.y / 1000f + 0.01f);
             trace.transform.position = position;
             trace.transform.localPosition = position;

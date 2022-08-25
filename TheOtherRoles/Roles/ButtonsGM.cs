@@ -108,14 +108,14 @@ namespace TheOtherRoles
 
                     if (!target.Data.IsDead)
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GMKill, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.GMKill, Hazel.SendOption.Reliable, -1);
                         writer.Write(index);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.GMKill(index);
                     }
                     else
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GMRevive, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.GMRevive, Hazel.SendOption.Reliable, -1);
                         writer.Write(index);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.GMRevive(index);
@@ -127,7 +127,7 @@ namespace TheOtherRoles
             {
                 return () =>
                 {
-                    if (GM.gm == null || PlayerControl.LocalPlayer != GM.gm ||
+                    if (GM.gm == null || CachedPlayer.LocalPlayer.PlayerControl != GM.gm ||
                         (!MapOptions.playerIcons.ContainsKey(index)) ||
                         (!GM.canWarp) ||
                         Helpers.playerById(index).Data.Disconnected)
@@ -143,7 +143,7 @@ namespace TheOtherRoles
             {
                 return () =>
                 {
-                    if (GM.gm == null || PlayerControl.LocalPlayer != GM.gm ||
+                    if (GM.gm == null || CachedPlayer.LocalPlayer.PlayerControl != GM.gm ||
                         (!MapOptions.playerIcons.ContainsKey(index)) ||
                         (!GM.canKill) ||
                         Helpers.playerById(index).Data.Disconnected)
@@ -177,8 +177,8 @@ namespace TheOtherRoles
                         //TheOtherRolesPlugin.Instance.Log.LogInfo($"Updated {index}: {pos.x}, {pos.y}, {pos.z}");
                     }
 
-                    //MapOptions.playerIcons[index].gameObject.SetActive(PlayerControl.LocalPlayer.CanMove);
-                    return PlayerControl.LocalPlayer.CanMove;
+                    //MapOptions.playerIcons[index].gameObject.SetActive(CachedPlayer.LocalPlayer.PlayerControl.CanMove);
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove;
                 };
             }
 
@@ -209,7 +209,7 @@ namespace TheOtherRoles
                         gmKillButtons[index].buttonText = ModTranslation.getString("gmKill");
                     }
 
-                    //MapOptions.playerIcons[index].gameObject.SetActive(PlayerControl.LocalPlayer.CanMove);
+                    //MapOptions.playerIcons[index].gameObject.SetActive(CachedPlayer.LocalPlayer.PlayerControl.CanMove);
                     return true;
                 };
             }
@@ -295,7 +295,7 @@ namespace TheOtherRoles
 
                     /*TheOtherRolesPlugin.Instance.Log.LogInfo($"Camera zoom {Camera.main.orthographicSize} / {TaskPanelBehaviour.Instance.transform.localPosition.x}");*/
                 },
-                () => { return !(GM.gm == null || PlayerControl.LocalPlayer != GM.gm); },
+                () => { return !(GM.gm == null || CachedPlayer.LocalPlayer.PlayerControl != GM.gm); },
                 () => { return true; },
                 () => { },
                 GM.getZoomOutSprite(),
@@ -332,7 +332,7 @@ namespace TheOtherRoles
 
                     /*TheOtherRolesPlugin.Instance.Log.LogInfo($"Camera zoom {Camera.main.orthographicSize} / {TaskPanelBehaviour.Instance.transform.localPosition.x}");*/
                 },
-                () => { return !(GM.gm == null || PlayerControl.LocalPlayer != GM.gm); },
+                () => { return !(GM.gm == null || CachedPlayer.LocalPlayer.PlayerControl != GM.gm); },
                 () => { return true; },
                 () => { },
                 GM.getZoomInSprite(),

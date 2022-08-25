@@ -35,7 +35,7 @@ namespace TheOtherRoles
         public override void OnMeetingEnd() { }
         public override void FixedUpdate()
         {
-            if (PlayerControl.LocalPlayer == player)
+            if (CachedPlayer.LocalPlayer.PlayerControl == player)
                 arrowUpdate();
         }
         public override void OnKill(PlayerControl target)
@@ -115,7 +115,7 @@ namespace TheOtherRoles
                 arrows = new List<Arrow>();
 
                 // インポスターの位置を示すArrowsを描画
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (p.Data.IsDead) continue;
                     Arrow arrow;

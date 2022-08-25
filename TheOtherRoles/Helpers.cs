@@ -131,7 +131,7 @@ namespace TheOtherRoles
 
             List<byte> taskTypeIds = generateTasks(numCommon, numShort, numLong);
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedSetTasks, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedSetTasks, Hazel.SendOption.Reliable, -1);
             writer.Write(player.PlayerId);
             writer.WriteBytesAndSize(taskTypeIds.ToArray());
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -227,7 +227,7 @@ namespace TheOtherRoles
 
         public static PlayerControl playerById(byte id)
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
                 if (player.PlayerId == id)
                     return player;
             return null;
@@ -236,7 +236,7 @@ namespace TheOtherRoles
         public static Dictionary<byte, PlayerControl> allPlayersById()
         {
             Dictionary<byte, PlayerControl> res = new();
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
                 res.Add(player.PlayerId, player);
             return res;
         }
@@ -245,7 +245,7 @@ namespace TheOtherRoles
         {
             // Murder the bitten player and reset bitten (regardless whether the kill was successful or not)
             Helpers.checkMuderAttemptAndKill(Vampire.vampire, Vampire.bitten, true, false);
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
             writer.Write(byte.MaxValue);
             writer.Write(byte.MaxValue);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -466,7 +466,7 @@ namespace TheOtherRoles
 
         public static bool hidePlayerName(PlayerControl target)
         {
-            return hidePlayerName(PlayerControl.LocalPlayer, target);
+            return hidePlayerName(CachedPlayer.LocalPlayer.PlayerControl, target);
         }
 
         public static bool hidePlayerName(PlayerControl source, PlayerControl target)
@@ -506,7 +506,7 @@ namespace TheOtherRoles
             target.RawSetColor(colorId);
             target.RawSetVisor(visorId, colorId);
             target.RawSetHat(hatId, colorId);
-            target.RawSetName(hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName);
+            target.RawSetName(hidePlayerName(CachedPlayer.LocalPlayer.PlayerControl, target) ? "" : playerName);
 
             SkinData nextSkin = FastDestroyableSingleton<HatManager>.Instance.GetSkinById(skinId);
             PlayerPhysics playerPhysics = target.MyPhysics;
@@ -597,7 +597,7 @@ namespace TheOtherRoles
             // Handle blank shot
             if (Pursuer.blankedList.Any(x => x.PlayerId == killer.PlayerId))
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write((byte)0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -644,7 +644,7 @@ namespace TheOtherRoles
             MurderAttemptResult murder = checkMuderAttempt(killer, target, isMeetingStart);
             if (murder == MurderAttemptResult.PerformKill)
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write(target.PlayerId);
                 writer.Write(showAnimation ? Byte.MaxValue : 0);
@@ -656,7 +656,7 @@ namespace TheOtherRoles
 
         public static void shareGameVersion()
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
             writer.WritePacked(TheOtherRolesPlugin.Version.Major);
             writer.WritePacked(TheOtherRolesPlugin.Version.Minor);
             writer.WritePacked(TheOtherRolesPlugin.Version.Build);
@@ -670,7 +670,7 @@ namespace TheOtherRoles
         public static List<PlayerControl> getKillerTeamMembers(PlayerControl player)
         {
             List<PlayerControl> team = new();
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl p in CachedPlayer.AllPlayers)
             {
                 if (player.Data.Role.IsImpostor && p.Data.Role.IsImpostor && player.PlayerId != p.PlayerId && team.All(x => x.PlayerId != p.PlayerId)) team.Add(p);
                 else if (player.isRole(RoleType.Jackal) && p.isRole(RoleType.Sidekick)) team.Add(p);
@@ -702,7 +702,7 @@ namespace TheOtherRoles
                 if (p == 1f && renderer != null)
                 {
                     bool reactorActive = false;
-                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                    foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
                     {
                         if (task.TaskType == TaskTypes.StopCharles)
                         {
@@ -755,7 +755,7 @@ namespace TheOtherRoles
 
         public static PlayerControl getPlayerById(byte playerId)
         {
-            return PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(p => p.PlayerId == playerId).FirstOrDefault();
+            return CachedPlayer.AllPlayers.ToArray().Where(p => p.PlayerId == playerId).FirstOrDefault();
         }
 
         public static System.Collections.IEnumerable FindObjectsOfType(Type type)

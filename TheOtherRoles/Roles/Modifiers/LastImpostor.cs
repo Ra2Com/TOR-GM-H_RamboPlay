@@ -86,7 +86,7 @@ namespace TheOtherRoles
                 return () =>
                 {
                     if (selectedFunction == 1) return false;
-                    var p = PlayerControl.LocalPlayer;
+                    var p = CachedPlayer.LocalPlayer.PlayerControl;
                     if (!p.hasModifier(ModifierType.LastImpostor)) return false;
                     if (p.hasModifier(ModifierType.LastImpostor) && p.CanMove && p.isAlive() & p.PlayerId != index
                         && MapOptions.playerIcons.ContainsKey(index) && numUsed < 1 && isCounterMax())
@@ -98,7 +98,7 @@ namespace TheOtherRoles
                         if (playerIcons.ContainsKey(index))
                         {
                             playerIcons[index].gameObject.SetActive(false);
-                            if (PlayerControl.LocalPlayer.isRole(RoleType.BountyHunter))
+                            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.BountyHunter))
                                 setBountyIconPos(Vector3.zero);
                         }
                         if (lastImpostorButtons.Count > index)
@@ -128,7 +128,7 @@ namespace TheOtherRoles
             void setIconStatus(byte index, bool transparent)
             {
                 playerIcons[index].transform.localScale = Vector3.one * 0.25f;
-                playerIcons[index].gameObject.SetActive(PlayerControl.LocalPlayer.CanMove);
+                playerIcons[index].gameObject.SetActive(CachedPlayer.LocalPlayer.PlayerControl.CanMove);
                 playerIcons[index].setSemiTransparent(transparent);
             }
 
@@ -149,7 +149,7 @@ namespace TheOtherRoles
                     //　ラストインポスター以外の場合、リソースがない場合はボタンを表示しない
                     var p = Helpers.playerById(index);
                     if (!playerIcons.ContainsKey(index) ||
-                        !PlayerControl.LocalPlayer.hasModifier(ModifierType.LastImpostor) ||
+                        !CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.LastImpostor) ||
                         !isCounterMax())
                     {
                         return false;
@@ -159,19 +159,19 @@ namespace TheOtherRoles
                     setButtonPos(index);
 
                     // ボタンにテキストを設定
-                    lastImpostorButtons[index].buttonText = PlayerControl.LocalPlayer.isAlive() ? "生存" : "死亡";
+                    lastImpostorButtons[index].buttonText = CachedPlayer.LocalPlayer.PlayerControl.isAlive() ? "生存" : "死亡";
 
                     // アイコンの位置と透明度を変更
                     setIconStatus(index, false);
 
                     // Bounty Hunterの場合賞金首の位置をずらして表示する
-                    if (PlayerControl.LocalPlayer.isRole(RoleType.BountyHunter))
+                    if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.BountyHunter))
                     {
                         Vector3 offset = new(0f, 1f, 0f);
                         setBountyIconPos(offset);
                     }
 
-                    return PlayerControl.LocalPlayer.CanMove && numUsed < 1;
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove && numUsed < 1;
                 };
             }
 
@@ -239,7 +239,7 @@ namespace TheOtherRoles
             }
             if (impList.Count == 1)
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ImpostorPromotesToLastImpostor, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ImpostorPromotesToLastImpostor, Hazel.SendOption.Reliable, -1);
                 writer.Write(impList[0].PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.impostorPromotesToLastImpostor(impList[0].PlayerId);
@@ -302,11 +302,11 @@ namespace TheOtherRoles
             numUsed += 1;
 
             // 占いを実行したことで発火される処理を他クライアントに通知
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.FortuneTellerUsedDivine, Hazel.SendOption.Reliable, -1);
-            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.FortuneTellerUsedDivine, Hazel.SendOption.Reliable, -1);
+            writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
             writer.Write(p.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.fortuneTellerUsedDivine(PlayerControl.LocalPlayer.PlayerId, p.PlayerId);
+            RPCProcedure.fortuneTellerUsedDivine(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, p.PlayerId);
             numUsed += 1;
         }
 
@@ -315,10 +315,10 @@ namespace TheOtherRoles
         {
             public static void Prefix(IntroCutscene __instance)
             {
-                if (PlayerControl.LocalPlayer != null && HudManager.Instance != null)
+                if (CachedPlayer.LocalPlayer.PlayerControl != null && HudManager.Instance != null)
                 {
                     Vector3 bottomLeft = new(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                    foreach (PlayerControl p in CachedPlayer.AllPlayers)
                     {
                         GameData.PlayerInfo data = p.Data;
                         PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);

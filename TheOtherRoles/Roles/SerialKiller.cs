@@ -31,9 +31,9 @@ namespace TheOtherRoles
 
         public override void OnMeetingEnd()
         {
-            if (PlayerControl.LocalPlayer.isRole(RoleType.SerialKiller))
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.SerialKiller))
             {
-                PlayerControl.LocalPlayer.SetKillTimerUnchecked(killCooldown);
+                CachedPlayer.LocalPlayer.PlayerControl.SetKillTimerUnchecked(killCooldown);
 
                 if (resetTimer)
                     serialKillerButton.Timer = suicideTimer;
@@ -45,7 +45,7 @@ namespace TheOtherRoles
 
         public override void OnKill(PlayerControl target)
         {
-            if (PlayerControl.LocalPlayer == player)
+            if (CachedPlayer.LocalPlayer.PlayerControl == player)
                 player.SetKillTimerUnchecked(killCooldown);
 
             serialKillerButton.Timer = suicideTimer;
@@ -67,7 +67,7 @@ namespace TheOtherRoles
             // SerialKiller Suicide Countdown
             serialKillerButton = new CustomButton(
                 () => { },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.SerialKiller) && PlayerControl.LocalPlayer.isAlive() && local.isCountDown; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.SerialKiller) && CachedPlayer.LocalPlayer.PlayerControl.isAlive() && local.isCountDown; },
                 () => { return true; },
                 () => { },
                 SerialKiller.getButtonSprite(),
@@ -87,8 +87,8 @@ namespace TheOtherRoles
 
         public void suicide()
         {
-            byte targetId = PlayerControl.LocalPlayer.PlayerId;
-            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SerialKillerSuicide, Hazel.SendOption.Reliable, -1); killWriter.Write(targetId);
+            byte targetId = CachedPlayer.LocalPlayer.PlayerControl.PlayerId;
+            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SerialKillerSuicide, Hazel.SendOption.Reliable, -1); killWriter.Write(targetId);
             AmongUsClient.Instance.FinishRpcImmediately(killWriter);
             RPCProcedure.serialKillerSuicide(targetId);
         }

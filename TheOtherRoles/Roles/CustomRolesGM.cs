@@ -201,7 +201,7 @@ namespace TheOtherRoles
                 else
                     camoData.ColorId = 6;
 
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (p == null) continue;
                     p.setOutfit(camoData, visible: false);
@@ -211,7 +211,7 @@ namespace TheOtherRoles
             public static void resetCamouflage()
             {
                 camouflageTimer = 0f;
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (p == null) continue;
 

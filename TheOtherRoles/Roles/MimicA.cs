@@ -37,7 +37,7 @@ namespace TheOtherRoles
         public override void OnMeetingEnd() { }
         public override void FixedUpdate()
         {
-            if (PlayerControl.LocalPlayer == player)
+            if (CachedPlayer.LocalPlayer.PlayerControl == player)
                 arrowUpdate();
         }
         public override void OnKill(PlayerControl target) { }
@@ -92,23 +92,23 @@ namespace TheOtherRoles
                 {
                     if (!isMorph)
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.mimicMorph, Hazel.SendOption.Reliable, -1);
-                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.mimicMorph, Hazel.SendOption.Reliable, -1);
+                        writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                         writer.Write(MimicK.allPlayers.FirstOrDefault().PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.mimicMorph(PlayerControl.LocalPlayer.PlayerId, MimicK.allPlayers.FirstOrDefault().PlayerId);
+                        RPCProcedure.mimicMorph(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, MimicK.allPlayers.FirstOrDefault().PlayerId);
                     }
                     else
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.mimicResetMorph, Hazel.SendOption.Reliable, -1);
-                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.mimicResetMorph, Hazel.SendOption.Reliable, -1);
+                        writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.mimicResetMorph(PlayerControl.LocalPlayer.PlayerId);
+                        RPCProcedure.mimicResetMorph(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                     }
 
                 },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.MimicA) && PlayerControl.LocalPlayer.isAlive() && MimicK.isAlive(); },
-                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.MimicA) && CachedPlayer.LocalPlayer.PlayerControl.isAlive() && MimicK.isAlive(); },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
                 () =>
                 {
                 },
@@ -126,22 +126,22 @@ namespace TheOtherRoles
             adminButton = new CustomButton(
                  () =>
                  {
-                     PlayerControl.LocalPlayer.NetTransform.Halt();
+                     CachedPlayer.LocalPlayer.PlayerControl.NetTransform.Halt();
                      Action<MapBehaviour> tmpAction = (MapBehaviour m) => { m.ShowCountOverlay(); };
                      FastDestroyableSingleton<HudManager>.Instance.ShowMap(tmpAction);
-                     if (PlayerControl.LocalPlayer.AmOwner)
+                     if (CachedPlayer.LocalPlayer.PlayerControl.AmOwner)
                      {
-                         PlayerControl.LocalPlayer.MyPhysics.inputHandler.enabled = true;
+                         CachedPlayer.LocalPlayer.PlayerControl.MyPhysics.inputHandler.enabled = true;
                          ConsoleJoystick.SetMode_Task();
                      }
                  },
                  () =>
                  {
-                     return PlayerControl.LocalPlayer.isRole(RoleType.MimicA) &&
-                       PlayerControl.LocalPlayer.isAlive() &&
+                     return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.MimicA) &&
+                       CachedPlayer.LocalPlayer.PlayerControl.isAlive() &&
                        MimicK.isAlive();
                  },
-                 () => { return PlayerControl.LocalPlayer.CanMove; },
+                 () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
                  () => { },
                  EvilHacker.getButtonSprite(),
                  new Vector3(0f, 1.0f, 0),
@@ -202,7 +202,7 @@ namespace TheOtherRoles
                 arrows = new List<Arrow>();
 
                 // インポスターの位置を示すArrowsを描画
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (p.Data.IsDead) continue;
                     Arrow arrow;
@@ -224,7 +224,7 @@ namespace TheOtherRoles
         {
             public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
             {
-                PlayerControl player = PlayerControl.LocalPlayer;
+                PlayerControl player = CachedPlayer.LocalPlayer.PlayerControl;
                 if (__instance.isRole(RoleType.MimicK) && __instance != player && player.isRole(RoleType.MimicA) && player.isAlive())
                 {
                     Helpers.showFlash(new Color(42f / 255f, 187f / 255f, 245f / 255f));

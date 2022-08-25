@@ -129,9 +129,9 @@ namespace TheOtherRoles
 
         public static void ShareOptionSelections()
         {
-            if (PlayerControl.AllPlayerControls.Count <= 1 || (AmongUsClient.Instance?.AmHost == false && PlayerControl.LocalPlayer == null)) return;
+            if (PlayerControl.AllPlayerControls.Count <= 1 || (AmongUsClient.Instance?.AmHost == false && CachedPlayer.LocalPlayer.PlayerControl == null)) return;
 
-            MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareOptions, Hazel.SendOption.Reliable);
+            MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareOptions, Hazel.SendOption.Reliable);
             messageWriter.WritePacked((uint)CustomOption.options.Count);
             foreach (CustomOption option in CustomOption.options)
             {
@@ -198,7 +198,7 @@ namespace TheOtherRoles
                 stringOption.oldValue = stringOption.Value = selection;
                 stringOption.ValueText.text = getString();
 
-                if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer)
+                if (AmongUsClient.Instance?.AmHost == true && CachedPlayer.LocalPlayer.PlayerControl)
                 {
                     if (id == 0) switchPreset(selection); // Switch presets
                     else if (entry != null) entry.Value = selection; // Save selection to config
@@ -1129,7 +1129,7 @@ namespace TheOtherRoles
             Scroller.ContentYBounds = new FloatRange(MinY, maxY);
 
             // Prevent scrolling when the player is interacting with a menu
-            if (PlayerControl.LocalPlayer?.CanMove != true)
+            if (CachedPlayer.LocalPlayer.PlayerControl?.CanMove != true)
             {
                 __instance.GameSettings.transform.localPosition = LastPosition;
 

@@ -44,7 +44,7 @@ namespace TheOtherRoles.Patches
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started)
                 {
                     __instance.text.text = $"{baseCredentials}\n{__instance.text.text}";
-                    if (PlayerControl.LocalPlayer.Data.IsDead || (!(PlayerControl.LocalPlayer == null) && PlayerControl.LocalPlayer.isLovers()))
+                    if (CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead || (!(CachedPlayer.LocalPlayer.PlayerControl == null) && CachedPlayer.LocalPlayer.PlayerControl.isLovers()))
                     {
                         // __instance.transform.localPosition = new Vector3(3.45f, __instance.transform.localPosition.y, __instance.transform.localPosition.z);
                         __instance.gameObject.GetComponent<AspectPosition>().DistanceFromEdge = new Vector3(1.2f, 0.8f, 0f);

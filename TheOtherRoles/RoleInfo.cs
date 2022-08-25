@@ -318,7 +318,7 @@ namespace TheOtherRoles
             if (p.isRole(RoleType.Immoralist)) infos.Add(immoralist);
             if (p.isRole(RoleType.FortuneTeller))
             {
-                if ((includeHidden || PlayerControl.LocalPlayer) && PlayerControl.LocalPlayer.Data.IsDead)
+                if ((includeHidden || CachedPlayer.LocalPlayer.PlayerControl) && CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead)
                 {
                     infos.Add(fortuneTeller);
                 }
@@ -328,7 +328,7 @@ namespace TheOtherRoles
                     infos.Add(info);
                 }
             }
-            if ( p.isRole(RoleType.Akujo)) infos.Add(akujo);
+            if (p.isRole(RoleType.Akujo)) infos.Add(akujo);
 
             // はおみんオリジナル
             if (p.isRole(RoleType.SchrodingersCat)) infos.Add(schrodingersCat);
@@ -361,7 +361,7 @@ namespace TheOtherRoles
 
             var roleInfo = getRoleInfoForPlayer(p, excludeRoles, includeHidden);
             string roleName = String.Join(joinSeparator, roleInfo.Select(x => useColors ? Helpers.cs(x.color, x.name) : x.name).ToArray());
-            if (Lawyer.target != null && p?.PlayerId == Lawyer.target.PlayerId && PlayerControl.LocalPlayer != Lawyer.target) roleName += useColors ? Helpers.cs(Pursuer.color, " §") : " §";
+            if (Lawyer.target != null && p?.PlayerId == Lawyer.target.PlayerId && CachedPlayer.LocalPlayer.PlayerControl != Lawyer.target) roleName += useColors ? Helpers.cs(Pursuer.color, " §") : " §";
 
             if (p.hasModifier(ModifierType.Madmate) || p.hasModifier(ModifierType.CreatedMadmate))
             {
@@ -395,7 +395,7 @@ namespace TheOtherRoles
 
             if (p.hasModifier(ModifierType.Munou))
             {
-                if (PlayerControl.LocalPlayer.Data.IsDead || Munou.endGameFlag)
+                if (CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead || Munou.endGameFlag)
                 {
                     string postfix = useColors ? Helpers.cs(Munou.color, Munou.postfix) : Munou.postfix;
                     // roleName = String.Join(joinSeparator, roleInfo.Select(x => useColors? Helpers.cs(x.color, x.name)  : x.name).ToArray());

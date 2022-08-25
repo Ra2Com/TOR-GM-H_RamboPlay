@@ -41,7 +41,7 @@ namespace TheOtherRoles.Patches
         private static bool filterAdmin(SystemTypes type)
         {
             // イビルハッカーのアドミンは今まで通り
-            if (PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) return true;
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) return true;
 
             if (CustomOptionHolder.airshipRestrictedAdmin.getBool())
             {
@@ -79,10 +79,10 @@ namespace TheOtherRoles.Patches
             // Don't waste network traffic if we're out of time.
             if (!isEvilHackerAdmin)
             {
-                if (MapOptions.restrictDevices > 0 && MapOptions.restrictAdmin && MapOptions.restrictAdminTime > 0f && PlayerControl.LocalPlayer.isAlive() &&
-                        !PlayerControl.LocalPlayer.isRole(RoleType.MimicA))
+                if (MapOptions.restrictDevices > 0 && MapOptions.restrictAdmin && MapOptions.restrictAdminTime > 0f && CachedPlayer.LocalPlayer.PlayerControl.isAlive() &&
+                        !CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.MimicA))
                 {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseAdminTime, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UseAdminTime, Hazel.SendOption.Reliable, -1);
                     writer.Write(adminTimer);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.useAdminTime(adminTimer);
@@ -118,11 +118,11 @@ namespace TheOtherRoles.Patches
                 adminTimer = 0f;
 
                 // 現在地からどのアドミンを使っているか特定する
-                room = Helpers.getPlainShipRoom(PlayerControl.LocalPlayer);
+                room = Helpers.getPlainShipRoom(CachedPlayer.LocalPlayer.PlayerControl);
                 if (room == null) return;
 
                 // アドミンの画像を差し替える
-                if (!PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) && !EvilHacker.isInherited() && PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipRestrictedAdmin.getBool() && (room.name == "Cockpit" || room.name == "Records"))
+                if (!CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilHacker) && !EvilHacker.isInherited() && PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipRestrictedAdmin.getBool() && (room.name == "Cockpit" || room.name == "Records"))
                 {
                     if (room.name == "Cockpit" && !adminCockpitSprite) adminCockpitSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.admin_cockpit.png", 100f);
                     if (room.name == "Records" && !adminRecordsSprite) adminRecordsSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.admin_records.png", 100f);
@@ -201,13 +201,13 @@ namespace TheOtherRoles.Patches
                         TimeRemaining.color = Palette.White;
                     }
 
-                    if (PlayerControl.LocalPlayer.isRole(RoleType.MimicA))
+                    if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.MimicA))
                     {
                         TimeRemaining.gameObject.SetActive(false);
                     }
                     else
                     {
-                        if (MapOptions.restrictAdminTime <= 0f && !PlayerControl.LocalPlayer.isImpostor())
+                        if (MapOptions.restrictAdminTime <= 0f && !CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
                         {
                             __instance.BackgroundColor.SetColor(Palette.DisabledGrey);
                             OutOfTime.gameObject.SetActive(true);
@@ -230,7 +230,7 @@ namespace TheOtherRoles.Patches
                 }
 
                 bool commsActive = false;
-                foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
                     if (task.TaskType == TaskTypes.FixComms) commsActive = true;
 
                 if (!__instance.isSab && commsActive)
@@ -348,7 +348,7 @@ namespace TheOtherRoles.Patches
             static void Postfix(CounterArea __instance)
             {
                 // Hacker display saved colors on the admin panel
-                bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
+                bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl && Hacker.hackerTimer > 0;
                 if (playerColors.ContainsKey(__instance.RoomType))
                 {
                     List<Color> colors = playerColors[__instance.RoomType];
@@ -398,7 +398,7 @@ namespace TheOtherRoles.Patches
                                 }
                                 renderer.material.SetColor("_VisorColor", Palette.VisorColor);
                             }
-                            else if (((PlayerControl.LocalPlayer.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) && EvilHacker.canHasBetterAdmin) || PlayerControl.LocalPlayer.isRole(RoleType.MimicA))
+                            else if (((CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilHacker) || EvilHacker.isInherited()) && EvilHacker.canHasBetterAdmin) || CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.MimicA))
                             {
                                 renderer.material = newMat;
                                 var color = colors[i];

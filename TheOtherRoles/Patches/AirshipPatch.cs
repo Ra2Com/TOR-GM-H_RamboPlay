@@ -32,7 +32,7 @@ namespace TheOtherRoles.Patches
                 //昇降機右に影を追加
                 OneWayShadows oneWayShadow = obj.transform.FindChild("Shadow").FindChild("LedgeShadow").GetComponent<OneWayShadows>();
                 oneWayShadow.enabled = false;
-                if (PlayerControl.LocalPlayer.isImpostor()) oneWayShadow.gameObject.SetActive(false);
+                if (CachedPlayer.LocalPlayer.PlayerControl.isImpostor()) oneWayShadow.gameObject.SetActive(false);
 
                 SpriteRenderer renderer;
 

@@ -26,7 +26,7 @@ namespace TheOtherRoles
 
         public override void FixedUpdate()
         {
-            if (PlayerControl.LocalPlayer.isRole(RoleType.Immoralist))
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Immoralist))
             {
                 arrowUpdate();
             }
@@ -59,8 +59,8 @@ namespace TheOtherRoles
 
         public static void suicide()
         {
-            byte targetId = PlayerControl.LocalPlayer.PlayerId;
-            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SerialKillerSuicide, Hazel.SendOption.Reliable, -1); killWriter.Write(targetId);
+            byte targetId = CachedPlayer.LocalPlayer.PlayerControl.PlayerId;
+            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SerialKillerSuicide, Hazel.SendOption.Reliable, -1); killWriter.Write(targetId);
             AmongUsClient.Instance.FinishRpcImmediately(killWriter);
             RPCProcedure.serialKillerSuicide(targetId);
         }
@@ -81,7 +81,7 @@ namespace TheOtherRoles
                 {
                     suicide();
                 },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Immoralist) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Immoralist) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
                 () => { return true; },
                 () =>
                 {
@@ -124,7 +124,7 @@ namespace TheOtherRoles
                 arrows = new List<Arrow>();
 
                 // 狐の位置を示すArrowを描画
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (p.Data.IsDead) continue;
                     Arrow arrow;
@@ -150,7 +150,7 @@ namespace TheOtherRoles
         {
             public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
             {
-                PlayerControl player = PlayerControl.LocalPlayer;
+                PlayerControl player = CachedPlayer.LocalPlayer.PlayerControl;
                 if (player.isRole(RoleType.Immoralist) && player.isAlive())
                 {
                     Helpers.showFlash(new Color(42f / 255f, 187f / 255f, 245f / 255f));

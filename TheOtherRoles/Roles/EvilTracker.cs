@@ -39,7 +39,7 @@ namespace TheOtherRoles
         public override void OnMeetingEnd() { }
         public override void FixedUpdate()
         {
-            if (PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker))
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker))
             {
                 arrowUpdate();
             }
@@ -66,8 +66,8 @@ namespace TheOtherRoles
                 {
                     target = currentTarget;
                 },
-                () => { return target == null && PlayerControl.LocalPlayer.isRole(RoleType.EvilTracker) && PlayerControl.LocalPlayer.isAlive(); },
-                () => { return currentTarget != null && target == null && PlayerControl.LocalPlayer.CanMove; },
+                () => { return target == null && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker) && CachedPlayer.LocalPlayer.PlayerControl.isAlive(); },
+                () => { return currentTarget != null && target == null && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
                 () => { trackerButton.Timer = trackerButton.MaxTimer; },
                 getTrackerButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -122,7 +122,7 @@ namespace TheOtherRoles
 
                 // インポスターの位置を示すArrowsを描画
                 int count = 0;
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (p.Data.IsDead)
                     {
@@ -133,7 +133,7 @@ namespace TheOtherRoles
                         continue;
                     }
                     Arrow arrow;
-                    if (p.isImpostor() && p != PlayerControl.LocalPlayer)
+                    if (p.isImpostor() && p != CachedPlayer.LocalPlayer.PlayerControl)
                     {
                         arrow = new Arrow(Palette.ImpostorRed);
                         arrow.arrow.SetActive(true);
@@ -220,7 +220,7 @@ namespace TheOtherRoles
         {
             public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target)
             {
-                PlayerControl player = PlayerControl.LocalPlayer;
+                PlayerControl player = CachedPlayer.LocalPlayer.PlayerControl;
                 if (__instance.isImpostor() && __instance != player && player.isRole(RoleType.EvilTracker) && player.isAlive() && canSeeDeathFlash)
                 {
                     Helpers.showFlash(new Color(42f / 255f, 187f / 255f, 245f / 255f));

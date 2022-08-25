@@ -86,7 +86,7 @@ namespace TheOtherRoles
             if (killer != null && infectKiller)
             {
                 byte targetId = killer.PlayerId;
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlagueDoctorSetInfected, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PlagueDoctorSetInfected, Hazel.SendOption.Reliable, -1);
                 writer.Write(targetId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.plagueDoctorInfected(targetId);
@@ -95,7 +95,7 @@ namespace TheOtherRoles
 
         public override void FixedUpdate()
         {
-            if (player == PlayerControl.LocalPlayer)
+            if (player == CachedPlayer.LocalPlayer.PlayerControl)
             {
                 if (numInfections > 0 && player.isAlive())
                 {
@@ -106,7 +106,7 @@ namespace TheOtherRoles
                 if (!meetingFlag && (canWinDead || player.isAlive()))
                 {
                     List<PlayerControl> newInfected = new();
-                    foreach (PlayerControl target in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                    foreach (PlayerControl target in CachedPlayer.AllPlayers)
                     { // 非感染プレイヤーのループ
                         if (target == player || target.isDead() || infected.ContainsKey(target.PlayerId) || target.inVent) continue;
 
@@ -128,7 +128,7 @@ namespace TheOtherRoles
                                 progress[target.PlayerId] += Time.fixedDeltaTime;
 
                                 // 他のクライアントに進行状況を通知する
-                                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlagueDoctorUpdateProgress, Hazel.SendOption.Reliable, -1);
+                                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PlagueDoctorUpdateProgress, Hazel.SendOption.Reliable, -1);
                                 writer.Write(target.PlayerId);
                                 writer.Write(progress[target.PlayerId]);
                                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -149,7 +149,7 @@ namespace TheOtherRoles
                     foreach (PlayerControl p in newInfected)
                     {
                         byte targetId = p.PlayerId;
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlagueDoctorSetInfected, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PlagueDoctorSetInfected, Hazel.SendOption.Reliable, -1);
                         writer.Write(targetId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.plagueDoctorInfected(targetId);
@@ -157,7 +157,7 @@ namespace TheOtherRoles
 
                     // 勝利条件を満たしたか確認する
                     bool winFlag = true;
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                    foreach (PlayerControl p in CachedPlayer.AllPlayers)
                     {
                         if (p.isDead()) continue;
                         if (p == player) continue;
@@ -170,7 +170,7 @@ namespace TheOtherRoles
 
                     if (winFlag)
                     {
-                        MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlagueDoctorWin, Hazel.SendOption.Reliable, -1);
+                        MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PlagueDoctorWin, Hazel.SendOption.Reliable, -1);
                         AmongUsClient.Instance.FinishRpcImmediately(winWriter);
                         RPCProcedure.plagueDoctorWin();
                     }
@@ -206,7 +206,7 @@ namespace TheOtherRoles
                 return;
             }
 
-            if ((player != null && PlayerControl.LocalPlayer == player) || PlayerControl.LocalPlayer.isDead())
+            if ((player != null && CachedPlayer.LocalPlayer.PlayerControl == player) || CachedPlayer.LocalPlayer.PlayerControl.isDead())
             {
                 if (statusText == null)
                 {
@@ -226,7 +226,7 @@ namespace TheOtherRoles
 
                 statusText.gameObject.SetActive(true);
                 string text = $"[{ModTranslation.getString("plagueDoctorProgress")}]\n";
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     if (p == player) continue;
                     if (dead.ContainsKey(p.PlayerId) && dead[p.PlayerId]) continue;
@@ -258,7 +258,7 @@ namespace TheOtherRoles
                 {/*ボタンが押されたとき*/
                     byte targetId = local.currentTarget.PlayerId;
 
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlagueDoctorSetInfected, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PlagueDoctorSetInfected, Hazel.SendOption.Reliable, -1);
                     writer.Write(targetId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.plagueDoctorInfected(targetId);
@@ -267,7 +267,7 @@ namespace TheOtherRoles
                     plagueDoctorButton.Timer = plagueDoctorButton.MaxTimer;
                     local.currentTarget = null;
                 },
-                () => {/*ボタンが有効になる条件*/ return PlayerControl.LocalPlayer.isRole(RoleType.PlagueDoctor) && local.numInfections > 0 && !PlayerControl.LocalPlayer.isDead(); },
+                () => {/*ボタンが有効になる条件*/ return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.PlagueDoctor) && local.numInfections > 0 && !CachedPlayer.LocalPlayer.PlayerControl.isDead(); },
                 () =>
                 {/*ボタンが使える条件*/
                     if (numInfectionsText != null)
@@ -278,7 +278,7 @@ namespace TheOtherRoles
                             numInfectionsText.text = "";
                     }
 
-                    return local.currentTarget != null && local.numInfections > 0 && PlayerControl.LocalPlayer.CanMove;
+                    return local.currentTarget != null && local.numInfections > 0 && CachedPlayer.LocalPlayer.PlayerControl.CanMove;
                 },
                 () => {/*ミーティング終了時*/ plagueDoctorButton.Timer = plagueDoctorButton.MaxTimer; },
                 getSyringeIcon(),

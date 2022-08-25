@@ -152,14 +152,14 @@ namespace TheOtherRoles.Objects
                     else if ((p == 1f) && target.isAlive())
                     { // 正常にキルが発生する場合の処理
                         target.moveable = true;
-                        if (PlayerControl.LocalPlayer.isRole(RoleType.Trapper))
+                        if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Trapper))
                         {
-                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TrapperKill, Hazel.SendOption.Reliable, -1);
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.TrapperKill, Hazel.SendOption.Reliable, -1);
                             writer.Write(trapId);
-                            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                            writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                             writer.Write(target.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
-                            RPCProcedure.trapperKill(trapId, PlayerControl.LocalPlayer.PlayerId, target.PlayerId);
+                            RPCProcedure.trapperKill(trapId, CachedPlayer.LocalPlayer.PlayerControl.PlayerId, target.PlayerId);
                         }
                     }
                     else
@@ -193,9 +193,9 @@ namespace TheOtherRoles.Objects
                 }
             })));
 
-            if (PlayerControl.LocalPlayer.isRole(RoleType.Trapper))
+            if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Trapper))
             {
-                PlayerControl.LocalPlayer.killTimer = PlayerControl.GameOptions.KillCooldown + Trapper.penaltyTime;
+                CachedPlayer.LocalPlayer.PlayerControl.killTimer = PlayerControl.GameOptions.KillCooldown + Trapper.penaltyTime;
                 Trapper.trapperSetTrapButton.Timer = Trapper.cooldown + Trapper.penaltyTime;
             }
         }
@@ -227,16 +227,16 @@ namespace TheOtherRoles.Objects
                 if (trap.Value.target != null)
                 {
 
-                    if (PlayerControl.LocalPlayer.isRole(RoleType.Trapper))
+                    if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Trapper))
                     {
                         if (!trap.Value.target.isDead())
                         {
-                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TrapperKill, Hazel.SendOption.Reliable, -1);
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.TrapperKill, Hazel.SendOption.Reliable, -1);
                             writer.Write(trap.Key);
-                            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                            writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                             writer.Write(trap.Value.target.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
-                            RPCProcedure.trapperKill(trap.Key, PlayerControl.LocalPlayer.PlayerId, trap.Value.target.PlayerId);
+                            RPCProcedure.trapperKill(trap.Key, CachedPlayer.LocalPlayer.PlayerControl.PlayerId, trap.Value.target.PlayerId);
                         }
                     }
 
@@ -281,10 +281,10 @@ namespace TheOtherRoles.Objects
                 {
                     bool canSee =
                         trap.isActive ||
-                        PlayerControl.LocalPlayer.isImpostor() ||
-                        PlayerControl.LocalPlayer.isDead() ||
-                        (PlayerControl.LocalPlayer.isRole(RoleType.Lighter) && Lighter.isLightActive(PlayerControl.LocalPlayer)) ||
-                        PlayerControl.LocalPlayer.isRole(RoleType.Fox);
+                        CachedPlayer.LocalPlayer.PlayerControl.isImpostor() ||
+                        CachedPlayer.LocalPlayer.PlayerControl.isDead() ||
+                        (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Lighter) && Lighter.isLightActive(CachedPlayer.LocalPlayer.PlayerControl)) ||
+                        CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Fox);
                     var opacity = canSee ? 1.0f : 0.0f;
                     if (trap.trap != null)
                         trap.trap.GetComponent<SpriteRenderer>().material.color = Color.Lerp(Palette.ClearWhite, Palette.White, opacity);

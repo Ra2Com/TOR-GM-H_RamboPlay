@@ -138,7 +138,7 @@ namespace TheOtherRoles
         {
             public static void Postfix(ShipStatus __instance)
             {
-                if (hasTasks && hasModifier(PlayerControl.LocalPlayer))
+                if (hasTasks && hasModifier(CachedPlayer.LocalPlayer.PlayerControl))
                 {
                     local.assignTasks();
                 }

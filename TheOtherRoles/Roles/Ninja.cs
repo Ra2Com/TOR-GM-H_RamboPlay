@@ -46,7 +46,7 @@ namespace TheOtherRoles
 
         public override void OnMeetingEnd()
         {
-            if (player == PlayerControl.LocalPlayer)
+            if (player == CachedPlayer.LocalPlayer.PlayerControl)
             {
                 if (penalized)
                 {
@@ -115,7 +115,7 @@ namespace TheOtherRoles
         {
             penalized = stealthed;
             float penalty = penalized ? killPenalty : 0f;
-            if (PlayerControl.LocalPlayer == player)
+            if (CachedPlayer.LocalPlayer.PlayerControl == player)
                 player.SetKillTimerUnchecked(PlayerControl.GameOptions.KillCooldown + penalty);
         }
 
@@ -145,13 +145,13 @@ namespace TheOtherRoles
                         return;
                     }
 
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.NinjaStealth, Hazel.SendOption.Reliable, -1);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.NinjaStealth, Hazel.SendOption.Reliable, -1);
+                    writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                     writer.Write(true);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.ninjaStealth(PlayerControl.LocalPlayer.PlayerId, true);
+                    RPCProcedure.ninjaStealth(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, true);
                 },
-                () => { return PlayerControl.LocalPlayer.isRole(RoleType.Ninja) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Ninja) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
                 () =>
                 {
                     if (ninjaButton.isEffectActive)
@@ -162,7 +162,7 @@ namespace TheOtherRoles
                     {
                         ninjaButton.buttonText = ModTranslation.getString("NinjaText");
                     }
-                    return PlayerControl.LocalPlayer.CanMove;
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove;
                 },
                 () =>
                 {
@@ -179,13 +179,13 @@ namespace TheOtherRoles
                 {
                     ninjaButton.Timer = ninjaButton.MaxTimer = Ninja.stealthCooldown;
 
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.NinjaStealth, Hazel.SendOption.Reliable, -1);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.NinjaStealth, Hazel.SendOption.Reliable, -1);
+                    writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
                     writer.Write(false);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.ninjaStealth(PlayerControl.LocalPlayer.PlayerId, false);
+                    RPCProcedure.ninjaStealth(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, false);
 
-                    PlayerControl.LocalPlayer.SetKillTimerUnchecked(Math.Max(PlayerControl.LocalPlayer.killTimer, Ninja.killPenalty));
+                    CachedPlayer.LocalPlayer.PlayerControl.SetKillTimerUnchecked(Math.Max(CachedPlayer.LocalPlayer.PlayerControl.killTimer, Ninja.killPenalty));
                 }
             )
             {
@@ -254,9 +254,9 @@ namespace TheOtherRoles
                     if (ninja == null || ninja.isDead()) return;
 
                     bool canSee =
-                        PlayerControl.LocalPlayer.isImpostor() ||
-                        PlayerControl.LocalPlayer.isDead() ||
-                        (Lighter.canSeeNinja && PlayerControl.LocalPlayer.isRole(RoleType.Lighter) && Lighter.isLightActive(PlayerControl.LocalPlayer));
+                        CachedPlayer.LocalPlayer.PlayerControl.isImpostor() ||
+                        CachedPlayer.LocalPlayer.PlayerControl.isDead() ||
+                        (Lighter.canSeeNinja && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Lighter) && Lighter.isLightActive(CachedPlayer.LocalPlayer.PlayerControl));
 
                     var opacity = canSee ? 0.1f : 0.0f;
 

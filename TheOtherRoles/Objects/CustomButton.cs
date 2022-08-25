@@ -151,7 +151,7 @@ namespace TheOtherRoles.Objects
 
         private void Update()
         {
-            if (PlayerControl.LocalPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton())
+            if (CachedPlayer.LocalPlayer.PlayerControl.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton())
             {
                 setActive(false);
                 return;
@@ -187,7 +187,7 @@ namespace TheOtherRoles.Objects
             {
                 bool always = CustomOptionHolder.alwaysReduceCooldown.getBool();
                 // オプションがONの場合はベント内はクールダウン減少を止める
-                bool exceptInVent = CustomOptionHolder.exceptInVent.getBool() && PlayerControl.LocalPlayer.inVent;
+                bool exceptInVent = CustomOptionHolder.exceptInVent.getBool() && CachedPlayer.LocalPlayer.PlayerControl.inVent;
                 // オプションがONの場合は配電盤タスク中はクールダウン減少を止める
                 bool exceptOnTask = CustomOptionHolder.exceptOnTask.getBool() && Patches.ElectricPatch.onTask;
                 if (HasEffect && isEffectActive)
@@ -199,7 +199,7 @@ namespace TheOtherRoles.Objects
                         Timer -= Time.deltaTime;
                     }
                 }
-                else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
+                else if (!CachedPlayer.LocalPlayer.PlayerControl.inVent && CachedPlayer.LocalPlayer.PlayerControl.moveable)
                 {
                     Timer -= Time.deltaTime;
                 }

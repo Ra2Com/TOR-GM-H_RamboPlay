@@ -23,7 +23,7 @@ namespace TheOtherRoles.Patches
             // Medic shield
             if (Medic.medic != null && AmongUsClient.Instance.AmHost && Medic.futureShielded != null && !Medic.medic.Data.IsDead)
             { // We need to send the RPC from the host here, to make sure that the order of shifting and setting the shield is correct(for that reason the futureShifted and futureShielded are being synced)
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
                 writer.Write(Medic.futureShielded.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.medicSetShielded(Medic.futureShielded.PlayerId);
@@ -42,7 +42,7 @@ namespace TheOtherRoles.Patches
                 if (target != null)
                 {
                     // exile the picked crewmate
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId,
                         (byte)CustomRPC.UncheckedExilePlayer,
                         Hazel.SendOption.Reliable,
                         -1);
@@ -55,7 +55,7 @@ namespace TheOtherRoles.Patches
             // Shifter shift
             if (Shifter.shifter != null && AmongUsClient.Instance.AmHost && Shifter.futureShift != null)
             { // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
                 writer.Write(Shifter.futureShift.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shifterShift(Shifter.futureShift.PlayerId);
@@ -69,7 +69,7 @@ namespace TheOtherRoles.Patches
                 {
                     if (target != null && target.canBeErased())
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ErasePlayerRoles, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ErasePlayerRoles, Hazel.SendOption.Reliable, -1);
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.erasePlayerRoles(target.PlayerId);
@@ -95,7 +95,7 @@ namespace TheOtherRoles.Patches
                 {
                     if (target != null && !target.Data.IsDead && Helpers.checkMuderAttempt(Witch.witch, target, true) == MurderAttemptResult.PerformKill)
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WitchSpellCast, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.WitchSpellCast, Hazel.SendOption.Reliable, -1);
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.witchSpellCast(target.PlayerId);
@@ -137,7 +137,7 @@ namespace TheOtherRoles.Patches
         {
             int numAliveCrewmates = 0;
             // count alive crewmates
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
             {
                 if (player.Data.Role.IsImpostor)
                     continue;
@@ -151,7 +151,7 @@ namespace TheOtherRoles.Patches
             int targetPlayerIndex = TheOtherRoles.rnd.Next(0, numAliveCrewmates);
             int currentPlayerIndex = 0;
             // return the player
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
             {
                 if (player.Data.Role.IsImpostor)
                     continue;
@@ -246,14 +246,14 @@ namespace TheOtherRoles.Patches
             TheOtherRolesGM.OnMeetingEnd();
 
             // Mini set adapted cooldown
-            if (PlayerControl.LocalPlayer.hasModifier(ModifierType.Mini) && PlayerControl.LocalPlayer.Data.Role.IsImpostor)
+            if (CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.Mini) && CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor)
             {
-                var multiplier = Mini.isGrownUp(PlayerControl.LocalPlayer) ? 0.66f : 2f;
-                PlayerControl.LocalPlayer.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
+                var multiplier = Mini.isGrownUp(CachedPlayer.LocalPlayer.PlayerControl) ? 0.66f : 2f;
+                CachedPlayer.LocalPlayer.PlayerControl.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
             }
 
             // Seer spawn souls
-            if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2))
+            if (Seer.deadBodyPositions != null && Seer.seer != null && CachedPlayer.LocalPlayer.PlayerControl == Seer.seer && (Seer.mode == 0 || Seer.mode == 2))
             {
                 foreach (Vector3 pos in Seer.deadBodyPositions)
                 {
@@ -289,11 +289,11 @@ namespace TheOtherRoles.Patches
             Arsonist.updateIcons();
 
             // Force Bounty Hunter Bounty Update
-            if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer)
+            if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == CachedPlayer.LocalPlayer.PlayerControl)
                 BountyHunter.bountyUpdateTimer = 0f;
 
             // Medium spawn souls
-            if (Medium.medium != null && PlayerControl.LocalPlayer == Medium.medium)
+            if (Medium.medium != null && CachedPlayer.LocalPlayer.PlayerControl == Medium.medium)
             {
                 if (Medium.souls != null)
                 {
@@ -319,14 +319,14 @@ namespace TheOtherRoles.Patches
                 }
             }
 
-            if (Lawyer.lawyer != null && PlayerControl.LocalPlayer == Lawyer.lawyer && !Lawyer.lawyer.Data.IsDead)
+            if (Lawyer.lawyer != null && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && !Lawyer.lawyer.Data.IsDead)
                 Lawyer.meetings++;
 
-            if (PlayerControl.LocalPlayer.hasModifier(ModifierType.AntiTeleport))
+            if (CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.AntiTeleport))
             {
                 if (AntiTeleport.position != new Vector3())
                 {
-                    PlayerControl.LocalPlayer.transform.position = AntiTeleport.position;
+                    CachedPlayer.LocalPlayer.PlayerControl.transform.position = AntiTeleport.position;
                     if (SubmergedCompatibility.isSubmerged())
                     {
                         SubmergedCompatibility.ChangeFloor(AntiTeleport.position.y > -7);

@@ -30,9 +30,9 @@ namespace TheOtherRoles.Patches
         static void UseVitalsTime()
         {
             // Don't waste network traffic if we're out of time.
-            if (MapOptions.restrictDevices > 0 && MapOptions.restrictVitals && MapOptions.restrictVitalsTime > 0f && PlayerControl.LocalPlayer.isAlive())
+            if (MapOptions.restrictDevices > 0 && MapOptions.restrictVitals && MapOptions.restrictVitalsTime > 0f && CachedPlayer.LocalPlayer.PlayerControl.isAlive())
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseVitalsTime, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UseVitalsTime, Hazel.SendOption.Reliable, -1);
                 writer.Write(vitalsTimer);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.useVitalsTime(vitalsTimer);
@@ -47,7 +47,7 @@ namespace TheOtherRoles.Patches
             {
                 vitalsTimer = 0f;
 
-                if (Hacker.hacker != null && PlayerControl.LocalPlayer == Hacker.hacker)
+                if (Hacker.hacker != null && CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker)
                 {
                     hackerTexts = new List<TMPro.TextMeshPro>();
                     foreach (VitalsPanel panel in __instance.vitals)
@@ -103,7 +103,7 @@ namespace TheOtherRoles.Patches
             {
 
                 // Hacker show time since death
-                if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0)
+                if (Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl && Hacker.hackerTimer > 0)
                 {
                     for (int k = 0; k < __instance.vitals.Length; k++)
                     {
