@@ -93,7 +93,7 @@ namespace TheOtherRoles.Patches
             // インポスター視界の場合に昇降機右の影を無効化
             if (PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipOptimizeMap.getBool() && Helpers.hasImpostorVision(PlayerControl.LocalPlayer))
             {
-                var obj = ShipStatus.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
+                var obj = MapUtilities.CachedShipStatus.FastRooms[SystemTypes.GapRoom].gameObject;
                 OneWayShadows oneWayShadow = obj.transform.FindChild("Shadow").FindChild("LedgeShadow").GetComponent<OneWayShadows>();
                 oneWayShadow.gameObject.SetActive(false);
             }
@@ -119,7 +119,7 @@ namespace TheOtherRoles.Patches
                 {
                     GameObject sabo = gapRoom.GetComponentsInChildren<Console>().Where(x => x.name == "task_lightssabotage (gap)").FirstOrDefault()?.gameObject;
                     sabo.SetActive(false);
-                    ShipStatus.Instance.AllConsoles = ShipStatus.Instance.AllConsoles.Where(x => x != sabo.GetComponent<Console>()).ToArray();
+                    MapUtilities.CachedShipStatus.AllConsoles = MapUtilities.CachedShipStatus.AllConsoles.Where(x => x != sabo.GetComponent<Console>()).ToArray();
                 }
 
                 // ぬ～んを消す

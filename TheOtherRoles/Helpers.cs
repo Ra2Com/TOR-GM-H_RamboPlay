@@ -105,22 +105,22 @@ namespace TheOtherRoles
             var hashSet = new Il2CppSystem.Collections.Generic.HashSet<TaskTypes>();
 
             var commonTasks = new Il2CppSystem.Collections.Generic.List<NormalPlayerTask>();
-            foreach (var task in ShipStatus.Instance.CommonTasks.OrderBy(x => rnd.Next())) commonTasks.Add(task);
+            foreach (var task in MapUtilities.CachedShipStatus.CommonTasks.OrderBy(x => rnd.Next())) commonTasks.Add(task);
 
             var shortTasks = new Il2CppSystem.Collections.Generic.List<NormalPlayerTask>();
-            foreach (var task in ShipStatus.Instance.NormalTasks.OrderBy(x => rnd.Next())) shortTasks.Add(task);
+            foreach (var task in MapUtilities.CachedShipStatus.NormalTasks.OrderBy(x => rnd.Next())) shortTasks.Add(task);
 
             var longTasks = new Il2CppSystem.Collections.Generic.List<NormalPlayerTask>();
-            foreach (var task in ShipStatus.Instance.LongTasks.OrderBy(x => rnd.Next())) longTasks.Add(task);
+            foreach (var task in MapUtilities.CachedShipStatus.LongTasks.OrderBy(x => rnd.Next())) longTasks.Add(task);
 
             int start = 0;
-            ShipStatus.Instance.AddTasksFromList(ref start, numCommon, tasks, hashSet, commonTasks);
+            MapUtilities.CachedShipStatus.AddTasksFromList(ref start, numCommon, tasks, hashSet, commonTasks);
 
             start = 0;
-            ShipStatus.Instance.AddTasksFromList(ref start, numShort, tasks, hashSet, shortTasks);
+            MapUtilities.CachedShipStatus.AddTasksFromList(ref start, numShort, tasks, hashSet, shortTasks);
 
             start = 0;
-            ShipStatus.Instance.AddTasksFromList(ref start, numLong, tasks, hashSet, longTasks);
+            MapUtilities.CachedShipStatus.AddTasksFromList(ref start, numLong, tasks, hashSet, longTasks);
 
             return tasks.ToArray().ToList();
         }
@@ -480,13 +480,13 @@ namespace TheOtherRoles
             if (!source.isRole(RoleType.Fox) && !source.Data.IsDead && Fox.isStealthed(target)) return true;
             if (!source.isRole(RoleType.Puppeteer) && !source.Data.IsDead && target.isRole(RoleType.Puppeteer) && Puppeteer.stealthed) return true;
             if (!source.isRole(RoleType.Puppeteer) && !source.Data.IsDead && target == Puppeteer.dummy && !Puppeteer.stealthed) return true;
-            if (MapOptions.hideOutOfSightNametags && GameStarted && ShipStatus.Instance != null && source.transform != null && target.transform != null)
+            if (MapOptions.hideOutOfSightNametags && GameStarted && MapUtilities.CachedShipStatus != null && source.transform != null && target.transform != null)
             {
                 float distMod = 1.025f;
                 float distance = Vector3.Distance(source.transform.position, target.transform.position);
                 bool anythingBetween = PhysicsHelpers.AnythingBetween(source.GetTruePosition(), target.GetTruePosition(), Constants.ShadowMask, false);
 
-                if (distance > ShipStatus.Instance.CalculateLightRadius(source.Data) * distMod || anythingBetween) return true;
+                if (distance > MapUtilities.CachedShipStatus.CalculateLightRadius(source.Data) * distMod || anythingBetween) return true;
             }
             if (!MapOptions.hidePlayerNames) return false; // All names are visible
             if (source.isImpostor() && (target.isImpostor() || target.isRole(RoleType.Spy) || (target == Sidekick.sidekick && Sidekick.wasTeamRed) || (target == Jackal.jackal && Jackal.wasTeamRed))) return false; // Members of team Impostors see the names of Impostors/Spies

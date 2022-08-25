@@ -258,7 +258,7 @@ namespace TheOtherRoles.Patches
 
                     if (!commsActive && counterArea.RoomType > SystemTypes.Hallway)
                     {
-                        PlainShipRoom plainShipRoom = ShipStatus.Instance.FastRooms[counterArea.RoomType];
+                        PlainShipRoom plainShipRoom = MapUtilities.CachedShipStatus.FastRooms[counterArea.RoomType];
 
                         if (plainShipRoom != null && plainShipRoom.roomArea)
                         {

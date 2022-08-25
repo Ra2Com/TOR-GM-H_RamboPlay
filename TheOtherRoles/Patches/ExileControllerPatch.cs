@@ -105,14 +105,14 @@ namespace TheOtherRoles.Patches
             Witch.futureSpelled = new List<PlayerControl>();
 
             // SecurityGuard vents and cameras
-            var allCameras = ShipStatus.Instance.AllCameras.ToList();
+            var allCameras = MapUtilities.CachedShipStatus.AllCameras.ToList();
             MapOptions.camerasToAdd.ForEach(camera =>
             {
                 camera.gameObject.SetActive(true);
                 camera.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                 allCameras.Add(camera);
             });
-            ShipStatus.Instance.AllCameras = allCameras.ToArray();
+            MapUtilities.CachedShipStatus.AllCameras = allCameras.ToArray();
             MapOptions.camerasToAdd = new List<SurvCamera>();
 
             foreach (Vent vent in MapOptions.ventsToSeal)

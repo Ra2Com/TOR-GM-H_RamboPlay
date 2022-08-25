@@ -882,7 +882,7 @@ namespace TheOtherRoles.Patches
                     {
                         Minigame.Instance.ForceClose();
                     }
-                    ShipStatus.Instance.OnMeetingCalled();
+                    MapUtilities.CachedShipStatus.OnMeetingCalled();
                     KillAnimation.SetMovement(reporter, true);
                 }
 
@@ -973,7 +973,7 @@ namespace TheOtherRoles.Patches
             }
             private static void StartMeeting(PlayerControl reporter, GameData.PlayerInfo target)
             {
-                ShipStatus.Instance.StartCoroutine(CoStartMeeting(reporter, target).WrapToIl2Cpp());
+                MapUtilities.CachedShipStatus.StartCoroutine(CoStartMeeting(reporter, target).WrapToIl2Cpp());
             }
             public static bool Prefix(PlayerControl __instance, GameData.PlayerInfo target)
             {

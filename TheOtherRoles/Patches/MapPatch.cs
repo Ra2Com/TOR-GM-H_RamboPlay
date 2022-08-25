@@ -117,8 +117,8 @@ namespace TheOtherRoles.Patches
             {
                 if (!MeetingHud.Instance) return true;  // Only run in meetings, and then set the Position of the HerePoint to the Position before the Meeting!
                 Vector3 vector = AntiTeleport.position != null ? AntiTeleport.position : PlayerControl.LocalPlayer.transform.position;
-                vector /= ShipStatus.Instance.MapScale;
-                vector.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
+                vector /= MapUtilities.CachedShipStatus.MapScale;
+                vector.x *= Mathf.Sign(MapUtilities.CachedShipStatus.transform.localScale.x);
                 vector.z = -1f;
                 __instance.HerePoint.transform.localPosition = vector;
                 PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
@@ -153,8 +153,8 @@ namespace TheOtherRoles.Patches
                         if (enabled)
                         {
                             Vector3 vector = p.transform.position;
-                            vector /= ShipStatus.Instance.MapScale;
-                            vector.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
+                            vector /= MapUtilities.CachedShipStatus.MapScale;
+                            vector.x *= Mathf.Sign(MapUtilities.CachedShipStatus.transform.localScale.x);
                             vector.z = -1f;
                             mapIcons[id].transform.localPosition = vector;
 
@@ -168,8 +168,8 @@ namespace TheOtherRoles.Patches
                     {
                         byte id = b.ParentId;
                         Vector3 vector = b.transform.position;
-                        vector /= ShipStatus.Instance.MapScale;
-                        vector.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
+                        vector /= MapUtilities.CachedShipStatus.MapScale;
+                        vector.x *= Mathf.Sign(MapUtilities.CachedShipStatus.transform.localScale.x);
                         vector.z = -1f;
 
                         if (!corpseIcons.ContainsKey(id))
@@ -318,7 +318,7 @@ namespace TheOtherRoles.Patches
 
             foreach (var door in plainDoors)
             {
-                Vector3 pos = door.gameObject.transform.position / ShipStatus.Instance.MapScale;
+                Vector3 pos = door.gameObject.transform.position / MapUtilities.CachedShipStatus.MapScale;
                 pos.z = -10f;
                 String key = $"{pos.x},{pos.y}";
                 SpriteRenderer mark;
@@ -418,8 +418,8 @@ namespace TheOtherRoles.Patches
                 GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(EvilTracker.target.PlayerId);
                 PlayerMaterial.SetColors((playerById != null) ? playerById.DefaultOutfit.ColorId : 0, targetHerePoint);
                 Vector3 pos = new Vector3(EvilTracker.target.transform.position.x, EvilTracker.target.transform.position.y, EvilTracker.target.transform.position.z);
-                pos /= ShipStatus.Instance.MapScale;
-                pos.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
+                pos /= MapUtilities.CachedShipStatus.MapScale;
+                pos.x *= Mathf.Sign(MapUtilities.CachedShipStatus.transform.localScale.x);
                 pos.z = -10;
                 targetHerePoint.transform.localPosition = pos;
             }
@@ -438,8 +438,8 @@ namespace TheOtherRoles.Patches
                     GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(p.PlayerId);
                     PlayerMaterial.SetColors(0, impostorHerePoint[p.PlayerId]);
                     Vector3 pos = new Vector3(p.transform.position.x, p.transform.position.y, p.transform.position.z);
-                    pos /= ShipStatus.Instance.MapScale;
-                    pos.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
+                    pos /= MapUtilities.CachedShipStatus.MapScale;
+                    pos.x *= Mathf.Sign(MapUtilities.CachedShipStatus.transform.localScale.x);
                     pos.z = -10;
                     impostorHerePoint[p.PlayerId].transform.localPosition = pos;
                 }
@@ -567,7 +567,7 @@ namespace TheOtherRoles.Patches
                 {
                     Vector2 pos = realTasks[EvilTracker.target.PlayerId][i];
 
-                    Vector3 localPosition = pos / ShipStatus.Instance.MapScale;
+                    Vector3 localPosition = pos / MapUtilities.CachedShipStatus.MapScale;
                     localPosition.z = -1f;
                     PooledMapIcon pooledMapIcon = __instance.icons.Get<PooledMapIcon>();
                     pooledMapIcon.transform.localScale = new Vector3(pooledMapIcon.NormalSize, pooledMapIcon.NormalSize, pooledMapIcon.NormalSize);

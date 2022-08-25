@@ -28,7 +28,7 @@ namespace TheOtherRoles.Patches
             if (!CustomOptionHolder.airshipOptimizeMap.getBool()) return;
             if (mapId == 4)
             {
-                var obj = ShipStatus.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
+                var obj = MapUtilities.CachedShipStatus.FastRooms[SystemTypes.GapRoom].gameObject;
                 //昇降機右に影を追加
                 OneWayShadows oneWayShadow = obj.transform.FindChild("Shadow").FindChild("LedgeShadow").GetComponent<OneWayShadows>();
                 oneWayShadow.enabled = false;
@@ -180,14 +180,14 @@ namespace TheOtherRoles.Patches
                 console.usableDistance = 0.7f;
                 console.TaskTypes = new TaskTypes[0];
                 console.ValidTasks = new UnhollowerBaseLib.Il2CppReferenceArray<TaskSet>(0);
-                var list = ShipStatus.Instance.AllConsoles.ToList();
+                var list = MapUtilities.CachedShipStatus.AllConsoles.ToList();
                 list.Add(console);
-                ShipStatus.Instance.AllConsoles = new UnhollowerBaseLib.Il2CppReferenceArray<Console>(list.ToArray());
+                MapUtilities.CachedShipStatus.AllConsoles = new UnhollowerBaseLib.Il2CppReferenceArray<Console>(list.ToArray());
             }
             if (console.Image == null)
             {
                 console.Image = obj.GetComponent<SpriteRenderer>();
-                console.Image.material = new Material(ShipStatus.Instance.AllConsoles[0].Image.material);
+                console.Image.material = new Material(MapUtilities.CachedShipStatus.AllConsoles[0].Image.material);
             }
             if (!button)
             {
@@ -214,7 +214,7 @@ namespace TheOtherRoles.Patches
         static void Postfix(NormalPlayerTask __instance, TaskTypes taskType, byte[] consoleIds)
         {
             if (taskType != TaskTypes.FixWiring || !CustomOptionHolder.randomWireTask.getBool()) return;
-            List<Console> orgList = ShipStatus.Instance.AllConsoles.Where((global::Console t) => t.TaskTypes.Contains(taskType)).ToList<global::Console>();
+            List<Console> orgList = MapUtilities.CachedShipStatus.AllConsoles.Where((global::Console t) => t.TaskTypes.Contains(taskType)).ToList<global::Console>();
             List<Console> list = new(orgList);
 
             __instance.MaxStep = numWireTask;

@@ -303,8 +303,8 @@ namespace TheOtherRoles
             {
                 AmongUsClient.Instance.Dispatcher.Add(new Action(() =>
                 {
-                    ShipStatus.Instance.enabled = false;
-                    ShipStatus.Instance.ShouldCheckForGameEnd = false;
+                    MapUtilities.CachedShipStatus.enabled = false;
+                    MapUtilities.CachedShipStatus.ShouldCheckForGameEnd = false;
                     AmongUsClient.Instance.OnGameEnd(new EndGameResult((GameOverReason)reason, false));
 
                     if (AmongUsClient.Instance.AmHost)
@@ -330,7 +330,7 @@ namespace TheOtherRoles
 
         public static void engineerFixLights()
         {
-            SwitchSystem switchSystem = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
+            SwitchSystem switchSystem = MapUtilities.CachedShipStatus.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
             switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
         }
 
@@ -808,7 +808,7 @@ namespace TheOtherRoles
 
         public static void sealVent(int ventId)
         {
-            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault((x) => x != null && x.Id == ventId);
+            Vent vent = MapUtilities.CachedShipStatus.AllVents.FirstOrDefault((x) => x != null && x.Id == ventId);
             if (vent == null) return;
 
             SecurityGuard.remainingScrews -= SecurityGuard.ventPrice;

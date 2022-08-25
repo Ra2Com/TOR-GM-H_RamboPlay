@@ -19,14 +19,14 @@ namespace TheOtherRoles
             vent.Left = null;
             vent.Right = null;
             vent.Center = null;
-            Vent tmp = ShipStatus.Instance.AllVents[0];
+            Vent tmp = MapUtilities.CachedShipStatus.AllVents[0];
             vent.EnterVentAnim = tmp.EnterVentAnim;
             vent.ExitVentAnim = tmp.ExitVentAnim;
             vent.Offset = new Vector3(0f, 0.25f, 0f);
-            vent.Id = ShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
-            var allVentsList = ShipStatus.Instance.AllVents.ToList();
+            vent.Id = MapUtilities.CachedShipStatus.AllVents.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
+            var allVentsList = MapUtilities.CachedShipStatus.AllVents.ToList();
             allVentsList.Add(vent);
-            ShipStatus.Instance.AllVents = allVentsList.ToArray();
+            MapUtilities.CachedShipStatus.AllVents = allVentsList.ToArray();
             vent.gameObject.SetActive(true);
             vent.name = "AdditionalVent_" + vent.Id;
             AllVents.Add(this);
