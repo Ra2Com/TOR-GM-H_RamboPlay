@@ -994,7 +994,7 @@ namespace TheOtherRoles.Patches
                 // 既存処理の移植
                 {
                     bool flag = target == null;
-                    FastDestroyableSingleton<Telemetry>.Instance.WriteMeetingStarted(flag);
+                    Telemetry.Instance.WriteMeetingStarted(flag);
                     StartMeeting(__instance, target); // 変更部分
                     if (__instance.AmOwner)
                     {

@@ -42,7 +42,7 @@ namespace TheOtherRoles
         public override void OnMeetingStart() { }
         public override void OnMeetingEnd()
         {
-            canKill = sheriffCanKillNoDeadBody || CachedPlayer.AllPlayers.ToArray().Any(p => p.Data.IsDead);
+            canKill = sheriffCanKillNoDeadBody || PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Any(p => p.Data.IsDead);
         }
 
         public override void FixedUpdate()

@@ -755,7 +755,7 @@ namespace TheOtherRoles
 
         public static PlayerControl getPlayerById(byte playerId)
         {
-            return CachedPlayer.AllPlayers.ToArray().Where(p => p.PlayerId == playerId).FirstOrDefault();
+            return PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(p => p.PlayerId == playerId).FirstOrDefault();
         }
 
         public static System.Collections.IEnumerable FindObjectsOfType(Type type)

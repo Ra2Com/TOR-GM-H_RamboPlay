@@ -28,7 +28,7 @@ namespace TheOtherRoles.Patches
             if (!CustomOptionHolder.airshipOptimizeMap.getBool()) return;
             if (mapId == 4)
             {
-                var obj = MapUtilities.CachedShipStatus.FastRooms[SystemTypes.GapRoom].gameObject;
+                var obj = ShipStatus.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
                 //昇降機右に影を追加
                 OneWayShadows oneWayShadow = obj.transform.FindChild("Shadow").FindChild("LedgeShadow").GetComponent<OneWayShadows>();
                 oneWayShadow.enabled = false;
@@ -70,8 +70,8 @@ namespace TheOtherRoles.Patches
         {
             if (mapId == 4)
             {
-                GameObject meetingRoom = FastDestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.MeetingRoom].gameObject;
-                GameObject gapRoom = FastDestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
+                GameObject meetingRoom = ShipStatus.Instance.FastRooms[SystemTypes.MeetingRoom].gameObject;
+                GameObject gapRoom = ShipStatus.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
                 if (CustomOptionHolder.airshipAdditionalLadder.getBool())
                 {
                     // 梯子追加
@@ -92,9 +92,7 @@ namespace TheOtherRoles.Patches
 
                     // 梯子の周りの影を消す
                     GameObject.Destroy(gapRoom.GetComponentsInChildren<EdgeCollider2D>().Where(x => Math.Abs(x.points[0].x + 6.2984f) < 0.1).FirstOrDefault());
-                    Logger.currentMethod();
                     EdgeCollider2D collider = meetingRoom.GetComponentsInChildren<EdgeCollider2D>().Where(x => x.pointCount == 46).FirstOrDefault();
-                    Logger.currentMethod();
                     Il2CppSystem.Collections.Generic.List<Vector2> points = new();
                     EdgeCollider2D newCollider = collider.gameObject.AddComponent<EdgeCollider2D>();
                     EdgeCollider2D newCollider2 = collider.gameObject.AddComponent<EdgeCollider2D>();

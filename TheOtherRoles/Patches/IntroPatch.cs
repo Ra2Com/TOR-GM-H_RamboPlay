@@ -93,7 +93,7 @@ namespace TheOtherRoles.Patches
             // インポスター視界の場合に昇降機右の影を無効化
             if (PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipOptimizeMap.getBool() && Helpers.hasImpostorVision(CachedPlayer.LocalPlayer.PlayerControl))
             {
-                var obj = MapUtilities.CachedShipStatus.FastRooms[SystemTypes.GapRoom].gameObject;
+                var obj = ShipStatus.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
                 OneWayShadows oneWayShadow = obj.transform.FindChild("Shadow").FindChild("LedgeShadow").GetComponent<OneWayShadows>();
                 oneWayShadow.gameObject.SetActive(false);
             }
@@ -107,13 +107,13 @@ namespace TheOtherRoles.Patches
             // アーカイブのアドミンを消す
             if (PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipOldAdmin.getBool())
             {
-                GameObject records = FastDestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.Records].gameObject;
+                GameObject records = ShipStatus.Instance.FastRooms[SystemTypes.Records].gameObject;
                 records.GetComponentsInChildren<MapConsole>().Where(x => x.name == "records_admin_map").FirstOrDefault()?.gameObject.SetActive(false);
             }
 
-            if (FastDestroyableSingleton<ShipStatus>.Instance.FastRooms.ContainsKey(SystemTypes.GapRoom))
+            if (ShipStatus.Instance.FastRooms.ContainsKey(SystemTypes.GapRoom))
             {
-                GameObject gapRoom = FastDestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
+                GameObject gapRoom = ShipStatus.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
                 // GapRoomの配電盤を消す
                 if (PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipDisableGapSwitchBoard.getBool())
                 {

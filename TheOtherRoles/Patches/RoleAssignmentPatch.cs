@@ -226,7 +226,7 @@ namespace TheOtherRoles.Patches
                     gmID = setRoleToRandomPlayer((byte)RoleType.GM, data.crewmates);
                 }
 
-                PlayerControl p = CachedPlayer.AllPlayers.ToArray().ToList().Find(x => x.PlayerId == gmID);
+                PlayerControl p = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().ToList().Find(x => x.PlayerId == gmID);
 
                 if (p != null && CustomOptionHolder.gmDiesAtStart.getBool())
                 {
