@@ -682,12 +682,12 @@ namespace TheOtherRoles
 
         public static void showFlash(Color color, float duration = 1f)
         {
-            if (HudManager.Instance == null || HudManager.Instance.FullScreen == null) return;
-            HudManager.Instance.FullScreen.gameObject.SetActive(true);
-            HudManager.Instance.FullScreen.enabled = true;
-            HudManager.Instance.StartCoroutine(Effects.Lerp(duration, new Action<float>((p) =>
+            if (FastDestroyableSingleton<HudManager>.Instance == null || FastDestroyableSingleton<HudManager>.Instance.FullScreen == null) return;
+            FastDestroyableSingleton<HudManager>.Instance.FullScreen.gameObject.SetActive(true);
+            FastDestroyableSingleton<HudManager>.Instance.FullScreen.enabled = true;
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(duration, new Action<float>((p) =>
             {
-                var renderer = HudManager.Instance.FullScreen;
+                var renderer = FastDestroyableSingleton<HudManager>.Instance.FullScreen;
 
                 if (p < 0.5)
                 {

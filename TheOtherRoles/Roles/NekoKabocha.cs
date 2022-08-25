@@ -56,7 +56,7 @@ namespace TheOtherRoles
                     {
                         killer.Exiled();
                         if (CachedPlayer.LocalPlayer.PlayerControl == killer)
-                            HudManager.Instance.KillOverlay.ShowKillAnimation(player.Data, killer.Data);
+                            FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(player.Data, killer.Data);
                     }
 
                     finalStatuses[killer.PlayerId] = FinalStatus.Revenge;

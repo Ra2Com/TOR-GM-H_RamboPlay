@@ -142,11 +142,11 @@ namespace TheOtherRoles
                         count += 1;
                         if (!impostorPositionText.ContainsKey(p.name))
                         {
-                            RoomTracker roomTracker = HudManager.Instance?.roomTracker;
+                            RoomTracker roomTracker = FastDestroyableSingleton<HudManager>.Instance?.roomTracker;
                             if (roomTracker == null) return;
                             GameObject gameObject = UnityEngine.Object.Instantiate(roomTracker.gameObject);
                             UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
-                            gameObject.transform.SetParent(HudManager.Instance.transform);
+                            gameObject.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                             gameObject.transform.localPosition = new Vector3(0, -2.0f + 0.25f * count, gameObject.transform.localPosition.z);
                             gameObject.transform.localScale = Vector3.one * 1.0f;
                             TMPro.TMP_Text positionText = gameObject.GetComponent<TMPro.TMP_Text>();
@@ -175,11 +175,11 @@ namespace TheOtherRoles
                     arrows.Add(arrow);
                     if (targetPositionText == null)
                     {
-                        RoomTracker roomTracker = HudManager.Instance?.roomTracker;
+                        RoomTracker roomTracker = FastDestroyableSingleton<HudManager>.Instance?.roomTracker;
                         if (roomTracker == null) return;
                         GameObject gameObject = UnityEngine.Object.Instantiate(roomTracker.gameObject);
                         UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
-                        gameObject.transform.SetParent(HudManager.Instance.transform);
+                        gameObject.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                         gameObject.transform.localPosition = new Vector3(0, -2.0f, gameObject.transform.localPosition.z);
                         gameObject.transform.localScale = Vector3.one * 1.0f;
                         targetPositionText = gameObject.GetComponent<TMPro.TMP_Text>();

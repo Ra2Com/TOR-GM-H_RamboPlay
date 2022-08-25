@@ -70,7 +70,7 @@ namespace TheOtherRoles
             }
             if (player == CachedPlayer.LocalPlayer.PlayerControl && team == Team.Impostor && !isLastImpostor() && cantKillUntilLastOne)
             {
-                HudManager.Instance.KillButton.SetTarget(null);
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(null);
             }
         }
 
@@ -149,14 +149,14 @@ namespace TheOtherRoles
                     {
                         // 死亡までのカウントダウン
                         TMPro.TMP_Text text;
-                        RoomTracker roomTracker = HudManager.Instance?.roomTracker;
+                        RoomTracker roomTracker = FastDestroyableSingleton<HudManager>.Instance?.roomTracker;
                         GameObject gameObject = UnityEngine.Object.Instantiate(roomTracker.gameObject);
                         UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
-                        gameObject.transform.SetParent(HudManager.Instance.transform);
+                        gameObject.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                         gameObject.transform.localPosition = new Vector3(0, -1.8f, gameObject.transform.localPosition.z);
                         gameObject.transform.localScale = Vector3.one * 3f;
                         text = gameObject.GetComponent<TMPro.TMP_Text>();
-                        HudManager.Instance.StartCoroutine(Effects.Lerp(15f, new Action<float>((p) =>
+                        FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(15f, new Action<float>((p) =>
                         {
                             string message = (15 - (p * 15f)).ToString("0");
                             bool even = ((int)(p * 15f / 0.25f)) % 2 == 0; // Bool flips every 0.25 seconds

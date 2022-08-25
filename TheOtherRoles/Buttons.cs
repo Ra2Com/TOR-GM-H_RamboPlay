@@ -685,7 +685,7 @@ namespace TheOtherRoles
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
                             RPCProcedure.vampireSetBitten(Vampire.bitten.PlayerId, 0);
 
-                            HudManager.Instance.StartCoroutine(Effects.Lerp(Vampire.delay, new Action<float>((p) =>
+                            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Vampire.delay, new Action<float>((p) =>
                             { // Delayed action
                                 if (p == 1f)
                                 {
@@ -980,7 +980,7 @@ namespace TheOtherRoles
                         {
                             CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
                             CachedPlayer.LocalPlayer.PlayerControl.NetTransform.Halt(); // Stop current movement so the warlock is not just running straight into the next object
-                            HudManager.Instance.StartCoroutine(Effects.Lerp(Warlock.rootTime, new Action<float>((p) =>
+                            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Warlock.rootTime, new Action<float>((p) =>
                             { // Delayed action
                                 if (p == 1f)
                                 {
@@ -1039,7 +1039,7 @@ namespace TheOtherRoles
                         byte roomId;
                         try
                         {
-                            roomId = (byte)HudManager.Instance.roomTracker.LastRoom.RoomId;
+                            roomId = (byte)FastDestroyableSingleton<HudManager>.Instance.roomTracker.LastRoom.RoomId;
                         }
                         catch
                         {
@@ -1410,7 +1410,7 @@ namespace TheOtherRoles
                             }
                         }
 
-                        HudManager.Instance.StartCoroutine(Effects.Lerp(5f, new Action<float>((p) =>
+                        FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(5f, new Action<float>((p) =>
                         {
                             if (target != null)
                             {

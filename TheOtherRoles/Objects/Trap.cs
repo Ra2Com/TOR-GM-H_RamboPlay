@@ -135,7 +135,7 @@ namespace TheOtherRoles.Objects
             target.NetTransform.Halt();
 
             bool moveableFlag = false;
-            HudManager.Instance.StartCoroutine(Effects.Lerp(Trapper.killTimer, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Trapper.killTimer, new Action<float>((p) =>
             {
                 try
                 {
@@ -182,7 +182,7 @@ namespace TheOtherRoles.Objects
             trap.isActive = false;
             trap.audioSource.Stop();
             trap.audioSource.PlayOneShot(disable);
-            HudManager.Instance.StartCoroutine(Effects.Lerp(disable.length, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(disable.length, new Action<float>((p) =>
             {
                 if (p == 1f)
                 {
@@ -206,7 +206,7 @@ namespace TheOtherRoles.Objects
             audioSource.Stop();
             audioSource.maxDistance = Trapper.maxDistance;
             audioSource.PlayOneShot(kill);
-            HudManager.Instance.StartCoroutine(Effects.Lerp(kill.length, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(kill.length, new Action<float>((p) =>
             {
                 if (p == 1f)
                 {

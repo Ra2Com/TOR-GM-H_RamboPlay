@@ -45,7 +45,7 @@ namespace TheOtherRoles
 
         public override void OnMeetingEnd()
         {
-            HudManager.Instance.StartCoroutine(Effects.Lerp(5.0f, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(5.0f, new Action<float>((p) =>
             {
                 if (p == 1f)
                 {
@@ -374,12 +374,12 @@ namespace TheOtherRoles
         private static TMPro.TMP_Text text;
         public static void fortuneTellerMessage(string message, float duration, Color color)
         {
-            RoomTracker roomTracker = HudManager.Instance?.roomTracker;
+            RoomTracker roomTracker = FastDestroyableSingleton<HudManager>.Instance?.roomTracker;
             if (roomTracker != null)
             {
                 GameObject gameObject = UnityEngine.Object.Instantiate(roomTracker.gameObject);
 
-                gameObject.transform.SetParent(HudManager.Instance.transform);
+                gameObject.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                 UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
 
                 // Use local position to place it in the player's view instead of the world location
@@ -390,7 +390,7 @@ namespace TheOtherRoles
                 text.text = message;
                 text.color = color;
 
-                HudManager.Instance.StartCoroutine(Effects.Lerp(duration, new Action<float>((p) =>
+                FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(duration, new Action<float>((p) =>
                 {
                     if (p == 1f && text != null && text.gameObject != null)
                     {
@@ -405,7 +405,7 @@ namespace TheOtherRoles
         {
             public static void Prefix(IntroCutscene __instance)
             {
-                HudManager.Instance.StartCoroutine(Effects.Lerp(16.2f, new Action<float>((p) =>
+                FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(16.2f, new Action<float>((p) =>
                 {
                     if (p == 1f)
                     {

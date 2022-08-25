@@ -643,6 +643,7 @@ namespace TheOtherRoles
             }
             public static void Postfix(KeyboardJoystick __instance)
             {
+                if (CachedPlayer.LocalPlayer == null) return;
                 if (!CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Puppeteer)) return;
 
                 if (stealthed)

@@ -117,8 +117,8 @@ namespace TheOtherRoles
                 {
                     if (statusText == null)
                     {
-                        GameObject gameObject = UnityEngine.Object.Instantiate(HudManager.Instance?.roomTracker.gameObject);
-                        gameObject.transform.SetParent(HudManager.Instance.transform);
+                        GameObject gameObject = UnityEngine.Object.Instantiate(FastDestroyableSingleton<HudManager>.Instance?.roomTracker.gameObject);
+                        gameObject.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                         gameObject.SetActive(true);
                         UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
                         statusText = gameObject.GetComponent<TMPro.TMP_Text>();

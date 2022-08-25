@@ -1064,10 +1064,10 @@ namespace TheOtherRoles
             }
             if (page != TheOtherRolesPlugin.optionsPage)
             {
-                Vector3 position = (Vector3)HudManager.Instance?.GameSettings?.transform.localPosition;
+                Vector3 position = (Vector3)FastDestroyableSingleton<HudManager>.Instance?.GameSettings?.transform.localPosition;
                 if (position != null)
                 {
-                    HudManager.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
+                    FastDestroyableSingleton<HudManager>.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
                 }
             }
         }
@@ -1129,7 +1129,7 @@ namespace TheOtherRoles
             Scroller.ContentYBounds = new FloatRange(MinY, maxY);
 
             // Prevent scrolling when the player is interacting with a menu
-            if (CachedPlayer.LocalPlayer.PlayerControl?.CanMove != true)
+            if (CachedPlayer.LocalPlayer?.PlayerControl.CanMove != true)
             {
                 __instance.GameSettings.transform.localPosition = LastPosition;
 

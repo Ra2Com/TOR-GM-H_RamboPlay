@@ -35,7 +35,7 @@ namespace TheOtherRoles.Objects
 
             // display the assassins color in the trace
             float colorDuration = CustomOptionHolder.assassinTraceColorTime.getFloat();
-            HudManager.Instance.StartCoroutine(Effects.Lerp(colorDuration, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(colorDuration, new Action<float>((p) =>
             {
                 Color c = Palette.PlayerColors[(int)Assassin.assassin.Data.DefaultOutfit.ColorId];
                 if (Helpers.isLighterColor(Assassin.assassin.Data.DefaultOutfit.ColorId)) c = Color.white;
@@ -54,7 +54,7 @@ namespace TheOtherRoles.Objects
 
             float fadeOutDuration = 1f;
             if (fadeOutDuration > duration) fadeOutDuration = 0.5f * duration;
-            HudManager.Instance.StartCoroutine(Effects.Lerp(duration, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(duration, new Action<float>((p) =>
             {
                 float interP = 0f;
                 if (p < (duration - fadeOutDuration) / duration)

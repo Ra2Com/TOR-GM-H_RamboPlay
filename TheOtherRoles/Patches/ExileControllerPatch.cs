@@ -267,7 +267,7 @@ namespace TheOtherRoles.Patches
 
                     if (Seer.limitSoulDuration)
                     {
-                        HudManager.Instance.StartCoroutine(Effects.Lerp(Seer.soulDuration, new Action<float>((p) =>
+                        FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Seer.soulDuration, new Action<float>((p) =>
                         {
                             if (rend != null)
                             {

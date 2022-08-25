@@ -730,7 +730,7 @@ namespace TheOtherRoles.Patches
             // Uses remaining text for guesser/swapper
             if (meetingInfoText == null)
             {
-                meetingInfoText = UnityEngine.Object.Instantiate(HudManager.Instance.TaskText, __instance.transform);
+                meetingInfoText = UnityEngine.Object.Instantiate(FastDestroyableSingleton<HudManager>.Instance.TaskText, __instance.transform);
                 meetingInfoText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                 meetingInfoText.transform.position = Vector3.zero;
                 meetingInfoText.transform.localPosition = new Vector3(-3.07f, 3.33f, -20f);
@@ -913,10 +913,10 @@ namespace TheOtherRoles.Patches
                     greyscreen.gameObject.SetActive(true);
                     greyscreen.enabled = true;
                     TMPro.TMP_Text text;
-                    RoomTracker roomTracker = HudManager.Instance?.roomTracker;
+                    RoomTracker roomTracker = FastDestroyableSingleton<HudManager>.Instance?.roomTracker;
                     GameObject gameObject = UnityEngine.Object.Instantiate(roomTracker.gameObject);
                     UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
-                    gameObject.transform.SetParent(HudManager.Instance.transform);
+                    gameObject.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                     gameObject.transform.localPosition = new Vector3(0, 0, -930f);
                     gameObject.transform.localScale = Vector3.one * 5f;
                     text = gameObject.GetComponent<TMPro.TMP_Text>();

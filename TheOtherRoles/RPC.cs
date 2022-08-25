@@ -385,11 +385,11 @@ namespace TheOtherRoles
             {
                 resetTimeMasterButton();
             }
-            HudManager.Instance.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
-            HudManager.Instance.FullScreen.enabled = true;
-            HudManager.Instance.StartCoroutine(Effects.Lerp(TimeMaster.rewindTime / 2, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
+            FastDestroyableSingleton<HudManager>.Instance.FullScreen.enabled = true;
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(TimeMaster.rewindTime / 2, new Action<float>((p) =>
             {
-                if (p == 1f) HudManager.Instance.FullScreen.enabled = false;
+                if (p == 1f) FastDestroyableSingleton<HudManager>.Instance.FullScreen.enabled = false;
             })));
 
             if (TimeMaster.timeMaster == null || CachedPlayer.LocalPlayer.PlayerControl == TimeMaster.timeMaster) return; // Time Master himself does not rewind
@@ -407,7 +407,7 @@ namespace TheOtherRoles
         public static void timeMasterShield()
         {
             TimeMaster.shieldActive = true;
-            HudManager.Instance.StartCoroutine(Effects.Lerp(TimeMaster.shieldDuration, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(TimeMaster.shieldDuration, new Action<float>((p) =>
             {
                 if (p == 1f) TimeMaster.shieldActive = false;
             })));
@@ -427,7 +427,7 @@ namespace TheOtherRoles
             bool isShieldedAndShow = Medic.shielded == CachedPlayer.LocalPlayer.PlayerControl && Medic.showAttemptToShielded;
             bool isMedicAndShow = Medic.medic == CachedPlayer.LocalPlayer.PlayerControl && Medic.showAttemptToMedic;
 
-            if ((isShieldedAndShow || isMedicAndShow) && HudManager.Instance?.FullScreen != null)
+            if ((isShieldedAndShow || isMedicAndShow) && FastDestroyableSingleton<HudManager>.Instance?.FullScreen != null)
             {
                 Color c = Palette.ImpostorRed;
                 Helpers.showFlash(new Color(c.r, c.g, c.b));
@@ -896,11 +896,11 @@ namespace TheOtherRoles
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(dyingTarget.KillSfx, false, 0.8f);
 
             PlayerControl guesser = Helpers.playerById(killerId);
-            if (HudManager.Instance != null && guesser != null)
+            if (FastDestroyableSingleton<HudManager>.Instance != null && guesser != null)
                 if (CachedPlayer.LocalPlayer.PlayerControl == dyingTarget)
-                    HudManager.Instance.KillOverlay.ShowKillAnimation(guesser.Data, dyingTarget.Data);
+                    FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(guesser.Data, dyingTarget.Data);
                 else if (dyingLoverPartner != null && CachedPlayer.LocalPlayer.PlayerControl == dyingLoverPartner)
-                    HudManager.Instance.KillOverlay.ShowKillAnimation(dyingLoverPartner.Data, dyingLoverPartner.Data);
+                    FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(dyingLoverPartner.Data, dyingLoverPartner.Data);
 
             PlayerControl guessedTarget = Helpers.playerById(guessedTargetId);
             if (Guesser.showInfoInGhostChat && CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && guessedTarget != null)
@@ -1007,12 +1007,12 @@ namespace TheOtherRoles
                 finalStatuses[partner.PlayerId] = FinalStatus.GMExecuted;
             }
 
-            if (HudManager.Instance != null && GM.gm != null)
+            if (FastDestroyableSingleton<HudManager>.Instance != null && GM.gm != null)
             {
                 if (CachedPlayer.LocalPlayer.PlayerControl == target)
-                    HudManager.Instance.KillOverlay.ShowKillAnimation(GM.gm.Data, target.Data);
+                    FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(GM.gm.Data, target.Data);
                 else if (partner != null && CachedPlayer.LocalPlayer.PlayerControl == partner)
-                    HudManager.Instance.KillOverlay.ShowKillAnimation(GM.gm.Data, partner.Data);
+                    FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(GM.gm.Data, partner.Data);
             }
         }
 
@@ -1034,7 +1034,7 @@ namespace TheOtherRoles
 
             if (CachedPlayer.LocalPlayer.PlayerControl.isGM())
             {
-                HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
+                FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
             }
         }
 
@@ -1213,7 +1213,7 @@ namespace TheOtherRoles
         }
         public static void randomSpawn(byte playerId, byte locId)
         {
-            HudManager.Instance.StartCoroutine(Effects.Lerp(3f, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(3f, new Action<float>((p) =>
             { // Delayed action
                 if (p == 1f)
                 {

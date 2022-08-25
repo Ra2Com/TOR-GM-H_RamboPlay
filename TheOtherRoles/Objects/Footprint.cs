@@ -47,7 +47,7 @@ namespace TheOtherRoles.Objects
             footprint.SetActive(true);
             footprints.Add(this);
 
-            HudManager.Instance.StartCoroutine(Effects.Lerp(footprintDuration, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(footprintDuration, new Action<float>((p) =>
             {
                 Color c = color;
                 if (!anonymousFootprints && owner != null)

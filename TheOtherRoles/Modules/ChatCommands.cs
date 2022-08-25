@@ -53,7 +53,7 @@ namespace TheOtherRoles.Modules
                     if (text.ToLower().Equals("/murder"))
                     {
                         CachedPlayer.LocalPlayer.PlayerControl.Exiled();
-                        HudManager.Instance.KillOverlay.ShowKillAnimation(CachedPlayer.LocalPlayer.PlayerControl.Data, CachedPlayer.LocalPlayer.PlayerControl.Data);
+                        FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(CachedPlayer.LocalPlayer.PlayerControl.Data, CachedPlayer.LocalPlayer.PlayerControl.Data);
                         handled = true;
                     }
                     else if (text.ToLower().StartsWith("/color "))

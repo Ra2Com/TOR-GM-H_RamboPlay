@@ -216,7 +216,7 @@ namespace TheOtherRoles.Patches
             {
                 if (CachedPlayer.LocalPlayer.PlayerControl.isGM())
                 {
-                    useButtonPos = HudManager.Instance.UseButton.transform.localPosition;
+                    useButtonPos = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
                 }
                 CustomOverlays.hideInfoOverlay();
                 CustomOverlays.hideRoleOverlay();
@@ -256,7 +256,7 @@ namespace TheOtherRoles.Patches
             {
                 if (CachedPlayer.LocalPlayer.PlayerControl.isGM())
                 {
-                    HudManager.Instance.UseButton.transform.localPosition = useButtonPos;
+                    FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition = useButtonPos;
                 }
                 FastDestroyableSingleton<HudManager>.Instance.transform.FindChild("TaskDisplay").FindChild("TaskPanel").gameObject.SetActive(true);
             }

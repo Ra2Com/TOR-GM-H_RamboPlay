@@ -324,10 +324,10 @@ namespace TheOtherRoles
                 // buttonSprite = FastDestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.AirshipAdminButton);
                 // return buttonSprite;
                 byte mapId = PlayerControl.GameOptions.MapId;
-                UseButtonSettings button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
-                if (mapId is 0 or 3) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
-                else if (mapId == 1) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
-                else if (mapId == 4) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton]; // Airship
+                UseButtonSettings button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
+                if (mapId is 0 or 3) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
+                else if (mapId == 1) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
+                else if (mapId == 4) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton]; // Airship
                 buttonSprite = button.Image;
                 return buttonSprite;
             }
@@ -386,24 +386,24 @@ namespace TheOtherRoles
             public static Sprite getVitalsSprite()
             {
                 if (vitalsSprite) return vitalsSprite;
-                vitalsSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.VitalsButton].Image;
+                vitalsSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.VitalsButton].Image;
                 return vitalsSprite;
             }
 
             public static Sprite getLogSprite()
             {
                 if (logSprite) return logSprite;
-                logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+                logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
                 return logSprite;
             }
 
             public static Sprite getAdminSprite()
             {
                 byte mapId = PlayerControl.GameOptions.MapId;
-                UseButtonSettings button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
-                if (mapId is 0 or 3) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
-                else if (mapId == 1) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
-                else if (mapId == 4) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton]; // Airship
+                UseButtonSettings button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
+                if (mapId is 0 or 3) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
+                else if (mapId == 1) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
+                else if (mapId == 4) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton]; // Airship
                 adminSprite = button.Image;
                 return adminSprite;
             }
@@ -897,7 +897,7 @@ namespace TheOtherRoles
             public static Sprite getCamSprite()
             {
                 if (camSprite) return camSprite;
-                camSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
+                camSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
                 return camSprite;
             }
 
@@ -905,7 +905,7 @@ namespace TheOtherRoles
             public static Sprite getLogSprite()
             {
                 if (logSprite) return logSprite;
-                logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+                logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
                 return logSprite;
             }
 
@@ -981,7 +981,7 @@ namespace TheOtherRoles
                 if (Arsonist.arsonist != null && Arsonist.arsonist == CachedPlayer.LocalPlayer.PlayerControl)
                 {
                     int visibleCounter = 0;
-                    Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
+                    Vector3 bottomLeft = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
                     bottomLeft.x *= -1;
                     bottomLeft += new Vector3(-0.25f, -0.25f, 0);
 

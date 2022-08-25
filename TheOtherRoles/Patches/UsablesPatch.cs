@@ -311,18 +311,18 @@ namespace TheOtherRoles.Patches
             {
                 if (__instance.AmOwner && Helpers.ShowButtons)
                 {
-                    HudManager.Instance.ImpostorVentButton.Hide();
-                    HudManager.Instance.SabotageButton.Hide();
+                    FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Hide();
+                    FastDestroyableSingleton<HudManager>.Instance.SabotageButton.Hide();
 
                     if (Helpers.ShowButtons)
                     {
                         if (__instance.roleCanUseVents())
-                            HudManager.Instance.ImpostorVentButton.Show();
+                            FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Show();
 
                         if (__instance.roleCanSabotage())
                         {
-                            HudManager.Instance.SabotageButton.Show();
-                            HudManager.Instance.SabotageButton.gameObject.SetActive(true);
+                            FastDestroyableSingleton<HudManager>.Instance.SabotageButton.Show();
+                            FastDestroyableSingleton<HudManager>.Instance.SabotageButton.gameObject.SetActive(true);
                         }
                     }
                 }
@@ -389,11 +389,11 @@ namespace TheOtherRoles.Patches
             static void Postfix()
             {
                 // Mafia disable sabotage button for Janitor and sometimes for Mafioso
-                bool blockSabotageJanitor = CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Janitor) && !Janitor.canSabotage;
-                bool blockSabotageMafioso = CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Mafioso) && !Mafioso.canSabotage;
+                bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == CachedPlayer.LocalPlayer.PlayerControl);
+                bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == CachedPlayer.LocalPlayer.PlayerControl && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
                 if (blockSabotageJanitor || blockSabotageMafioso)
                 {
-                    HudManager.Instance.SabotageButton.SetDisabled();
+                    FastDestroyableSingleton<HudManager>.Instance.SabotageButton.SetDisabled();
                 }
             }
         }

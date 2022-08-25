@@ -290,7 +290,7 @@ namespace TheOtherRoles
 
         public static void showBlackBG()
         {
-            if (HudManager.Instance == null) return;
+            if (FastDestroyableSingleton<HudManager>.Instance == null) return;
             if (!initializeOverlays()) return;
 
             meetingUnderlay.sprite = colorBG;
@@ -298,7 +298,7 @@ namespace TheOtherRoles
             meetingUnderlay.transform.localScale = new Vector3(20f, 20f, 1f);
             var clearBlack = new Color32(0, 0, 0, 0);
 
-            HudManager.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
             {
                 meetingUnderlay.color = Color.Lerp(clearBlack, Palette.Black, t);
             })));
@@ -315,7 +315,7 @@ namespace TheOtherRoles
             if (overlayShown || MapOptions.hideSettings) return;
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
-            if (MapUtilities.CachedShipStatus == null || CachedPlayer.LocalPlayer.PlayerControl == null || hudManager == null || HudManager.Instance.IsIntroDisplayed || (!CachedPlayer.LocalPlayer.PlayerControl.CanMove && MeetingHud.Instance == null))
+            if (MapUtilities.CachedShipStatus == null || CachedPlayer.LocalPlayer.PlayerControl == null || hudManager == null || FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed || (!CachedPlayer.LocalPlayer.PlayerControl.CanMove && MeetingHud.Instance == null))
                 return;
 
             if (!initializeOverlays()) return;
@@ -365,7 +365,7 @@ namespace TheOtherRoles
 
             var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
             var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
-            HudManager.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
             {
                 infoUnderlay.color = Color.Lerp(underlayTransparent, underlayOpaque, t);
                 infoOverlayRules.color = Color.Lerp(Palette.ClearWhite, Palette.White, t);
@@ -383,7 +383,7 @@ namespace TheOtherRoles
             var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
             var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
 
-            HudManager.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
             {
                 if (infoUnderlay != null)
                 {
@@ -418,7 +418,7 @@ namespace TheOtherRoles
             if ((rolePage != 0) || MapOptions.hideSettings) return;
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
-            if (MapUtilities.CachedShipStatus == null || CachedPlayer.LocalPlayer.PlayerControl == null || hudManager == null || HudManager.Instance.IsIntroDisplayed || (!CachedPlayer.LocalPlayer.PlayerControl.CanMove && MeetingHud.Instance == null))
+            if (MapUtilities.CachedShipStatus == null || CachedPlayer.LocalPlayer.PlayerControl == null || hudManager == null || FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed || (!CachedPlayer.LocalPlayer.PlayerControl.CanMove && MeetingHud.Instance == null))
                 return;
 
             if (!initializeOverlays()) return;
@@ -458,7 +458,7 @@ namespace TheOtherRoles
 
             var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
             var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
-            HudManager.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
             {
                 roleUnderlay.color = Color.Lerp(underlayTransparent, underlayOpaque, t);
                 foreach (var roleOverlay in roleOverlayList)
@@ -497,7 +497,7 @@ namespace TheOtherRoles
             var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
             var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
 
-            HudManager.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
             {
                 if (roleUnderlay != null)
                 {

@@ -17,13 +17,13 @@ namespace TheOtherRoles.Patches
         public static void Prefix(IntroCutscene __instance)
         {
             // Generate and initialize player icons
-            if (CachedPlayer.LocalPlayer.PlayerControl != null && HudManager.Instance != null)
+            if (CachedPlayer.LocalPlayer.PlayerControl != null && FastDestroyableSingleton<HudManager>.Instance != null)
             {
-                Vector3 bottomLeft = new(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
+                Vector3 bottomLeft = new(-FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.x, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.y, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.z);
                 foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 {
                     GameData.PlayerInfo data = p.Data;
-                    PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
+                    PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, FastDestroyableSingleton<HudManager>.Instance.transform);
                     player.UpdateFromPlayerOutfit((GameData.PlayerOutfit)p.Data.DefaultOutfit, PlayerMaterial.MaskType.ComplexUI, p.Data.IsDead, true);
                     player.SetFlipX(true);
                     // player.PetSlot.gameObject.SetActive(false);
@@ -55,10 +55,10 @@ namespace TheOtherRoles.Patches
             if (BountyHunter.bounty != null && CachedPlayer.LocalPlayer.PlayerControl == BountyHunter.bountyHunter)
             {
                 BountyHunter.bountyUpdateTimer = 0f;
-                if (HudManager.Instance != null)
+                if (FastDestroyableSingleton<HudManager>.Instance != null)
                 {
-                    Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z) + new Vector3(-0.25f, 1f, 0);
-                    BountyHunter.cooldownText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(HudManager.Instance.KillButton.cooldownTimerText, HudManager.Instance.transform);
+                    Vector3 bottomLeft = new Vector3(-FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.x, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.y, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.z) + new Vector3(-0.25f, 1f, 0);
+                    BountyHunter.cooldownText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText, FastDestroyableSingleton<HudManager>.Instance.transform);
                     BountyHunter.cooldownText.alignment = TMPro.TextAlignmentOptions.Center;
                     BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
                     BountyHunter.cooldownText.gameObject.SetActive(true);
@@ -76,19 +76,19 @@ namespace TheOtherRoles.Patches
 
             if (CachedPlayer.LocalPlayer.PlayerControl.isGM())
             {
-                HudManager.Instance.ShadowQuad.gameObject.SetActive(false);
-                HudManager.Instance.ReportButton.gameObject.SetActiveRecursively(false);
-                HudManager.Instance.ReportButton.SetActive(false);
-                HudManager.Instance.ReportButton.graphic.enabled = false;
-                HudManager.Instance.ReportButton.enabled = false;
-                HudManager.Instance.ReportButton.graphic.sprite = null;
-                HudManager.Instance.ReportButton.buttonLabelText.enabled = false;
-                HudManager.Instance.ReportButton.buttonLabelText.SetText("");
+                FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+                FastDestroyableSingleton<HudManager>.Instance.ReportButton.gameObject.SetActiveRecursively(false);
+                FastDestroyableSingleton<HudManager>.Instance.ReportButton.SetActive(false);
+                FastDestroyableSingleton<HudManager>.Instance.ReportButton.graphic.enabled = false;
+                FastDestroyableSingleton<HudManager>.Instance.ReportButton.enabled = false;
+                FastDestroyableSingleton<HudManager>.Instance.ReportButton.graphic.sprite = null;
+                FastDestroyableSingleton<HudManager>.Instance.ReportButton.buttonLabelText.enabled = false;
+                FastDestroyableSingleton<HudManager>.Instance.ReportButton.buttonLabelText.SetText("");
 
-                HudManager.Instance.roomTracker.gameObject.SetActiveRecursively(false);
-                HudManager.Instance.roomTracker.text.enabled = false;
-                HudManager.Instance.roomTracker.text.SetText("");
-                HudManager.Instance.roomTracker.enabled = false;
+                FastDestroyableSingleton<HudManager>.Instance.roomTracker.gameObject.SetActiveRecursively(false);
+                FastDestroyableSingleton<HudManager>.Instance.roomTracker.text.enabled = false;
+                FastDestroyableSingleton<HudManager>.Instance.roomTracker.text.SetText("");
+                FastDestroyableSingleton<HudManager>.Instance.roomTracker.enabled = false;
             }
             // インポスター視界の場合に昇降機右の影を無効化
             if (PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipOptimizeMap.getBool() && Helpers.hasImpostorVision(CachedPlayer.LocalPlayer.PlayerControl))

@@ -12,10 +12,10 @@ namespace TheOtherRoles.Patches
     [HarmonyPatch]
     public static class ClientOptionsPatch
     {
-        private static List<SelectionBehaviour> AllOptions = new ();
+        private static List<SelectionBehaviour> AllOptions = new();
         private static void setAllOptions()
         {
-            AllOptions = new () {
+            AllOptions = new() {
                 new SelectionBehaviour("streamerModeButton", () => TheOtherRolesPlugin.StreamerMode.Value = !TheOtherRolesPlugin.StreamerMode.Value, TheOtherRolesPlugin.StreamerMode.Value),
                 new SelectionBehaviour("ghostsSeeTasksButton", () => MapOptions.ghostsSeeTasks = TheOtherRolesPlugin.GhostsSeeTasks.Value = !TheOtherRolesPlugin.GhostsSeeTasks.Value, TheOtherRolesPlugin.GhostsSeeTasks.Value),
                 new SelectionBehaviour("ghostsSeeVotesButton", () => MapOptions.ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value = !TheOtherRolesPlugin.GhostsSeeVotes.Value, TheOtherRolesPlugin.GhostsSeeVotes.Value),
@@ -116,9 +116,9 @@ namespace TheOtherRoles.Patches
            {
                if (!popUp) return;
 
-               if (__instance.transform.parent && __instance.transform.parent == HudManager.Instance.transform)
+               if (__instance.transform.parent && __instance.transform.parent == FastDestroyableSingleton<HudManager>.Instance.transform)
                {
-                   popUp.transform.SetParent(HudManager.Instance.transform);
+                   popUp.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                    popUp.transform.localPosition = new Vector3(0, 0, -800f);
                }
                else

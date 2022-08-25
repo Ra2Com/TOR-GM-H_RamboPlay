@@ -349,8 +349,8 @@ namespace TheOtherRoles
             public static void resetZoom()
             {
                 Camera.main.orthographicSize = 3.0f;
-                HudManager.Instance.UICamera.orthographicSize = 3.0f;
-                HudManager.Instance.transform.localScale = Vector3.one;
+                FastDestroyableSingleton<HudManager>.Instance.UICamera.orthographicSize = 3.0f;
+                FastDestroyableSingleton<HudManager>.Instance.transform.localScale = Vector3.one;
             }
 
             public static void FixedUpdate()

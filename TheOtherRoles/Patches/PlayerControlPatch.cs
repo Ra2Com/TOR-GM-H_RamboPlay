@@ -386,7 +386,7 @@ namespace TheOtherRoles.Patches
         {
             if (!CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor || !CachedPlayer.LocalPlayer.PlayerControl.CanMove || CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead)
             { // !isImpostor || !canMove || isDead
-                HudManager.Instance.KillButton.SetTarget(null);
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(null);
                 return;
             }
 
@@ -413,7 +413,7 @@ namespace TheOtherRoles.Patches
                 target = setTarget(true, true);
             }
 
-            HudManager.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
+            FastDestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
         }
 
         static void warlockSetTarget()
@@ -833,7 +833,7 @@ namespace TheOtherRoles.Patches
                 if (BountyHunter.bounty == null) return;
 
                 // Show poolable player
-                if (HudManager.Instance != null && HudManager.Instance.UseButton != null)
+                if (FastDestroyableSingleton<HudManager>.Instance != null && FastDestroyableSingleton<HudManager>.Instance.UseButton != null)
                 {
                     foreach (PoolablePlayer pp in MapOptions.playerIcons.Values) pp.gameObject.SetActive(false);
                     if (MapOptions.playerIcons.ContainsKey(BountyHunter.bounty.PlayerId) && MapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject != null)

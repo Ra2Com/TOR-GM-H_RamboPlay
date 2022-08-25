@@ -103,7 +103,7 @@ namespace TheOtherRoles.Patches
             public static void Postfix(GameStartManager __instance)
             {
                 // Send version as soon as CachedPlayer.LocalPlayer.PlayerControl exists
-                if (CachedPlayer.LocalPlayer.PlayerControl != null && !versionSent)
+                if (PlayerControl.LocalPlayer != null && !versionSent)
                 {
                     versionSent = true;
                     Helpers.shareGameVersion();

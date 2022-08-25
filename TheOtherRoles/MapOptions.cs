@@ -43,7 +43,7 @@ namespace TheOtherRoles
         public static bool offlineHats = false;
         public static bool hideFakeTasks = false;
         public static bool betterSabotageMap = false;
-        public static bool forceNormalSabotageMap= false;
+        public static bool forceNormalSabotageMap = false;
 
         // Updating values
         public static int meetingsCount = 0;
@@ -161,13 +161,13 @@ namespace TheOtherRoles
         {
             if (restrictDevices == 0 || (!restrictAdminText && !restrictCamerasText && !restrictVitalsText))
                 return;
-            if (HudManager.Instance == null)
+            if (FastDestroyableSingleton<HudManager>.Instance == null)
                 return;
 
             // Admin
             if (restrictAdminText)
             {
-                AdminTimerText = UnityEngine.Object.Instantiate(HudManager.Instance.TaskText, HudManager.Instance.transform);
+                AdminTimerText = UnityEngine.Object.Instantiate(FastDestroyableSingleton<HudManager>.Instance.TaskText, FastDestroyableSingleton<HudManager>.Instance.transform);
                 float y = -4.0f;
                 if (restrictCamerasText)
                     y += 0.2f;
@@ -184,7 +184,7 @@ namespace TheOtherRoles
             // Cameras
             if (restrictCamerasText)
             {
-                CamerasTimerText = UnityEngine.Object.Instantiate(HudManager.Instance.TaskText, HudManager.Instance.transform);
+                CamerasTimerText = UnityEngine.Object.Instantiate(FastDestroyableSingleton<HudManager>.Instance.TaskText, FastDestroyableSingleton<HudManager>.Instance.transform);
                 float y = -4.0f;
                 if (restrictVitalsText)
                     y += 0.2f;
@@ -199,7 +199,7 @@ namespace TheOtherRoles
             // Vitals
             if (restrictVitalsText)
             {
-                VitalsTimerText = UnityEngine.Object.Instantiate(HudManager.Instance.TaskText, HudManager.Instance.transform);
+                VitalsTimerText = UnityEngine.Object.Instantiate(FastDestroyableSingleton<HudManager>.Instance.TaskText, FastDestroyableSingleton<HudManager>.Instance.transform);
                 VitalsTimerText.transform.localPosition = new Vector3(-3.5f, -4.0f, 0);
                 if (restrictVitalsTime > 0)
                     VitalsTimerText.text = String.Format(ModTranslation.getString("vitalsText"), restrictVitalsTime.ToString("0.00"));

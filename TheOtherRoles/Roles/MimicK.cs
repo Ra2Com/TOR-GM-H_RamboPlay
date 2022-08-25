@@ -24,7 +24,7 @@ namespace TheOtherRoles
 
         public override void OnMeetingStart()
         {
-            HudManager.Instance.StartCoroutine(Effects.Lerp(3f, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(3f, new Action<float>((p) =>
             { // Delayed action
                 if (p == 1f)
                 {

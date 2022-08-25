@@ -65,15 +65,15 @@ namespace TheOtherRoles
                             if (distance < trapRange)
                             {
                                 TMPro.TMP_Text text;
-                                RoomTracker roomTracker = HudManager.Instance?.roomTracker;
+                                RoomTracker roomTracker = FastDestroyableSingleton<HudManager>.Instance?.roomTracker;
                                 GameObject gameObject = UnityEngine.Object.Instantiate(roomTracker.gameObject);
                                 UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
-                                gameObject.transform.SetParent(HudManager.Instance.transform);
+                                gameObject.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                                 gameObject.transform.localPosition = new Vector3(0, -1.8f, gameObject.transform.localPosition.z);
                                 gameObject.transform.localScale = Vector3.one * 2f;
                                 text = gameObject.GetComponent<TMPro.TMP_Text>();
                                 text.text = String.Format(ModTranslation.getString("trapperGetTrapped"), p.name);
-                                HudManager.Instance.StartCoroutine(Effects.Lerp(3f, new Action<float>((p) =>
+                                FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(3f, new Action<float>((p) =>
                                 {
                                     if (p == 1f && text != null && text.gameObject != null)
                                     {

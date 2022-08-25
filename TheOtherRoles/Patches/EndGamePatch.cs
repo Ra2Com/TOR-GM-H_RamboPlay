@@ -838,7 +838,7 @@ namespace TheOtherRoles.Patches
                 {
                     if (!GameData.Instance) return false;
                     if (DestroyableSingleton<TutorialManager>.InstanceExists) return true; // InstanceExists | Don't check Custom Criteria when in Tutorial
-                    if (HudManager.Instance.IsIntroDisplayed) return false;
+                    if (FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) return false;
 
                     var statistics = new PlayerStatistics(__instance);
                     if (CheckAndEndGameForMiniLose(__instance)) return false;

@@ -134,7 +134,7 @@ namespace TheOtherRoles
 
             void setBountyIconPos(Vector3 offset)
             {
-                Vector3 bottomLeft = new(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
+                Vector3 bottomLeft = new(-FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.x, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.y, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.z);
                 PoolablePlayer icon = MapOptions.playerIcons[BountyHunter.bounty.PlayerId];
                 icon.transform.localPosition = bottomLeft + new Vector3(-0.25f, 0f, 0) + offset;
                 BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(-0.25f, 0f, -1f) + offset;
@@ -315,13 +315,13 @@ namespace TheOtherRoles
         {
             public static void Prefix(IntroCutscene __instance)
             {
-                if (CachedPlayer.LocalPlayer.PlayerControl != null && HudManager.Instance != null)
+                if (CachedPlayer.LocalPlayer.PlayerControl != null && FastDestroyableSingleton<HudManager>.Instance != null)
                 {
-                    Vector3 bottomLeft = new(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
+                    Vector3 bottomLeft = new(-FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.x, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.y, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.z);
                     foreach (PlayerControl p in CachedPlayer.AllPlayers)
                     {
                         GameData.PlayerInfo data = p.Data;
-                        PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
+                        PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, FastDestroyableSingleton<HudManager>.Instance.transform);
                         player.UpdateFromPlayerOutfit((GameData.PlayerOutfit)p.Data.DefaultOutfit, PlayerMaterial.MaskType.ComplexUI, p.Data.IsDead, true);
                         player.SetFlipX(true);
                         player.cosmetics.currentPet?.gameObject.SetActive(false);

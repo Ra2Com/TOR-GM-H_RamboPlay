@@ -28,7 +28,7 @@ namespace TheOtherRoles.Objects
             JackInTheBox box = AllJackInTheBoxes.FirstOrDefault((x) => x?.vent != null && x.vent.Id == ventId);
             if (box == null) return;
 
-            HudManager.Instance.StartCoroutine(Effects.Lerp(0.6f, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.6f, new Action<float>((p) =>
             {
                 if (box.boxRenderer != null)
                 {
