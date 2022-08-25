@@ -69,7 +69,7 @@ namespace TheOtherRoles.Patches
         {
             static void Postfix(MainMenuManager __instance)
             {
-                DestroyableSingleton<ModManager>.Instance.ShowModStamp();
+                FastDestroyableSingleton<ModManager>.Instance.ShowModStamp();
 
                 var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
                 if (amongUsLogo != null)

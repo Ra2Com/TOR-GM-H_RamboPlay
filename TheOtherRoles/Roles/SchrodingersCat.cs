@@ -112,7 +112,7 @@ namespace TheOtherRoles
                 {
                     setImpostorFlag();
                     if (becomesImpostor)
-                        DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Impostor);
+                        FastDestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Impostor);
                 }
                 else if (killer.isRole(RoleType.Jackal))
                 {

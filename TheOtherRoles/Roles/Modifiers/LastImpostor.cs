@@ -298,7 +298,7 @@ namespace TheOtherRoles
                 FortuneTeller.fortuneTellerMessage(msg, 5f, color);
             }
 
-            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(DestroyableSingleton<HudManager>.Instance.TaskCompleteSound, false, 0.8f);
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(FastDestroyableSingleton<HudManager>.Instance.TaskCompleteSound, false, 0.8f);
             numUsed += 1;
 
             // 占いを実行したことで発火される処理を他クライアントに通知

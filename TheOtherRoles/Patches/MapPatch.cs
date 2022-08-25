@@ -202,7 +202,7 @@ namespace TheOtherRoles.Patches
                 __instance.GenericShow();
                 __instance.taskOverlay.Show();
                 __instance.ColorControl.SetColor(new Color(0.05f, 0.2f, 1f, 1f));
-                DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
+                FastDestroyableSingleton<HudManager>.Instance.SetHudActive(false);
                 return false;
             }
         }
@@ -258,7 +258,7 @@ namespace TheOtherRoles.Patches
                 {
                     HudManager.Instance.UseButton.transform.localPosition = useButtonPos;
                 }
-                DestroyableSingleton<HudManager>.Instance.transform.FindChild("TaskDisplay").FindChild("TaskPanel").gameObject.SetActive(true);
+                FastDestroyableSingleton<HudManager>.Instance.transform.FindChild("TaskDisplay").FindChild("TaskPanel").gameObject.SetActive(true);
             }
         }
         [HarmonyPatch(typeof(MapBehaviour), "get_IsOpenStopped")]
@@ -474,7 +474,7 @@ namespace TheOtherRoles.Patches
                 __instance.taskOverlay.Show();
             }
             __instance.ColorControl.SetColor(Palette.ImpostorRed);
-            DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
+            FastDestroyableSingleton<HudManager>.Instance.SetHudActive(false);
             ConsoleJoystick.SetMode_Sabotage();
 
             return false;
@@ -511,7 +511,7 @@ namespace TheOtherRoles.Patches
                 __instance.taskOverlay.Show();
             }
             __instance.ColorControl.SetColor(Palette.ImpostorRed);
-            DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
+            FastDestroyableSingleton<HudManager>.Instance.SetHudActive(false);
             ConsoleJoystick.SetMode_Sabotage();
 
             return false;

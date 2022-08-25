@@ -233,7 +233,7 @@ namespace TheOtherRoles
         {
             var player = Helpers.playerById(playerId);
             player.roleAssigned = false;
-            DestroyableSingleton<RoleManager>.Instance.SetRole(player, (RoleTypes)roleType);
+            FastDestroyableSingleton<RoleManager>.Instance.SetRole(player, (RoleTypes)roleType);
         }
 
         public static void versionHandshake(int major, int minor, int build, int revision, Guid guid, int clientId)
@@ -483,8 +483,8 @@ namespace TheOtherRoles
 
                 if (player.Data.Role.IsImpostor)
                 {
-                    DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
-                    DestroyableSingleton<RoleManager>.Instance.SetRole(oldShifter, RoleTypes.Impostor);
+                    FastDestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
+                    FastDestroyableSingleton<RoleManager>.Instance.SetRole(oldShifter, RoleTypes.Impostor);
                 }
             }
 
@@ -615,7 +615,7 @@ namespace TheOtherRoles
             {
                 bool wasSpy = Spy.spy != null && player == Spy.spy;
                 bool wasImpostor = player.Data.Role.IsImpostor;  // This can only be reached if impostors can be sidekicked.
-                DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
+                FastDestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
                 erasePlayerRoles(player.PlayerId, true, false);
                 Sidekick.sidekick = player;
                 if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true;
@@ -907,10 +907,10 @@ namespace TheOtherRoles
             {
                 RoleInfo roleInfo = RoleInfo.allRoleInfos.FirstOrDefault(x => (byte)x.roleType == guessedRoleType);
                 string msg = string.Format(ModTranslation.getString("guesserGuessChat"), roleInfo.name, guessedTarget.Data.PlayerName);
-                if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
-                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(guesser, msg);
+                if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
+                    FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(guesser, msg);
                 if (msg.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
-                    DestroyableSingleton<Assets.CoreScripts.Telemetry>.Instance.SendWho();
+                    FastDestroyableSingleton<Assets.CoreScripts.Telemetry>.Instance.SendWho();
             }
         }
 
@@ -947,7 +947,7 @@ namespace TheOtherRoles
         public static void foxCreatesImmoralist(byte targetId)
         {
             PlayerControl player = Helpers.playerById(targetId);
-            DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
+            FastDestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
             erasePlayerRoles(player.PlayerId, true);
             player.setRole(RoleType.Immoralist);
             player.clearAllTasks();
@@ -1361,14 +1361,14 @@ namespace TheOtherRoles
         public static void puppeteerClimbRadder(byte dummyId, byte targetId)
         {
             PlayerControl dummy = Helpers.playerById(dummyId);
-            Ladder target = DestroyableSingleton<AirshipStatus>.Instance.GetComponentsInChildren<Ladder>().ToList().Find(x => x.Id == targetId);
+            Ladder target = FastDestroyableSingleton<AirshipStatus>.Instance.GetComponentsInChildren<Ladder>().ToList().Find(x => x.Id == targetId);
             if (target == null) return;
             dummy.MyPhysics.ClimbLadder(target, (byte)(dummy.MyPhysics.lastClimbLadderSid + 1));
         }
         public static void puppeteerUsePlatform(byte dummyId)
         {
             PlayerControl dummy = Helpers.playerById(dummyId);
-            MovingPlatformBehaviour target = DestroyableSingleton<AirshipStatus>.Instance.GapPlatform;
+            MovingPlatformBehaviour target = FastDestroyableSingleton<AirshipStatus>.Instance.GapPlatform;
             if (target == null) return;
             dummy.NetTransform.Halt();
             target.Use(dummy);
@@ -1407,7 +1407,7 @@ namespace TheOtherRoles
 
         public static void syncKillTimer(byte playerId, float timer)
         {
-            if(!SoulPlayer.killTimers.ContainsKey(playerId))
+            if (!SoulPlayer.killTimers.ContainsKey(playerId))
             {
                 SoulPlayer.killTimers.Add(playerId, timer);
             }

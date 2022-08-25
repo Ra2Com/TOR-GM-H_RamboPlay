@@ -107,13 +107,13 @@ namespace TheOtherRoles.Patches
             // アーカイブのアドミンを消す
             if (PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipOldAdmin.getBool())
             {
-                GameObject records = DestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.Records].gameObject;
+                GameObject records = FastDestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.Records].gameObject;
                 records.GetComponentsInChildren<MapConsole>().Where(x => x.name == "records_admin_map").FirstOrDefault()?.gameObject.SetActive(false);
             }
 
-            if (DestroyableSingleton<ShipStatus>.Instance.FastRooms.ContainsKey(SystemTypes.GapRoom))
+            if (FastDestroyableSingleton<ShipStatus>.Instance.FastRooms.ContainsKey(SystemTypes.GapRoom))
             {
-                GameObject gapRoom = DestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
+                GameObject gapRoom = FastDestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
                 // GapRoomの配電盤を消す
                 if (PlayerControl.GameOptions.MapId == 4 && CustomOptionHolder.airshipDisableGapSwitchBoard.getBool())
                 {
@@ -152,7 +152,7 @@ namespace TheOtherRoles.Patches
             }
 
             // タスクパネルの表示優先度を上げる
-            var taskPanel = DestroyableSingleton<HudManager>._instance.TaskStuff;
+            var taskPanel = FastDestroyableSingleton<HudManager>.Instance.TaskStuff;
             var pos = taskPanel.transform.position;
             taskPanel.transform.position = new Vector3(pos.x, pos.y, -20);
 

@@ -60,7 +60,7 @@ namespace TheOtherRoles
             Modifier.allModifiers.Do(x => x.OnMeetingStart());
 
             GM.resetZoom();
-            DestroyableSingleton<HudManager>._instance.StartCoroutine(Effects.Lerp(3f, new Action<float>((p) =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(3f, new Action<float>((p) =>
             {
                 if (p == 1)
                 {

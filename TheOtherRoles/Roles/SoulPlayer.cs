@@ -21,7 +21,7 @@ namespace TheOtherRoles
         public static TMPro.TMP_Text statusText = null;
         public static void senrigan()
         {
-            var hm = DestroyableSingleton<HudManager>.Instance;
+            var hm = FastDestroyableSingleton<HudManager>.Instance;
             if (toggle)
             {
                 Camera.main.orthographicSize /= 6f;

@@ -239,7 +239,7 @@ namespace TheOtherRoles.Patches
                 }
 
 
-                __instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                __instance.TitleText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
                 int num = 0;
                 for (int i = 0; i < __instance.playerStates.Length; i++)
                 {
@@ -481,7 +481,7 @@ namespace TheOtherRoles.Patches
                 Transform button = UnityEngine.Object.Instantiate(buttonTemplate, buttonParent);
                 Transform buttonMask = UnityEngine.Object.Instantiate(maskTemplate, buttonParent);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
-                button.GetComponent<SpriteRenderer>().sprite = DestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
+                button.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
                 buttons.Add(button);
                 int row = i / 5, col = i % 5;
                 buttonParent.localPosition = new Vector3(-3.47f + 1.75f * col, 1.5f - 0.45f * row, -200f);
@@ -887,7 +887,7 @@ namespace TheOtherRoles.Patches
                 }
 
                 // 遅延処理追加そのままyield returnで待ちを入れるとロックしたのでHudManagerのコルーチンとして実行させる
-                DestroyableSingleton<HudManager>._instance.StartCoroutine(CoStartMeeting2(reporter, target).WrapToIl2Cpp());
+                FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(CoStartMeeting2(reporter, target).WrapToIl2Cpp());
                 yield break;
             }
             private static IEnumerator CoStartMeeting2(PlayerControl reporter, GameData.PlayerInfo target)
@@ -897,7 +897,7 @@ namespace TheOtherRoles.Patches
                     // ボタンと同時に通報が入った場合のバグ対応、他のクライアントからキルイベントが飛んでくるのを待つ
                     // 見えては行けないものが見えるので暗転させる
                     MeetingHud.Instance.state = MeetingHud.VoteStates.Animating; //ゲッサーのキル用meetingupdateが呼ばれないようにするおまじない（呼ばれるとバグる）
-                    HudManager hudManager = DestroyableSingleton<HudManager>.Instance;
+                    HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
                     var blackscreen = UnityEngine.Object.Instantiate(hudManager.FullScreen, hudManager.transform);
                     var greyscreen = UnityEngine.Object.Instantiate(hudManager.FullScreen, hudManager.transform);
                     blackscreen.color = Palette.Black;
@@ -994,7 +994,7 @@ namespace TheOtherRoles.Patches
                 // 既存処理の移植
                 {
                     bool flag = target == null;
-                    DestroyableSingleton<Telemetry>.Instance.WriteMeetingStarted(flag);
+                    FastDestroyableSingleton<Telemetry>.Instance.WriteMeetingStarted(flag);
                     StartMeeting(__instance, target); // 変更部分
                     if (__instance.AmOwner)
                     {
@@ -1056,7 +1056,7 @@ namespace TheOtherRoles.Patches
         {
             public static void Postfix(HudManager __instance)
             {
-                DestroyableSingleton<HudManager>.Instance.transform.FindChild("TaskDisplay").FindChild("TaskPanel").gameObject.SetActive(true);
+                FastDestroyableSingleton<HudManager>.Instance.transform.FindChild("TaskDisplay").FindChild("TaskPanel").gameObject.SetActive(true);
             }
         }
     }

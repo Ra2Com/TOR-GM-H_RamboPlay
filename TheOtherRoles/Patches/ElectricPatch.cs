@@ -37,7 +37,7 @@ namespace TheOtherRoles.Patches
             static void Postfix(SwitchMinigame __instance)
             {
                 ElectricPatch.lastUpdate = DateTime.UtcNow;
-                DestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) =>
+                FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) =>
                 {
                     if (p == 1f)
                     {

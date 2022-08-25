@@ -12,7 +12,7 @@ namespace TheOtherRoles
         public static bool isAlsoInGame = false;
         public static void SendInGame(string text)
         {
-            if (DestroyableSingleton<HudManager>._instance) DestroyableSingleton<HudManager>.Instance.Notifier.AddItem(text);
+            if (FastDestroyableSingleton<HudManager>.Instance) FastDestroyableSingleton<HudManager>.Instance.Notifier.AddItem(text);
         }
         private static void SendToFile(string text, LogLevel level = LogLevel.Info, string tag = "", int lineNumber = 0)
         {

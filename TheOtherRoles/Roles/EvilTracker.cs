@@ -14,7 +14,7 @@ namespace TheOtherRoles
         public static bool resetTargetAfterMeeting { get { return CustomOptionHolder.evilTrackerResetTargetAfterMeeting.getBool(); } }
         public static bool canSeeDeathFlash { get { return CustomOptionHolder.evilTrackerCanSeeDeathFlash.getBool(); } }
         public static bool canSeeTargetTask { get { return CustomOptionHolder.evilTrackerCanSeeTargetTask.getBool(); } }
-        public static bool canSeeTargetPosition { get {return CustomOptionHolder.evilTrackerCanSeeTargetPosition.getBool(); }}
+        public static bool canSeeTargetPosition { get { return CustomOptionHolder.evilTrackerCanSeeTargetPosition.getBool(); } }
         public static PlayerControl target;
         public static PlayerControl currentTarget;
         public static CustomButton trackerButton;
@@ -126,7 +126,7 @@ namespace TheOtherRoles
                 {
                     if (p.Data.IsDead)
                     {
-                        if(p.isImpostor() && impostorPositionText.ContainsKey(p.name))
+                        if (p.isImpostor() && impostorPositionText.ContainsKey(p.name))
                         {
                             impostorPositionText[p.name].text = "";
                         }
@@ -157,7 +157,7 @@ namespace TheOtherRoles
                         impostorPositionText[p.name].gameObject.SetActive(true);
                         if (room != null)
                         {
-                            impostorPositionText[p.name].text = "<color=#FF1919FF>" + $"{p.name}(" + DestroyableSingleton<TranslationController>.Instance.GetString(room.RoomId) + ")</color>";
+                            impostorPositionText[p.name].text = "<color=#FF1919FF>" + $"{p.name}(" + FastDestroyableSingleton<TranslationController>.Instance.GetString(room.RoomId) + ")</color>";
                         }
                         else
                         {
@@ -189,7 +189,7 @@ namespace TheOtherRoles
                     targetPositionText.gameObject.SetActive(true);
                     if (room != null)
                     {
-                        targetPositionText.text = "<color=#8CFFFFFF>" + $"{target.name}(" + DestroyableSingleton<TranslationController>.Instance.GetString(room.RoomId) + ")</color>";
+                        targetPositionText.text = "<color=#8CFFFFFF>" + $"{target.name}(" + FastDestroyableSingleton<TranslationController>.Instance.GetString(room.RoomId) + ")</color>";
                     }
                     else
                     {
@@ -198,7 +198,7 @@ namespace TheOtherRoles
                 }
                 else
                 {
-                    if(targetPositionText != null)
+                    if (targetPositionText != null)
                     {
                         targetPositionText.text = "";
                     }

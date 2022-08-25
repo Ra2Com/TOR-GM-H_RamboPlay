@@ -163,8 +163,8 @@ namespace TheOtherRoles.Patches
                 passiveButton.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => SpawnAt(__instance, pt.Location)));
                 passiveButton.GetComponent<SpriteAnim>().Stop();
                 passiveButton.GetComponent<SpriteRenderer>().sprite = pt.Image;
-                // passiveButton.GetComponentInChildren<TextMeshPro>().text = DestroyableSingleton<TranslationController>.Instance.GetString(pt.Name, Array.Empty<object>());
-                passiveButton.GetComponentInChildren<TextMeshPro>().text = DestroyableSingleton<TranslationController>.Instance.GetString(pt.Name, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                // passiveButton.GetComponentInChildren<TextMeshPro>().text = FastDestroyableSingleton<TranslationController>.Instance.GetString(pt.Name, Array.Empty<object>());
+                passiveButton.GetComponentInChildren<TextMeshPro>().text = FastDestroyableSingleton<TranslationController>.Instance.GetString(pt.Name, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
                 ButtonAnimRolloverHandler component = passiveButton.GetComponent<ButtonAnimRolloverHandler>();
                 component.StaticOutImage = pt.Image;
                 component.RolloverAnim = pt.Rollover;
@@ -240,7 +240,7 @@ namespace TheOtherRoles.Patches
                 PlayerControl.LocalPlayer.gameObject.SetActive(true);
                 __instance.StopAllCoroutines();
                 PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(spawnAt);
-                DestroyableSingleton<HudManager>.Instance.PlayerCam.SnapToTarget();
+                FastDestroyableSingleton<HudManager>.Instance.PlayerCam.SnapToTarget();
                 __instance.Close();
             }
             else
@@ -295,7 +295,7 @@ namespace TheOtherRoles.Patches
                             PlayerControl.LocalPlayer.gameObject.SetActive(true);
                             __instance.StopAllCoroutines();
                             PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(spawnAt);
-                            DestroyableSingleton<HudManager>.Instance.PlayerCam.SnapToTarget();
+                            FastDestroyableSingleton<HudManager>.Instance.PlayerCam.SnapToTarget();
                             synchronizeData.Reset(SynchronizeTag.PreSpawnMinigame);
                             __instance.Close();
                             CustomButton.stopCountdown = false;

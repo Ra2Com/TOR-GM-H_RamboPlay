@@ -128,7 +128,7 @@ namespace TheOtherRoles
                  {
                      PlayerControl.LocalPlayer.NetTransform.Halt();
                      Action<MapBehaviour> tmpAction = (MapBehaviour m) => { m.ShowCountOverlay(); };
-                     DestroyableSingleton<HudManager>.Instance.ShowMap(tmpAction);
+                     FastDestroyableSingleton<HudManager>.Instance.ShowMap(tmpAction);
                      if (PlayerControl.LocalPlayer.AmOwner)
                      {
                          PlayerControl.LocalPlayer.MyPhysics.inputHandler.enabled = true;
@@ -150,7 +150,7 @@ namespace TheOtherRoles
                  KeyCode.F,
                  false)
             {
-                buttonText = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Admin)
+                buttonText = FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Admin)
             };
             adminButton.MaxTimer = adminButton.Timer = 0;
         }

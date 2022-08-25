@@ -60,9 +60,9 @@ namespace TheOtherRoles
             if (!isAlive && (PlayerControl.LocalPlayer.isImpostor() || PlayerControl.LocalPlayer.isRole(RoleType.Jackal) || PlayerControl.LocalPlayer.isRole(RoleType.JekyllAndHyde)))
             {
                 string msg = $"人形遣いのカウント数 {counter}/{numKills}";
-                if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
+                if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
                 {
-                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg);
+                    FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg);
                 }
             }
 
@@ -268,7 +268,7 @@ namespace TheOtherRoles
             writer.Write(true);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             // 暫定遅延実行　何故か透明化が解除されないため
-            DestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.25f, new Action<float>(p =>
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.25f, new Action<float>(p =>
             {
                 if (p == 1)
                 {
@@ -291,7 +291,7 @@ namespace TheOtherRoles
         public static void senrigan(bool toggle)
         {
             // 初回呼び出し時にカメラのズーム率を保持しておく
-            var hm = DestroyableSingleton<HudManager>.Instance;
+            var hm = FastDestroyableSingleton<HudManager>.Instance;
             if (originalZoom == 0) originalZoom = Camera.main.orthographicSize;
             if (originalScale == new Vector3()) originalScale = hm.transform.localScale;
             if (!toggle)
@@ -321,7 +321,7 @@ namespace TheOtherRoles
                 writer.Write(false);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.puppeteerStealth(false);
-                var hudManager = DestroyableSingleton<HudManager>.Instance;
+                var hudManager = FastDestroyableSingleton<HudManager>.Instance;
                 hudManager.PlayerCam.SetTarget(PlayerControl.LocalPlayer);
                 senrigan(false);
                 var player = PlayerControl.LocalPlayer;
@@ -345,7 +345,7 @@ namespace TheOtherRoles
                 writer.Write(true);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.puppeteerStealth(true);
-                var hudManager = DestroyableSingleton<HudManager>.Instance;
+                var hudManager = FastDestroyableSingleton<HudManager>.Instance;
                 var dummy = Puppeteer.dummy;
                 hudManager.PlayerCam.SetTarget(dummy);
                 if (losesSenriganOnDeath)
@@ -654,15 +654,15 @@ namespace TheOtherRoles
                         PlainDoor[] doors;
                         if (PlayerControl.GameOptions.MapId == 4)
                         {
-                            doors = DestroyableSingleton<AirshipStatus>.Instance.GetComponentsInChildren<PlainDoor>();
+                            doors = FastDestroyableSingleton<AirshipStatus>.Instance.GetComponentsInChildren<PlainDoor>();
                         }
                         else if (PlayerControl.GameOptions.MapId == 2)
                         {
-                            doors = DestroyableSingleton<PolusShipStatus>.Instance.GetComponentsInChildren<PlainDoor>();
+                            doors = FastDestroyableSingleton<PolusShipStatus>.Instance.GetComponentsInChildren<PlainDoor>();
                         }
                         else if (PlayerControl.GameOptions.MapId == 1)
                         {
-                            doors = DestroyableSingleton<MiraShipStatus>.Instance.GetComponentsInChildren<PlainDoor>();
+                            doors = FastDestroyableSingleton<MiraShipStatus>.Instance.GetComponentsInChildren<PlainDoor>();
                         }
                         else if (SubmergedCompatibility.isSubmerged())
                         {
@@ -671,7 +671,7 @@ namespace TheOtherRoles
                         }
                         else
                         {
-                            doors = DestroyableSingleton<SkeldShipStatus>.Instance.GetComponentsInChildren<PlainDoor>();
+                            doors = FastDestroyableSingleton<SkeldShipStatus>.Instance.GetComponentsInChildren<PlainDoor>();
                         }
                         PlainDoor t = null;
                         float minDistance = 9999;
@@ -715,7 +715,7 @@ namespace TheOtherRoles
                             }
                             else
                             {
-                                DestroyableSingleton<ShipStatus>.Instance.RpcRepairSystem(SystemTypes.Doors, t.Id | 64);
+                                FastDestroyableSingleton<ShipStatus>.Instance.RpcRepairSystem(SystemTypes.Doors, t.Id | 64);
                                 t.SetDoorway(true);
                             }
                         }
@@ -723,7 +723,7 @@ namespace TheOtherRoles
 
                         if (PlayerControl.GameOptions.MapId == 4)
                         {
-                            Ladder[] ladders = DestroyableSingleton<AirshipStatus>.Instance.GetComponentsInChildren<Ladder>();
+                            Ladder[] ladders = FastDestroyableSingleton<AirshipStatus>.Instance.GetComponentsInChildren<Ladder>();
                             Ladder target = null;
                             foreach (var ladder in ladders)
                             {
@@ -744,7 +744,7 @@ namespace TheOtherRoles
                                 return;
                             }
 
-                            AirshipStatus shipstatus = DestroyableSingleton<AirshipStatus>.Instance;
+                            AirshipStatus shipstatus = FastDestroyableSingleton<AirshipStatus>.Instance;
                             if (shipstatus != null)
                             {
                                 var consoles = shipstatus.GetComponentsInChildren<PlatformConsole>().ToList();
@@ -759,8 +759,8 @@ namespace TheOtherRoles
                                     AmongUsClient.Instance.FinishRpcImmediately(messageWriter);
                                     RPCProcedure.puppeteerUsePlatform(dummy.PlayerId);
                                     // TODO 2回やらないと何故か乗れないので2回実行させておく
-                                    DestroyableSingleton<HudManager>._instance.StartCoroutine(DontMove(1).WrapToIl2Cpp());
-                                    DestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>(t =>
+                                    FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(DontMove(1).WrapToIl2Cpp());
+                                    FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>(t =>
                                     {
                                         if (t >= 1.0f)
                                         {

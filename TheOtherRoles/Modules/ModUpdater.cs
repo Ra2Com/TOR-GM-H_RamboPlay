@@ -18,7 +18,7 @@ namespace TheOtherRoles.Modules
     {
         private static void Prefix(MainMenuManager __instance)
         {
-            if (TheOtherRolesPlugin.DebugMode.Value) DestroyableSingleton<EOSManager>.Instance.PlayOffline();
+            if (TheOtherRolesPlugin.DebugMode.Value) FastDestroyableSingleton<EOSManager>.Instance.PlayOffline();
             AssetLoader.LoadAssets();
             CustomHatLoader.LaunchHatFetcher();
             var template = GameObject.Find("ExitGameButton");
@@ -87,7 +87,7 @@ namespace TheOtherRoles.Modules
                 text.SetText(ModTranslation.getString("updateButton"));
             })));
 
-            TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
+            TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
             ModUpdater.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(man.TwitchPopup);
             ModUpdater.InfoPopup.TextAreaTMP.fontSize *= 0.7f;
             ModUpdater.InfoPopup.TextAreaTMP.enableAutoSizing = false;
@@ -132,7 +132,7 @@ namespace TheOtherRoles.Modules
             clearOldVersions();
             if (hasUpdate || TheOtherRolesPlugin.ShowPopUpVersion.Value != TheOtherRolesPlugin.VersionString)
             {
-                DestroyableSingleton<MainMenuManager>.Instance.Announcement.gameObject.SetActive(true);
+                FastDestroyableSingleton<MainMenuManager>.Instance.Announcement.gameObject.SetActive(true);
                 TheOtherRolesPlugin.ShowPopUpVersion.Value = TheOtherRolesPlugin.VersionString;
             }
         }

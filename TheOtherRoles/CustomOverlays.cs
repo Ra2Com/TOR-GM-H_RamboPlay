@@ -53,7 +53,7 @@ namespace TheOtherRoles
 
         public static bool initializeOverlays()
         {
-            HudManager hudManager = DestroyableSingleton<HudManager>.Instance;
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
             if (hudManager == null) return false;
 
             if (helpButton == null)
@@ -314,7 +314,7 @@ namespace TheOtherRoles
         {
             if (overlayShown || MapOptions.hideSettings) return;
 
-            HudManager hudManager = DestroyableSingleton<HudManager>.Instance;
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
             if (ShipStatus.Instance == null || PlayerControl.LocalPlayer == null || hudManager == null || HudManager.Instance.IsIntroDisplayed || (!PlayerControl.LocalPlayer.CanMove && MeetingHud.Instance == null))
                 return;
 
@@ -377,7 +377,7 @@ namespace TheOtherRoles
         {
             if (!overlayShown) return;
 
-            if (MeetingHud.Instance == null) DestroyableSingleton<HudManager>.Instance.SetHudActive(true);
+            if (MeetingHud.Instance == null) FastDestroyableSingleton<HudManager>.Instance.SetHudActive(true);
 
             overlayShown = false;
             var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
@@ -417,7 +417,7 @@ namespace TheOtherRoles
         {
             if ((rolePage != 0) || MapOptions.hideSettings) return;
 
-            HudManager hudManager = DestroyableSingleton<HudManager>.Instance;
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
             if (ShipStatus.Instance == null || PlayerControl.LocalPlayer == null || hudManager == null || HudManager.Instance.IsIntroDisplayed || (!PlayerControl.LocalPlayer.CanMove && MeetingHud.Instance == null))
                 return;
 
@@ -491,7 +491,7 @@ namespace TheOtherRoles
         {
             if (rolePage == 0) return;
 
-            if (MeetingHud.Instance == null) DestroyableSingleton<HudManager>.Instance.SetHudActive(true);
+            if (MeetingHud.Instance == null) FastDestroyableSingleton<HudManager>.Instance.SetHudActive(true);
 
             rolePage = 0;
             var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
@@ -537,11 +537,11 @@ namespace TheOtherRoles
         {
             public static void Postfix(KeyboardJoystick __instance)
             {
-                if (Input.GetKeyDown(KeyCode.H) && AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started && !DestroyableSingleton<ChatController>.Instance.IsOpen)
+                if (Input.GetKeyDown(KeyCode.H) && AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started && !FastDestroyableSingleton<ChatController>.Instance.IsOpen)
                 {
                     toggleInfoOverlay();
                 }
-                else if (Input.GetKeyDown(KeyCode.I) && AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started && !DestroyableSingleton<ChatController>.Instance.IsOpen)
+                else if (Input.GetKeyDown(KeyCode.I) && AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started && !FastDestroyableSingleton<ChatController>.Instance.IsOpen)
                 {
                     toggleRoleOverlay();
                 }

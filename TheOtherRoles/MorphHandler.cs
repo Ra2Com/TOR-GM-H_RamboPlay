@@ -25,7 +25,7 @@ namespace TheOtherRoles
             if (pc.cosmetics.currentPet) UnityEngine.Object.Destroy(pc.cosmetics.currentPet.gameObject);
             if (!pc.Data.IsDead)
             {
-                pc.cosmetics.currentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.GetPetById(outfit.PetId).viewData.viewData);
+                pc.cosmetics.currentPet = UnityEngine.Object.Instantiate<PetBehaviour>(FastDestroyableSingleton<HatManager>.Instance.GetPetById(outfit.PetId).viewData.viewData);
                 pc.cosmetics.currentPet.transform.position = pc.transform.position;
                 pc.cosmetics.currentPet.Source = pc;
                 pc.cosmetics.currentPet.Visible = visible;

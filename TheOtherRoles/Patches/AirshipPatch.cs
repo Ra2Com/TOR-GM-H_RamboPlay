@@ -70,8 +70,8 @@ namespace TheOtherRoles.Patches
         {
             if (mapId == 4)
             {
-                GameObject meetingRoom = DestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.MeetingRoom].gameObject;
-                GameObject gapRoom = DestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
+                GameObject meetingRoom = FastDestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.MeetingRoom].gameObject;
+                GameObject gapRoom = FastDestroyableSingleton<ShipStatus>.Instance.FastRooms[SystemTypes.GapRoom].gameObject;
                 if (CustomOptionHolder.airshipAdditionalLadder.getBool())
                 {
                     // 梯子追加
@@ -83,7 +83,7 @@ namespace TheOtherRoles.Patches
                     {
                         if (l.name == "LadderBottom") l.gameObject.SetActive(false);
                         l.Id = (byte)id;
-                        DestroyableSingleton<AirshipStatus>.Instance.Ladders.AddItem(l);
+                        FastDestroyableSingleton<AirshipStatus>.Instance.Ladders.AddItem(l);
                         id++;
                     }
                     newLadder.transform.position = new Vector3(15.442f, 12.18f, 0.1f);

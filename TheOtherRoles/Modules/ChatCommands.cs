@@ -114,7 +114,7 @@ namespace TheOtherRoles.Modules
         {
             public static bool Prefix(ChatController __instance, [HarmonyArgument(0)] PlayerControl sourcePlayer)
             {
-                if (__instance != DestroyableSingleton<HudManager>.Instance.Chat)
+                if (__instance != FastDestroyableSingleton<HudManager>.Instance.Chat)
                     return true;
                 PlayerControl localPlayer = PlayerControl.LocalPlayer;
                 return localPlayer == null ||

@@ -400,7 +400,7 @@ namespace TheOtherRoles
                     PlayerControl.LocalPlayer.NetTransform.Halt();
                     Action<MapBehaviour> tmpAction = (MapBehaviour m) => { m.ShowCountOverlay(); };
                     Patches.AdminPatch.isEvilHackerAdmin = true;
-                    DestroyableSingleton<HudManager>.Instance.ShowMap(tmpAction);
+                    FastDestroyableSingleton<HudManager>.Instance.ShowMap(tmpAction);
                 },
                 () =>
                 {
@@ -421,7 +421,7 @@ namespace TheOtherRoles
                 0f,
                 () => { },
                 PlayerControl.GameOptions.MapId == 3,
-                DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Admin)
+                FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Admin)
             );
 
             // EvilHacker creates madmate button
@@ -486,7 +486,7 @@ namespace TheOtherRoles
                () =>
                {
                    if (!MapBehaviour.Instance || !MapBehaviour.Instance.isActiveAndEnabled)
-                       DestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+                       FastDestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
 
                    if (Hacker.cantMove) PlayerControl.LocalPlayer.moveable = false;
                    PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement
@@ -519,7 +519,7 @@ namespace TheOtherRoles
                    if (MapBehaviour.Instance && MapBehaviour.Instance.isActiveAndEnabled) MapBehaviour.Instance.Close();
                },
                PlayerControl.GameOptions.MapId == 3,
-               DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Admin)
+               FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Admin)
             );
 
             // Hacker Admin Table Charges
@@ -1381,7 +1381,7 @@ namespace TheOtherRoles
 
                     bool CensorChat = SaveManager.CensorChat;
                     if (CensorChat) SaveManager.CensorChat = false;
-                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
+                    FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
                     SaveManager.CensorChat = CensorChat;
 
                     // Remove soul

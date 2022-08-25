@@ -140,7 +140,7 @@ namespace TheOtherRoles
 
         public static void setSkinWithAnim(PlayerPhysics playerPhysics, string SkinId)
         {
-            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.GetSkinById(SkinId);
+            SkinData nextSkin = FastDestroyableSingleton<HatManager>.Instance.GetSkinById(SkinId);
             AnimationClip clip = null;
             var spriteAnim = playerPhysics.myPlayer.cosmetics.skin.animator;
             var anim = spriteAnim.m_animator;
@@ -320,8 +320,8 @@ namespace TheOtherRoles
 
         public static bool isCustomServer()
         {
-            if (DestroyableSingleton<ServerManager>.Instance == null) return false;
-            StringNames n = DestroyableSingleton<ServerManager>.Instance.CurrentRegion.TranslateName;
+            if (FastDestroyableSingleton<ServerManager>.Instance == null) return false;
+            StringNames n = FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.TranslateName;
             return n is not StringNames.ServerNA and not StringNames.ServerEU and not StringNames.ServerAS;
         }
 
@@ -508,7 +508,7 @@ namespace TheOtherRoles
             target.RawSetHat(hatId, colorId);
             target.RawSetName(hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName);
 
-            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.GetSkinById(skinId);
+            SkinData nextSkin = FastDestroyableSingleton<HatManager>.Instance.GetSkinById(skinId);
             PlayerPhysics playerPhysics = target.MyPhysics;
             AnimationClip clip = null;
             var spriteAnim = playerPhysics.myPlayer.cosmetics.skin.animator;
@@ -521,14 +521,14 @@ namespace TheOtherRoles
             else clip = nextSkin.viewData.viewData.IdleAnim;
             float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             playerPhysics.myPlayer.cosmetics.skin.skin = nextSkin.viewData.viewData;
-            if (playerPhysics.myPlayer.cosmetics.skin.layer.material == DestroyableSingleton<HatManager>.Instance.PlayerMaterial)
+            if (playerPhysics.myPlayer.cosmetics.skin.layer.material == FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial)
                 target.SetPlayerMaterialColors(target.cosmetics.currentPet.rend);
             spriteAnim.Play(clip, 1f);
             spriteAnim.m_animator.Play("a", 0, progress % 1);
             spriteAnim.m_animator.Update(0f);
 
             if (target.cosmetics.currentPet) UnityEngine.Object.Destroy(target.cosmetics.currentPet.gameObject);
-            target.cosmetics.currentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.GetPetById(petId).viewData.viewData);
+            target.cosmetics.currentPet = UnityEngine.Object.Instantiate<PetBehaviour>(FastDestroyableSingleton<HatManager>.Instance.GetPetById(petId).viewData.viewData);
             target.cosmetics.currentPet.transform.position = target.transform.position;
             target.cosmetics.currentPet.Source = target;
             target.cosmetics.currentPet.Visible = target.Visible;
@@ -831,7 +831,7 @@ namespace TheOtherRoles
             filter.layerMask = Constants.PlayersOnlyMask;
             filter.useLayerMask = true;
             filter.useTriggers = false;
-            array = DestroyableSingleton<ShipStatus>.Instance?.AllRooms;
+            array = FastDestroyableSingleton<ShipStatus>.Instance?.AllRooms;
             if (array == null) return null;
             foreach (PlainShipRoom plainShipRoom in array)
             {
