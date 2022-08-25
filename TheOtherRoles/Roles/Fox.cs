@@ -100,7 +100,7 @@ namespace TheOtherRoles
                 if (player.isAlive())
                 {
                     List<PlayerControl> untargetablePlayers = new();
-                    foreach (var p in PlayerControl.AllPlayerControls)
+                    foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         if (p.isImpostor() || p.isRole(RoleType.Jackal) || p.isRole(RoleType.Sheriff))
                         {
@@ -347,7 +347,7 @@ namespace TheOtherRoles
                 arrows = new List<Arrow>();
 
                 // インポスターの位置を示すArrowsを描画
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (p.isDead()) continue;
                     Arrow arrow;

@@ -137,7 +137,7 @@ namespace TheOtherRoles.Patches
         {
             int numAliveCrewmates = 0;
             // count alive crewmates
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (player.Data.Role.IsImpostor)
                     continue;
@@ -151,7 +151,7 @@ namespace TheOtherRoles.Patches
             int targetPlayerIndex = TheOtherRoles.rnd.Next(0, numAliveCrewmates);
             int currentPlayerIndex = 0;
             // return the player
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (player.Data.Role.IsImpostor)
                     continue;

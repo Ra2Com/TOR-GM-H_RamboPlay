@@ -355,7 +355,7 @@ namespace TheOtherRoles.Patches
                     List<Color> impostorColors = new();
                     List<Color> mimicKColors = new();
                     List<Color> deadBodyColors = new();
-                    foreach (var p in PlayerControl.AllPlayerControls)
+                    foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         // var color = p.myRend.material.GetColor("_BodyColor");
                         var color = Palette.PlayerColors[p.Data.DefaultOutfit.ColorId];

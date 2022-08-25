@@ -20,7 +20,7 @@ namespace TheOtherRoles.Patches
             if (PlayerControl.LocalPlayer != null && HudManager.Instance != null)
             {
                 Vector3 bottomLeft = new(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     GameData.PlayerInfo data = p.Data;
                     PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
@@ -199,7 +199,7 @@ namespace TheOtherRoles.Patches
             // Add the Spy to the Impostor team (for the Impostors)
             if (Spy.spy != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor)
             {
-                List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
+                List<PlayerControl> players = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
                 var fakeImpostorTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>(); // The local player always has to be the first one in the list (to be displayed in the center)
                 fakeImpostorTeam.Add(PlayerControl.LocalPlayer);
                 foreach (PlayerControl p in players)
@@ -245,10 +245,10 @@ namespace TheOtherRoles.Patches
                 }
 
                 Logger.info("----------Role Assign-----------", "Settings");
-                foreach (var pc in PlayerControl.AllPlayerControls)
+                foreach (var pc in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     Logger.info(String.Format("{0,-3}{1,-2}:{2}:{3}", pc.AmOwner ? "[*]" : "", pc.PlayerId, pc.Data.PlayerName.PadRightV2(20), RoleInfo.GetRolesString(pc, false, joinSeparator: " + ")), "Settings");
                 Logger.info("-----------Platforms------------", "Settings");
-                foreach (var pc in PlayerControl.AllPlayerControls)
+                foreach (var pc in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     Logger.info(String.Format("{0,-3}{1,-2}:{2}:{3}", pc.AmOwner ? "[*]" : "", pc.PlayerId, pc.Data.PlayerName.PadRightV2(20), pc.getPlatform().Replace("Standalone", "")), "Settings");
                 Logger.info("---------Game Settings----------", "Settings");
                 TheOtherRolesPlugin.optionsPage = 0;

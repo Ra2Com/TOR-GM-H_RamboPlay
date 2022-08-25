@@ -21,7 +21,7 @@ namespace TheOtherRoles.Modules
                     if (text.ToLower().StartsWith("/kick "))
                     {
                         string playerName = text[6..];
-                        PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                        PlayerControl target = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
                         if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan())
                         {
                             var client = AmongUsClient.Instance.GetClient(target.OwnerId);
@@ -35,7 +35,7 @@ namespace TheOtherRoles.Modules
                     else if (text.ToLower().StartsWith("/ban "))
                     {
                         string playerName = text[5..];
-                        PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                        PlayerControl target = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
                         if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan())
                         {
                             var client = AmongUsClient.Instance.GetClient(target.OwnerId);
@@ -72,7 +72,7 @@ namespace TheOtherRoles.Modules
                 if (text.ToLower().StartsWith("/tp ") && PlayerControl.LocalPlayer.Data.IsDead)
                 {
                     string playerName = text[4..].ToLower();
-                    PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.ToLower().Equals(playerName));
+                    PlayerControl target = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.ToLower().Equals(playerName));
                     if (target != null)
                     {
                         PlayerControl.LocalPlayer.transform.position = target.transform.position;
@@ -104,7 +104,7 @@ namespace TheOtherRoles.Modules
         {
             public static void Postfix(ChatBubble __instance, [HarmonyArgument(0)] string playerName)
             {
-                PlayerControl sourcePlayer = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                PlayerControl sourcePlayer = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
                 if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor && ((Spy.spy != null && sourcePlayer.PlayerId == Spy.spy.PlayerId) || (Sidekick.sidekick != null && Sidekick.wasTeamRed && sourcePlayer.PlayerId == Sidekick.sidekick.PlayerId) || (Jackal.jackal != null && Jackal.wasTeamRed && sourcePlayer.PlayerId == Jackal.jackal.PlayerId)) && __instance != null) __instance.NameText.color = Palette.ImpostorRed;
             }
         }

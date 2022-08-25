@@ -289,7 +289,7 @@ namespace TheOtherRoles
                 arrows = new List<Arrow>();
 
                 // 相方の位置を示すArrowsを描画
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (p.Data.IsDead) continue;
                     if (p.isRole(RoleType.BomberA))
@@ -315,7 +315,7 @@ namespace TheOtherRoles
                 if (PlayerControl.LocalPlayer != null && HudManager.Instance != null)
                 {
                     Vector3 bottomLeft = new(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         GameData.PlayerInfo data = p.Data;
                         PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);

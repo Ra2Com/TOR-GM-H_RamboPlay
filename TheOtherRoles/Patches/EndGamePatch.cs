@@ -164,7 +164,7 @@ namespace TheOtherRoles.Patches
             }
             AdditionalTempData.clear();
 
-            //foreach (var pc in PlayerControl.AllPlayerControls)
+            //foreach (var pc in PlayerControl.AllPlayerControls.GetFastEnumerator())
             var excludeRoles = new RoleType[] { RoleType.Lovers };
             foreach (var p in GameData.Instance.AllPlayers)
             {
@@ -995,7 +995,7 @@ namespace TheOtherRoles.Patches
                         bool isFoxAlive = Fox.isFoxAlive();
                         bool isFoxCompletedtasks = Fox.isFoxCompletedTasks();
                         int numDeadPlayerUncompletedTasks = 0;
-                        foreach (var player in PlayerControl.AllPlayerControls)
+                        foreach (var player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                         {
                             foreach (var task in player.Data.Tasks)
                             {

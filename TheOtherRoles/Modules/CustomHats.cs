@@ -291,7 +291,7 @@ namespace TheOtherRoles.Modules
                     List<CustomHat> hats = createCustomHatDetails(filePaths, true);
                     if (hats.Count > 0)
                     {
-                        foreach (PlayerControl pc in PlayerControl.AllPlayerControls)
+                        foreach (PlayerControl pc in PlayerControl.AllPlayerControls.GetFastEnumerator())
                         {
                             var color = pc.CurrentOutfit.ColorId;
                             pc.SetHat("hat_dusk", color);

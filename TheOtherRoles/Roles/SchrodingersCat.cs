@@ -268,7 +268,7 @@ namespace TheOtherRoles
 
         public static bool isTeamJackalAlive()
         {
-            foreach (var p in PlayerControl.AllPlayerControls)
+            foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (p.isRole(RoleType.Jackal) && p.isAlive())
                 {
@@ -284,7 +284,7 @@ namespace TheOtherRoles
 
         public static bool isLastImpostor()
         {
-            foreach (var p in PlayerControl.AllPlayerControls)
+            foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (PlayerControl.LocalPlayer != p && p.isImpostor() && p.isAlive()) return false;
             }

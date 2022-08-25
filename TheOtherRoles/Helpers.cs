@@ -227,7 +227,7 @@ namespace TheOtherRoles
 
         public static PlayerControl playerById(byte id)
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 if (player.PlayerId == id)
                     return player;
             return null;
@@ -236,7 +236,7 @@ namespace TheOtherRoles
         public static Dictionary<byte, PlayerControl> allPlayersById()
         {
             Dictionary<byte, PlayerControl> res = new();
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 res.Add(player.PlayerId, player);
             return res;
         }
@@ -670,7 +670,7 @@ namespace TheOtherRoles
         public static List<PlayerControl> getKillerTeamMembers(PlayerControl player)
         {
             List<PlayerControl> team = new();
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (player.Data.Role.IsImpostor && p.Data.Role.IsImpostor && player.PlayerId != p.PlayerId && team.All(x => x.PlayerId != p.PlayerId)) team.Add(p);
                 else if (player.isRole(RoleType.Jackal) && p.isRole(RoleType.Sidekick)) team.Add(p);
@@ -755,7 +755,7 @@ namespace TheOtherRoles
 
         public static PlayerControl getPlayerById(byte playerId)
         {
-            return PlayerControl.AllPlayerControls.ToArray().Where(p => p.PlayerId == playerId).FirstOrDefault();
+            return PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(p => p.PlayerId == playerId).FirstOrDefault();
         }
 
         public static System.Collections.IEnumerable FindObjectsOfType(Type type)
@@ -853,7 +853,7 @@ namespace TheOtherRoles
 
         public static bool isCrewmateAlive()
         {
-            foreach (var p in PlayerControl.AllPlayerControls)
+            foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (p.isCrew() && !p.isRole(RoleType.JekyllAndHyde) && !p.hasModifier(ModifierType.Madmate) && p.isAlive()) return true;
             }

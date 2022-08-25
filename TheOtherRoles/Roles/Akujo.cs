@@ -44,7 +44,8 @@ namespace TheOtherRoles
 
         public DateTime startTime = DateTime.UtcNow;
         public int timeLeft { get { return (int)Math.Ceiling(timeLimit - (DateTime.UtcNow - local.startTime).TotalSeconds); } }
-        public string timeString {
+        public string timeString
+        {
             get
             {
                 return String.Format(ModTranslation.getString("timeRemaining"), TimeSpan.FromSeconds(local.timeLeft).ToString(@"mm\:ss"));
@@ -212,7 +213,8 @@ namespace TheOtherRoles
                     local.setKeep(local.currentTarget);
                 },
                 () => { return PlayerControl.LocalPlayer.isRole(RoleType.Akujo) && !PlayerControl.LocalPlayer.Data.IsDead && local.keepsLeft > 0 && local.timeLeft > 0; },
-                () => {
+                () =>
+                {
                     if (numKeepsText != null)
                     {
                         if (local.keepsLeft > 0)

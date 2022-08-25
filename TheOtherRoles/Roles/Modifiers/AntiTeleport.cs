@@ -23,7 +23,7 @@ namespace TheOtherRoles
             {
                 List<PlayerControl> validPlayers = new();
 
-                foreach (var player in PlayerControl.AllPlayerControls)
+                foreach (var player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (!player.hasModifier(ModifierType.AntiTeleport))
                         validPlayers.Add(player);

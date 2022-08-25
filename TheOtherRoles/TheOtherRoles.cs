@@ -960,7 +960,7 @@ namespace TheOtherRoles
 
             public static bool dousedEveryoneAlive()
             {
-                return PlayerControl.AllPlayerControls.ToArray().All(x => { return x == Arsonist.arsonist || x.Data.IsDead || x.Data.Disconnected || x.isGM() || Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
+                return PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().All(x => { return x == Arsonist.arsonist || x.Data.IsDead || x.Data.Disconnected || x.isGM() || Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
             }
 
             public static void updateStatus()
@@ -985,7 +985,7 @@ namespace TheOtherRoles
                     bottomLeft.x *= -1;
                     bottomLeft += new Vector3(-0.25f, -0.25f, 0);
 
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         if (p.PlayerId == PlayerControl.LocalPlayer.PlayerId) continue;
                         if (!MapOptions.playerIcons.ContainsKey(p.PlayerId)) continue;

@@ -178,7 +178,7 @@ namespace TheOtherRoles
 
         public static void forceEnd()
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 Logger.info("ForceEnd", "Debug");
                 if (!player.Data.Role.IsImpostor)
@@ -210,7 +210,7 @@ namespace TheOtherRoles
         public static void setRole(byte roleId, byte playerId)
         {
             Logger.info($"{GameData.Instance.GetPlayerById(playerId).PlayerName}({playerId}): {Enum.GetName(typeof(RoleType), roleId)}", "setRole");
-            PlayerControl.AllPlayerControls.ToArray().DoIf(
+            PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().DoIf(
                 x => x.PlayerId == playerId,
                 x => x.setRole((RoleType)roleId)
             );
@@ -218,7 +218,7 @@ namespace TheOtherRoles
 
         public static void addModifier(byte modId, byte playerId)
         {
-            PlayerControl.AllPlayerControls.ToArray().DoIf(
+            PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().DoIf(
                 x => x.PlayerId == playerId,
                 x => x.addModifier((ModifierType)modId)
             );
@@ -534,7 +534,7 @@ namespace TheOtherRoles
             }
 
             if (Vampire.vampire == null) return;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (player.PlayerId == targetId && !player.Data.IsDead)
                 {
@@ -554,7 +554,7 @@ namespace TheOtherRoles
         public static void trackerUsedTracker(byte targetId)
         {
             Tracker.usedTracker = true;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 if (player.PlayerId == targetId)
                     Tracker.tracked = player;
         }
@@ -835,7 +835,7 @@ namespace TheOtherRoles
         public static void arsonistWin()
         {
             Arsonist.triggerArsonistWin = true;
-            var livingPlayers = PlayerControl.AllPlayerControls.ToArray().Where(p => !p.isRole(RoleType.Arsonist) && p.isAlive());
+            var livingPlayers = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(p => !p.isRole(RoleType.Arsonist) && p.isAlive());
             foreach (PlayerControl p in livingPlayers)
             {
                 p.Exiled();
@@ -1084,7 +1084,7 @@ namespace TheOtherRoles
         public static void plagueDoctorWin()
         {
             PlagueDoctor.triggerPlagueDoctorWin = true;
-            var livingPlayers = PlayerControl.AllPlayerControls.ToArray().Where(p => !p.isRole(RoleType.PlagueDoctor) && p.isAlive());
+            var livingPlayers = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(p => !p.isRole(RoleType.PlagueDoctor) && p.isAlive());
             foreach (PlayerControl p in livingPlayers)
             {
                 // Check again so we don't re-kill any lovers
@@ -1233,7 +1233,7 @@ namespace TheOtherRoles
                         5 => LaboSpawn,
                         _ => InitialSpawnCenter,
                     };
-                    foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                    foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         if (player.Data.PlayerId == playerId)
                         {
@@ -1342,7 +1342,7 @@ namespace TheOtherRoles
         public static void puppeteerWin()
         {
             Puppeteer.triggerPuppeteerWin = true;
-            var livingPlayers = PlayerControl.AllPlayerControls.ToArray().Where(p => !p.isRole(RoleType.Puppeteer) && p.isAlive());
+            var livingPlayers = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(p => !p.isRole(RoleType.Puppeteer) && p.isAlive());
             foreach (PlayerControl p in livingPlayers)
             {
                 // p.Exiled();

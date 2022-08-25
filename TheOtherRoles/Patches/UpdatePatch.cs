@@ -15,7 +15,7 @@ namespace TheOtherRoles.Patches
         {
             Dictionary<byte, PlayerControl> playersById = Helpers.allPlayersById();
 
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 player.cosmetics.nameText.text = Helpers.hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : player.CurrentOutfit.PlayerName;
                 if (PlayerControl.LocalPlayer.isImpostor() && player.isImpostor())
@@ -172,7 +172,7 @@ namespace TheOtherRoles.Patches
 
                 if (Madmate.knowsImpostors(PlayerControl.LocalPlayer))
                 {
-                    foreach (var p in PlayerControl.AllPlayerControls)
+                    foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         if (p.isImpostor() || p.isRole(RoleType.Spy) || (p.isRole(RoleType.Jackal) && Jackal.wasTeamRed) || (p.isRole(RoleType.Sidekick) && Sidekick.wasTeamRed))
                         {
@@ -188,7 +188,7 @@ namespace TheOtherRoles.Patches
 
                 if (CreatedMadmate.knowsImpostors(PlayerControl.LocalPlayer))
                 {
-                    foreach (var p in PlayerControl.AllPlayerControls)
+                    foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         if (p.isImpostor() || p.isRole(RoleType.Spy) || (p.isRole(RoleType.Jackal) && Jackal.wasTeamRed) || (p.isRole(RoleType.Sidekick) && Sidekick.wasTeamRed))
                         {
@@ -279,7 +279,7 @@ namespace TheOtherRoles.Patches
                 }
                 if (player.isRole(RoleType.SchrodingersCat))
                 {
-                    foreach (var p in PlayerControl.AllPlayerControls)
+                    foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         if (p.isImpostor()) setPlayerNameColor(p, Palette.ImpostorRed);
                     }
@@ -325,7 +325,7 @@ namespace TheOtherRoles.Patches
             // Mafia
             if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor)
             {
-                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (player.cosmetics.nameText.text == "") continue;
                     if (Godfather.godfather != null && Godfather.godfather == player)

@@ -106,7 +106,7 @@ namespace TheOtherRoles.Patches
 
         static void setBasePlayerOutlines()
         {
-            foreach (PlayerControl target in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl target in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (target == null || target.cosmetics?.currentBodySprite?.BodySprite == null) continue;
 
@@ -237,7 +237,7 @@ namespace TheOtherRoles.Patches
             if (Detective.timer <= 0f)
             {
                 Detective.timer = Detective.footprintInterval;
-                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (player != null && player != PlayerControl.LocalPlayer && !player.Data.IsDead && !player.inVent && !player.isGM())
                     {
@@ -580,7 +580,7 @@ namespace TheOtherRoles.Patches
             }
 
             var canSeeEverything = PlayerControl.LocalPlayer.isDead() || PlayerControl.LocalPlayer.isGM();
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (p == null) continue;
 
@@ -724,7 +724,7 @@ namespace TheOtherRoles.Patches
             if (Arsonist.arsonist == null || Arsonist.arsonist != PlayerControl.LocalPlayer) return;
             List<PlayerControl> untargetables;
             if (Arsonist.douseTarget != null)
-                untargetables = PlayerControl.AllPlayerControls.ToArray().Where(x => x.PlayerId != Arsonist.douseTarget.PlayerId).ToList();
+                untargetables = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(x => x.PlayerId != Arsonist.douseTarget.PlayerId).ToList();
             else
                 untargetables = Arsonist.dousedPlayers;
             Arsonist.currentTarget = setTarget(untargetablePlayers: untargetables);
@@ -755,7 +755,7 @@ namespace TheOtherRoles.Patches
             else if (PlayerControl.LocalPlayer == Snitch.snitch && numberOfTasks == 0)
             {
                 int arrowIndex = 0;
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     bool arrowForImp = p.Data.Role.IsImpostor;
                     bool arrowForTeamJackal = Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick);
@@ -817,7 +817,7 @@ namespace TheOtherRoles.Patches
                 BountyHunter.arrowUpdateTimer = 0f; // Force arrow to update
                 BountyHunter.bountyUpdateTimer = BountyHunter.bountyDuration;
                 var possibleTargets = new List<PlayerControl>();
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (!p.Data.IsDead && !p.Data.Disconnected && !p.Data.Role.IsImpostor && p != Spy.spy
                     && (p != Sidekick.sidekick || !Sidekick.wasTeamRed)
@@ -890,7 +890,7 @@ namespace TheOtherRoles.Patches
                     byte reporter = deadPlayer.killerIfExisting.PlayerId;
                     if (Bait.bait.hasModifier(ModifierType.Madmate))
                     {
-                        var candidates = PlayerControl.AllPlayerControls.ToArray().Where(x => x.isAlive() && !x.isImpostor() && !x.isDummy).ToList();
+                        var candidates = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(x => x.isAlive() && !x.isImpostor() && !x.isDummy).ToList();
                         int i = rnd.Next(0, candidates.Count);
                         reporter = candidates.Count > 0 ? candidates[i].PlayerId : deadPlayer.killerIfExisting.PlayerId;
                     }
@@ -908,7 +908,7 @@ namespace TheOtherRoles.Patches
             if (ShipStatus.Instance?.AllVents != null)
             {
                 var ventsWithPlayers = new List<int>();
-                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (player == null) continue;
 
@@ -1075,7 +1075,7 @@ namespace TheOtherRoles.Patches
             if (Witch.witch == null || Witch.witch != PlayerControl.LocalPlayer) return;
             List<PlayerControl> untargetables;
             if (Witch.spellCastingTarget != null)
-                untargetables = PlayerControl.AllPlayerControls.ToArray().Where(x => x.PlayerId != Witch.spellCastingTarget.PlayerId).ToList(); // Don't switch the target from the the one you're currently casting a spell on
+                untargetables = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(x => x.PlayerId != Witch.spellCastingTarget.PlayerId).ToList(); // Don't switch the target from the the one you're currently casting a spell on
             else
             {
                 untargetables = new List<PlayerControl>(); // Also target players that have already been spelled, to hide spells that were blanks/blocked by shields

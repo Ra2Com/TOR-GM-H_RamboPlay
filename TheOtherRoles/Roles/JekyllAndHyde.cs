@@ -217,7 +217,7 @@ namespace TheOtherRoles
         {
             if (status == Status.None)
             {
-                var alive = PlayerControl.AllPlayerControls.ToArray().Where(x =>
+                var alive = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(x =>
                 {
                     return x.isAlive() && x != Puppeteer.dummy;
                 });

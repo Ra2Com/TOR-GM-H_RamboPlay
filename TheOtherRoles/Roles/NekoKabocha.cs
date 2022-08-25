@@ -64,7 +64,7 @@ namespace TheOtherRoles
             }
             else if (killer == null && revengeExile && PlayerControl.LocalPlayer == player)
             {
-                var candidates = PlayerControl.AllPlayerControls.ToArray().Where(x => x != player && x.isAlive()).ToList();
+                var candidates = PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(x => x != player && x.isAlive()).ToList();
                 int targetID = rnd.Next(0, candidates.Count);
                 var target = candidates[targetID];
 

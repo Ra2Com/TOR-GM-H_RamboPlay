@@ -63,7 +63,7 @@ namespace TheOtherRoles
                 List<PlayerControl> crewNoRole = new();
                 List<PlayerControl> validPlayers = new();
 
-                foreach (var player in PlayerControl.AllPlayerControls)
+                foreach (var player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     var info = RoleInfo.getRoleInfoForPlayer(player);
                     if (info.Contains(RoleInfo.crewmate) && !player.hasModifier(ModifierType.Munou) && !player.isRole(RoleType.FortuneTeller))
@@ -134,7 +134,7 @@ namespace TheOtherRoles
             int random = rnd.Next(100);
             if (random > probability) return;
 
-            var allPlayers = PlayerControl.AllPlayerControls;
+            var allPlayers = PlayerControl.AllPlayerControls.GetFastEnumerator();
             List<byte> alivePlayers = new();
             List<int> tempList = new();
             foreach (var p in allPlayers)
@@ -180,7 +180,7 @@ namespace TheOtherRoles
         public static void resetColors()
         {
             colorPairs = new Dictionary<byte, byte>();
-            var allPlayers = PlayerControl.AllPlayerControls;
+            var allPlayers = PlayerControl.AllPlayerControls.GetFastEnumerator();
             foreach (var p in allPlayers)
             {
                 MorphHandler.morphToPlayer(p, p);

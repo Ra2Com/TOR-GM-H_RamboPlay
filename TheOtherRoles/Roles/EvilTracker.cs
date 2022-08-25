@@ -122,7 +122,7 @@ namespace TheOtherRoles
 
                 // インポスターの位置を示すArrowsを描画
                 int count = 0;
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (p.Data.IsDead)
                     {

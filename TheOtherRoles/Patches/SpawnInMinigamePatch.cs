@@ -47,7 +47,7 @@ namespace TheOtherRoles.Patches
 
                 dic.TryGetValue(tag, out ulong value);
 
-                foreach (PlayerControl pc in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl pc in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (pc.Data.IsDead ? withGhost : withSurvivor)
                         result &= (value & ((ulong)1 << pc.PlayerId)) != 0;

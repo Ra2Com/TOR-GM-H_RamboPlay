@@ -124,7 +124,7 @@ namespace TheOtherRoles
                 arrows = new List<Arrow>();
 
                 // 狐の位置を示すArrowを描画
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (p.Data.IsDead) continue;
                     Arrow arrow;

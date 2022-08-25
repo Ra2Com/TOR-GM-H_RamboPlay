@@ -19,7 +19,7 @@ namespace TheOtherRoles.Patches
             if (!__instance.Systems.ContainsKey(SystemTypes.Electrical)) return true;
 
             // If player is a role which has Impostor vision
-            if(Helpers.hasImpostorVision(player.Object))
+            if (Helpers.hasImpostorVision(player.Object))
             {
                 // __result = __instance.MaxLightRadius * PlayerControl.GameOptions.ImpostorLightMod;
                 __result = GetNeutralLightRadius(__instance, true);
@@ -97,7 +97,7 @@ namespace TheOtherRoles.Patches
             if (CustomOptionHolder.uselessOptions.getBool() && CustomOptionHolder.playerColorRandom.getBool() && AmongUsClient.Instance.AmHost)
             {
                 List<int> colors = Enumerable.Range(0, Palette.PlayerColors.Count).ToList();
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     int i = TheOtherRoles.rnd.Next(0, colors.Count);
                     p.SetColor(colors[i]);

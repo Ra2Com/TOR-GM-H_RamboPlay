@@ -51,8 +51,8 @@ namespace TheOtherRoles
             {
                 if (PlayerControl.LocalPlayer.isRole(RoleType.Trapper) && Trap.traps.Count != 0 && !Trap.hasTrappedPlayer() && !meetingFlag)
                 {
-                    // トラップを踏んだプレイヤーを動けなくする 
-                    foreach (var p in PlayerControl.AllPlayerControls)
+                    // トラップを踏んだプレイヤーを動けなくする
+                    foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         foreach (var trap in Trap.traps)
                         {
@@ -99,7 +99,7 @@ namespace TheOtherRoles
                     {
                         if (trap.Value.trap == null || !trap.Value.isActive) return;
                         Vector3 p1 = trap.Value.trap.transform.position;
-                        foreach (var player in PlayerControl.AllPlayerControls)
+                        foreach (var player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                         {
                             if (player.PlayerId == trap.Value.target.PlayerId || player.isDead() || player.inVent || player.isRole(RoleType.Trapper)) continue;
                             Vector3 p2 = player.transform.position;

@@ -89,7 +89,7 @@ namespace TheOtherRoles
                 List<PlayerControl> crewNoRole = new();
                 List<PlayerControl> validCrewmates = new();
 
-                foreach (var player in PlayerControl.AllPlayerControls.ToArray().Where(x => x.isCrew() && !hasModifier(x)).ToList())
+                foreach (var player in PlayerControl.AllPlayerControls.GetFastEnumerator().ToArray().Where(x => x.isCrew() && !hasModifier(x)).ToList())
                 {
                     var info = RoleInfo.getRoleInfoForPlayer(player);
                     if (info.Contains(RoleInfo.crewmate) && !player.hasModifier(ModifierType.Munou) && !player.isRole(RoleType.FortuneTeller))

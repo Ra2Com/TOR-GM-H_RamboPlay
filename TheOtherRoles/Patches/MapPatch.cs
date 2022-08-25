@@ -84,7 +84,7 @@ namespace TheOtherRoles.Patches
             {
                 mapIcons = new Dictionary<byte, SpriteRenderer>();
                 corpseIcons = new Dictionary<byte, SpriteRenderer>();
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     players.Add(p);
                 }
@@ -139,7 +139,7 @@ namespace TheOtherRoles.Patches
 
                 if (PlayerControl.LocalPlayer.isGM())
                 {
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         if (p == null || p.isGM()) continue;
 
@@ -426,7 +426,7 @@ namespace TheOtherRoles.Patches
 
             // インポスターの位置をマップに表示
             if (impostorHerePoint == null) impostorHerePoint = new();
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (p.isImpostor() && p != PlayerControl.LocalPlayer)
                 {

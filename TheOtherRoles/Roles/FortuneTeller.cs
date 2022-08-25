@@ -53,7 +53,7 @@ namespace TheOtherRoles
                 }
             })));
 
-            foreach (var p in PlayerControl.AllPlayerControls)
+            foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 playerStatus[p.PlayerId] = p.isAlive();
             }
@@ -237,7 +237,7 @@ namespace TheOtherRoles
         {
             if (player == PlayerControl.LocalPlayer && !meetingFlag)
             {
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (!progress.ContainsKey(p.PlayerId)) progress[p.PlayerId] = 0f;
                     if (p.isDead()) continue;

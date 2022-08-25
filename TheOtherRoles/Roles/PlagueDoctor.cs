@@ -106,7 +106,7 @@ namespace TheOtherRoles
                 if (!meetingFlag && (canWinDead || player.isAlive()))
                 {
                     List<PlayerControl> newInfected = new();
-                    foreach (PlayerControl target in PlayerControl.AllPlayerControls)
+                    foreach (PlayerControl target in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     { // 非感染プレイヤーのループ
                         if (target == player || target.isDead() || infected.ContainsKey(target.PlayerId) || target.inVent) continue;
 
@@ -157,7 +157,7 @@ namespace TheOtherRoles
 
                     // 勝利条件を満たしたか確認する
                     bool winFlag = true;
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     {
                         if (p.isDead()) continue;
                         if (p == player) continue;
@@ -226,7 +226,7 @@ namespace TheOtherRoles
 
                 statusText.gameObject.SetActive(true);
                 string text = $"[{ModTranslation.getString("plagueDoctorProgress")}]\n";
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (p == player) continue;
                     if (dead.ContainsKey(p.PlayerId) && dead[p.PlayerId]) continue;
@@ -312,7 +312,7 @@ namespace TheOtherRoles
 
         public static void updateDead()
         {
-            foreach (var pc in PlayerControl.AllPlayerControls)
+            foreach (var pc in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 dead[pc.PlayerId] = pc.isDead();
             }
