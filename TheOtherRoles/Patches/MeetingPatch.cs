@@ -973,7 +973,7 @@ namespace TheOtherRoles.Patches
             }
             private static void StartMeeting(PlayerControl reporter, GameData.PlayerInfo target)
             {
-                MapUtilities.CachedShipStatus.StartCoroutine(CoStartMeeting(reporter, target).WrapToIl2Cpp());
+                ShipStatus.Instance.StartCoroutine(CoStartMeeting(reporter, target).WrapToIl2Cpp());
             }
             public static bool Prefix(PlayerControl __instance, GameData.PlayerInfo target)
             {
