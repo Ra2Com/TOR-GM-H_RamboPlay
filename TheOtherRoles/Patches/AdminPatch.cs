@@ -118,7 +118,8 @@ namespace TheOtherRoles.Patches
                 adminTimer = 0f;
 
                 // 現在地からどのアドミンを使っているか特定する
-                room = Helpers.getPlainShipRoom(CachedPlayer.LocalPlayer.PlayerControl);
+                room = Helpers.getPlainShipRoom(PlayerControl.LocalPlayer);
+
                 if (room == null) return;
 
                 // アドミンの画像を差し替える
