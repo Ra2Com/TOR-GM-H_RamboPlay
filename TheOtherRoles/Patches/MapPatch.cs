@@ -524,21 +524,32 @@ namespace TheOtherRoles.Patches
         }
         public static void shareRealTasks()
         {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareRealTasks, Hazel.SendOption.Reliable, -1);
+            int count = 0;
             foreach (var task in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
             {
                 if (!task.IsComplete && task.HasLocation && !PlayerTask.TaskIsEmergency(task))
                 {
                     foreach (var loc in task.Locations)
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareRealTasks, Hazel.SendOption.Reliable, -1);
-                        writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
-                        writer.Write(loc.x);
-                        writer.Write(loc.y);
-                        writer.Write(task.TaskStep);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        count++;
                     }
                 }
             }
+            writer.Write((byte)count);
+            foreach (var task in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
+            {
+                if (!task.IsComplete && task.HasLocation && !PlayerTask.TaskIsEmergency(task))
+                {
+                    foreach (var loc in task.Locations)
+                    {
+                        writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+                        writer.Write(loc.x);
+                        writer.Write(loc.y);
+                    }
+                }
+            }
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
         [HarmonyPatch(typeof(MapTaskOverlay), nameof(MapTaskOverlay.Show))]
         class MapTaskOverlayShow

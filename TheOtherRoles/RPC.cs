@@ -1399,10 +1399,20 @@ namespace TheOtherRoles
             JekyllAndHyde.oddIsJekyll = b;
         }
 
-        public static void shareRealTasks(byte playerId, Vector2 pos)
+        public static void shareRealTasks(MessageReader reader)
         {
-            if (!MapBehaviorPatch.realTasks.ContainsKey(playerId)) MapBehaviorPatch.realTasks[playerId] = new Il2CppSystem.Collections.Generic.List<Vector2>();
-            MapBehaviorPatch.realTasks[playerId].Add(pos);
+            byte count= reader.ReadByte();
+            for(int i=0; i < count; i++)
+            {
+                byte playerId = reader.ReadByte();
+                byte[] taskTmp = reader.ReadBytes(4);
+                float x= System.BitConverter.ToSingle(taskTmp, 0);
+                taskTmp = reader.ReadBytes(4);
+                float y = System.BitConverter.ToSingle(taskTmp, 0);
+                Vector2 pos = new Vector2(x, y);
+                if (!MapBehaviorPatch.realTasks.ContainsKey(playerId)) MapBehaviorPatch.realTasks[playerId] = new Il2CppSystem.Collections.Generic.List<Vector2>();
+                MapBehaviorPatch.realTasks[playerId].Add(pos);
+            }
         }
 
         public static void syncKillTimer(byte playerId, float timer)
@@ -1830,12 +1840,7 @@ namespace TheOtherRoles
                             RPCProcedure.setOddIsJekyll(reader.ReadBoolean());
                             break;
                         case (byte)CustomRPC.ShareRealTasks:
-                            byte tmpid = reader.ReadByte();
-                            byte[] taskTmp = reader.ReadBytes(4);
-                            float taskX = System.BitConverter.ToSingle(taskTmp, 0);
-                            taskTmp = reader.ReadBytes(4);
-                            float taskY = System.BitConverter.ToSingle(taskTmp, 0);
-                            RPCProcedure.shareRealTasks(tmpid, new Vector2(taskX, taskY));
+                            RPCProcedure.shareRealTasks(reader);
                             break;
                         case (byte)CustomRPC.SyncKillTimer:
                             byte impostorId = reader.ReadByte();
