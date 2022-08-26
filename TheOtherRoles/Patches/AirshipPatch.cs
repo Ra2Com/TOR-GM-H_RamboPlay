@@ -142,53 +142,71 @@ namespace TheOtherRoles.Patches
         }
         protected static Console ActivateWiring(string consoleName, int consoleId)
         {
+            Logger.currentMethod();
             Console console = ActivateConsole(consoleName);
 
+            Logger.currentMethod();
             if (console == null)
             {
+                Logger.currentMethod();
                 Logger.error($"consoleName \"{consoleName}\" is null", "ActivateWiring");
                 return null;
             }
 
+            Logger.currentMethod();
             if (!console.TaskTypes.Contains(TaskTypes.FixWiring))
             {
+                Logger.currentMethod();
                 var list = console.TaskTypes.ToList();
                 list.Add(TaskTypes.FixWiring);
                 console.TaskTypes = list.ToArray();
             }
+            Logger.currentMethod();
             console.ConsoleId = consoleId;
+            Logger.currentMethod();
             return console;
         }
         protected static Console ActivateConsole(string objectName)
         {
+            Logger.currentMethod();
             GameObject obj = UnityEngine.GameObject.Find(objectName);
             if (obj == null)
             {
+                Logger.currentMethod();
                 Logger.error($"Object \"{objectName}\" was not found!", "ActivateConsole");
                 return null;
             }
+            Logger.currentMethod();
             obj.layer = LayerMask.NameToLayer("ShortObjects");
+            Logger.currentMethod();
             Console console = obj.GetComponent<Console>();
+            Logger.currentMethod();
             PassiveButton button = obj.GetComponent<PassiveButton>();
+            Logger.currentMethod();
             CircleCollider2D collider = obj.GetComponent<CircleCollider2D>();
             if (!console)
             {
+                Logger.currentMethod();
                 console = obj.AddComponent<Console>();
                 console.checkWalls = true;
                 console.usableDistance = 0.7f;
                 console.TaskTypes = new TaskTypes[0];
                 console.ValidTasks = new UnhollowerBaseLib.Il2CppReferenceArray<TaskSet>(0);
-                var list = MapUtilities.CachedShipStatus.AllConsoles.ToList();
+                var list = ShipStatus.Instance.AllConsoles.ToList();
                 list.Add(console);
-                MapUtilities.CachedShipStatus.AllConsoles = new UnhollowerBaseLib.Il2CppReferenceArray<Console>(list.ToArray());
+                ShipStatus.Instance.AllConsoles = new UnhollowerBaseLib.Il2CppReferenceArray<Console>(list.ToArray());
             }
+            Logger.currentMethod();
             if (console.Image == null)
             {
+                Logger.currentMethod();
                 console.Image = obj.GetComponent<SpriteRenderer>();
-                console.Image.material = new Material(MapUtilities.CachedShipStatus.AllConsoles[0].Image.material);
+                console.Image.material = new Material(ShipStatus.Instance.AllConsoles[0].Image.material);
             }
+            Logger.currentMethod();
             if (!button)
             {
+                Logger.currentMethod();
                 button = obj.AddComponent<PassiveButton>();
                 button.OnMouseOut = new UnityEngine.Events.UnityEvent();
                 button.OnMouseOver = new UnityEngine.Events.UnityEvent();
@@ -201,6 +219,7 @@ namespace TheOtherRoles.Patches
                 collider.radius = 0.4f;
                 collider.isTrigger = true;
             }
+            Logger.currentMethod();
             return console;
         }
     }
@@ -212,7 +231,7 @@ namespace TheOtherRoles.Patches
         static void Postfix(NormalPlayerTask __instance, TaskTypes taskType, byte[] consoleIds)
         {
             if (taskType != TaskTypes.FixWiring || !CustomOptionHolder.randomWireTask.getBool()) return;
-            List<Console> orgList = MapUtilities.CachedShipStatus.AllConsoles.Where((global::Console t) => t.TaskTypes.Contains(taskType)).ToList<global::Console>();
+            List<Console> orgList = ShipStatus.Instance.AllConsoles.Where((global::Console t) => t.TaskTypes.Contains(taskType)).ToList<global::Console>();
             List<Console> list = new(orgList);
 
             __instance.MaxStep = numWireTask;
