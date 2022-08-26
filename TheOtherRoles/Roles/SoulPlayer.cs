@@ -16,7 +16,7 @@ namespace TheOtherRoles
         public static bool toggle = false;
         public static Sprite senriganIcon;
         public static Dictionary<byte, float> killTimers;
-        public static float updateInterval = 1f;
+        public static float updateInterval = 2f;
         public static float timer = 0;
         public static TMPro.TMP_Text statusText = null;
         public static void senrigan()
