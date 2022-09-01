@@ -831,7 +831,7 @@ namespace TheOtherRoles
             filter.layerMask = Constants.PlayersOnlyMask;
             filter.useLayerMask = true;
             filter.useTriggers = false;
-            array = FastDestroyableSingleton<ShipStatus>.Instance?.AllRooms;
+            array = MapUtilities.CachedShipStatus?.AllRooms;
             if (array == null) return null;
             foreach (PlainShipRoom plainShipRoom in array)
             {

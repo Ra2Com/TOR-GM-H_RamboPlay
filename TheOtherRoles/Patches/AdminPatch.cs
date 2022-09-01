@@ -129,7 +129,7 @@ namespace TheOtherRoles.Patches
                     if (room.name == "Records" && !adminRecordsSprite) adminRecordsSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.admin_records.png", 100f);
                     if (!map)
                     {
-                        map = FastDestroyableSingleton<MapBehaviour>.Instance.gameObject.GetComponentsInChildren<SpriteRenderer>().Where(x => x.name == "Background").FirstOrDefault().gameObject;
+                        map = DestroyableSingleton<MapBehaviour>.Instance.gameObject.GetComponentsInChildren<SpriteRenderer>().Where(x => x.name == "Background").FirstOrDefault().gameObject;
                     }
                     if (!newmap) newmap = UnityEngine.Object.Instantiate(map, map.transform.parent);
 
