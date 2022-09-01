@@ -1467,11 +1467,11 @@ namespace TheOtherRoles
                 byte packetId = callId;
                 try
                 {
+                    CustomRPC rpc = (CustomRPC)packetId;
+                    Logger.info(rpc.ToString(), "RPC");
                     switch (packetId)
                     {
-
                         // Main Controls
-
                         case (byte)CustomRPC.ResetVariables:
                             RPCProcedure.resetVariables();
                             break;
