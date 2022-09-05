@@ -537,11 +537,13 @@ namespace TheOtherRoles
         {
             public static void Postfix(KeyboardJoystick __instance)
             {
-                if (Input.GetKeyDown(KeyCode.H) && AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started && !DestroyableSingleton<ChatController>.Instance.IsOpen)
+                ChatController cc = DestroyableSingleton<ChatController>.Instance;
+                bool isOpen = cc != null && cc.IsOpen;
+                if (Input.GetKeyDown(KeyCode.H) && AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started && !isOpen)
                 {
                     toggleInfoOverlay();
                 }
-                else if (Input.GetKeyDown(KeyCode.I) && AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started && !DestroyableSingleton<ChatController>.Instance.IsOpen)
+                else if (Input.GetKeyDown(KeyCode.I) && AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started && !isOpen)
                 {
                     toggleRoleOverlay();
                 }
