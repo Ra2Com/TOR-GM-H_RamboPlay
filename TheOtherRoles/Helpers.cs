@@ -859,5 +859,14 @@ namespace TheOtherRoles
             }
             return false;
         }
+
+        public static string GetRpcName(byte callId)
+        {
+            string rpcName;
+            if ((rpcName = Enum.GetName(typeof(RpcCalls), callId)) != null) { }
+            else if ((rpcName = Enum.GetName(typeof(CustomRPC), callId)) != null) { }
+            else rpcName = callId.ToString();
+            return rpcName;
+        }
     }
 }
