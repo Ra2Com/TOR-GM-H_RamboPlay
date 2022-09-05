@@ -43,7 +43,6 @@ namespace TheOtherRoles.Patches
         private static TextMeshPro titleTextTitle;
 
         private static ToggleButtonBehaviour buttonPrefab;
-        private static Vector3? _origin;
         private static int page = 1;
 
         [HarmonyPostfix]
