@@ -54,12 +54,28 @@ namespace TheOtherRoles
         public static void UpdateRegions()
         {
             ServerManager serverManager = FastDestroyableSingleton<ServerManager>.Instance;
-            IRegionInfo[] regions = defaultRegions;
+            IRegionInfo[] regions = new IRegionInfo[] {
+                new DnsRegionInfo("haoming-server.com", "haoming-server", StringNames.NoTranslation, "haoming-server.com", 22023, false).CastFast<IRegionInfo>(),
+                new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false).CastFast<IRegionInfo>()
+            };
+            #nullable enable
+            IRegionInfo ? currentRegion = serverManager.CurrentRegion;
+            #nullable disable
+                        foreach (IRegionInfo region in regions) {
+                if (region == null)
+                    Logger.LogError("Could not add region");
+                else {
+                    if (currentRegion != null && region.Name.Equals(currentRegion.Name, StringComparison.OrdinalIgnoreCase))
+                        currentRegion = region;
+                    serverManager.AddOrUpdateRegion(region);
+                }
+            }
 
-            var CustomRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false);
-            regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
-            ServerManager.DefaultRegions = regions;
-            serverManager.AvailableRegions = regions;
+            // AU remembers the previous region that was set, so we need to restore it
+            if (currentRegion != null) {
+                Logger.LogDebug("Resetting previous region");
+                serverManager.SetRegion(currentRegion);
+            }
         }
 
         public override void Load()
