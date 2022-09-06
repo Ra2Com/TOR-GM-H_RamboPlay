@@ -1468,7 +1468,7 @@ namespace TheOtherRoles
                 try
                 {
                     CustomRPC rpc = (CustomRPC)packetId;
-                    Logger.info(rpc.ToString(), "RPC");
+                    Logger.info(Helpers.GetRpcName(callId), "RPC");
                     switch (packetId)
                     {
                         // Main Controls
