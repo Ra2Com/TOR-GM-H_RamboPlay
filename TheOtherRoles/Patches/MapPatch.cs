@@ -502,7 +502,11 @@ namespace TheOtherRoles.Patches
             AdminPatch.isEvilHackerAdmin = true;
             __instance.countOverlay.gameObject.SetActive(true);
             __instance.infectedOverlay.gameObject.SetActive(MeetingHud.Instance ? false : true);
-            if (TheOtherRolesPlugin.HideFakeTasks.Value)
+            if ( MeetingHud.Instance != null && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker) && EvilTracker.canSeeTargetTask)
+            {
+                __instance.taskOverlay.Show();
+            }
+            else if (TheOtherRolesPlugin.HideFakeTasks.Value)
             {
                 __instance.taskOverlay.Hide();
             }
