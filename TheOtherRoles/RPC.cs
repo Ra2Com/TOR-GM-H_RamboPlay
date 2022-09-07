@@ -20,9 +20,11 @@ namespace TheOtherRoles
         // Main Controls
 
         ResetVariables = 60,
+        FinishResetVariables,
         ShareOptions,
         ForceEnd,
         SetRole,
+        FinishSetRole,
         SetLovers,
         VersionHandshake,
         UseUncheckedVent,
@@ -156,6 +158,25 @@ namespace TheOtherRoles
             MapBehaviorPatch.resetRealTasks();
 
             KillAnimationCoPerformKillPatch.hideNextAnimation = false;
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.FinishResetVariables, Hazel.SendOption.Reliable, -1);
+            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.finishResetVariables(PlayerControl.LocalPlayer.PlayerId);
+
+
+        }
+
+        public static void finishResetVariables(byte playerId)
+        {
+            var checkList = RoleAssignmentPatch.AmongUsClientCoStartGameHostPatch.checkList;
+            if (checkList != null)
+            {
+                if (checkList.ContainsKey(playerId))
+                {
+                    checkList[playerId] = true;
+                }
+            }
         }
 
         public static void ShareOptions(int numberOfOptions, MessageReader reader)
@@ -214,6 +235,11 @@ namespace TheOtherRoles
                 x => x.PlayerId == playerId,
                 x => x.setRole((RoleType)roleId)
             );
+        }
+
+        public static void finishSetRole()
+        {
+            RoleAssignmentPatch.isAssigned = true;
         }
 
         public static void addModifier(byte modId, byte playerId)
@@ -1401,12 +1427,12 @@ namespace TheOtherRoles
 
         public static void shareRealTasks(MessageReader reader)
         {
-            byte count= reader.ReadByte();
-            for(int i=0; i < count; i++)
+            byte count = reader.ReadByte();
+            for (int i = 0; i < count; i++)
             {
                 byte playerId = reader.ReadByte();
                 byte[] taskTmp = reader.ReadBytes(4);
-                float x= System.BitConverter.ToSingle(taskTmp, 0);
+                float x = System.BitConverter.ToSingle(taskTmp, 0);
                 taskTmp = reader.ReadBytes(4);
                 float y = System.BitConverter.ToSingle(taskTmp, 0);
                 Vector2 pos = new Vector2(x, y);
@@ -1475,6 +1501,9 @@ namespace TheOtherRoles
                         case (byte)CustomRPC.ResetVariables:
                             RPCProcedure.resetVariables();
                             break;
+                        case (byte)CustomRPC.FinishResetVariables:
+                            RPCProcedure.finishResetVariables(reader.ReadByte());
+                            break;
                         case (byte)CustomRPC.ShareOptions:
                             RPCProcedure.ShareOptions((int)reader.ReadPackedUInt32(), reader);
                             break;
@@ -1485,6 +1514,9 @@ namespace TheOtherRoles
                             byte roleId = reader.ReadByte();
                             byte playerId = reader.ReadByte();
                             RPCProcedure.setRole(roleId, playerId);
+                            break;
+                        case (byte)CustomRPC.FinishSetRole:
+                            RPCProcedure.finishSetRole();
                             break;
                         case (byte)CustomRPC.SetLovers:
                             RPCProcedure.setLovers(reader.ReadByte(), reader.ReadByte());

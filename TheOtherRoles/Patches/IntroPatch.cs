@@ -225,6 +225,37 @@ namespace TheOtherRoles.Patches
             }
         }
 
+        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
+        class IntroCutsceneCoBeginPatch
+        {
+            private static bool Prefix(IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
+            {
+                if (RoleAssignmentPatch.isAssigned)
+                {
+                    return true;
+                }
+                __result = CoBegin(__instance).WrapToIl2Cpp();
+                return false;
+            }
+            private static IEnumerator CoBegin(IntroCutscene __instance)
+            {
+                yield return waitRoleAssign().WrapToIl2Cpp();
+                yield return __instance.CoBegin();
+                yield break;
+            }
+            private static IEnumerator waitRoleAssign()
+            {
+                if (!CustomOptionHolder.activateRoles.getBool()) yield break;
+
+                while (!RoleAssignmentPatch.isAssigned)
+                {
+                    yield return null;
+                }
+                yield break;
+            }
+
+        }
+
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
         class SetUpRoleTextPatch
         {
