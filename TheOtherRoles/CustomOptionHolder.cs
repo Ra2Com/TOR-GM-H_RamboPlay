@@ -461,6 +461,8 @@ namespace TheOtherRoles
         public static CustomOption alwaysReduceCooldown;
         public static CustomOption exceptInVent;
         public static CustomOption exceptOnTask;
+        public static CustomOption additionalEmergencyCooldown;
+        public static CustomOption additionalEmergencyCooldownTime;
         public static CustomOption additionalVents;
         public static CustomOption specimenVital;
         public static CustomOption polusRandomSpawn;
@@ -904,6 +906,8 @@ namespace TheOtherRoles
             alwaysReduceCooldown = CustomOption.Create(9911, CustomOptionType.General, "alwaysReduceCooldown", false, mapOptions);
             exceptInVent = CustomOption.Create(9912, CustomOptionType.General, "exceptInVent", false, alwaysReduceCooldown);
             exceptOnTask = CustomOption.Create(9931, CustomOptionType.General, "exceptOnTask", false, alwaysReduceCooldown);
+            additionalEmergencyCooldown = CustomOption.Create(9934, CustomOptionType.General, "additionalEmergencyCooldown", 0f, 0f, 15f, 1f, mapOptions, format: "unitPlayers");
+            additionalEmergencyCooldownTime = CustomOption.Create(9935, CustomOptionType.General, "additionalEmergencyCooldownTime", 10f, 0f, 60f, 1f, additionalEmergencyCooldown, format: "unitSeconds");
 
             delayBeforeMeeting = CustomOption.Create(9921, CustomOptionType.General, "delayBeforeMeeting", 0f, 0f, 10f, 0.25f, mapOptions, true);
             additionalVents = CustomOption.Create(9905, CustomOptionType.General, "additionalVents", false, mapOptions);

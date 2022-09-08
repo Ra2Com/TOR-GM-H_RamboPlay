@@ -349,6 +349,17 @@ namespace TheOtherRoles.Patches
 
             // イビルトラッカーで他のプレイヤーのタスク情報を表示する
             MapBehaviorPatch.resetRealTasks();
+
+            // 一定人数が死ぬまで会議時間を延ばす
+            int deadPlayers = 0;
+            foreach(var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            {
+                if(p.Data.IsDead) deadPlayers += 1;
+            }
+            if(deadPlayers < (int)CustomOptionHolder.additionalEmergencyCooldown.getFloat())
+            {
+                ShipStatus.Instance.EmergencyCooldown = (float)PlayerControl.GameOptions.EmergencyCooldown + CustomOptionHolder.additionalEmergencyCooldownTime.getFloat();
+            }
         }
     }
 
