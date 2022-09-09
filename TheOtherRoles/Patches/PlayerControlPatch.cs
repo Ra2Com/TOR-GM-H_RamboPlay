@@ -17,12 +17,13 @@ namespace TheOtherRoles.Patches
         private static Dictionary<byte, bool> lastVisible = new();
         // Helpers
 
-        public static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null, PlayerControl targetingPlayer = null)
+        public static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null, PlayerControl targetingPlayer = null, int killDistance = 3)
         {
             PlayerControl result = null;
-            float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
+            int kd = killDistance == 3 ? PlayerControl.GameOptions.KillDistance : killDistance;
+            float num = GameOptionsData.KillDistances[Mathf.Clamp(kd, 0, 2)];
             if (!MapUtilities.CachedShipStatus) return result;
-            if (targetingPlayer == null) targetingPlayer = CachedPlayer.LocalPlayer.PlayerControl;
+            if (targetingPlayer == null) targetingPlayer = PlayerControl.LocalPlayer;
             if ((targetingPlayer.Data.IsDead && !targetingPlayer.isRole(RoleType.Puppeteer)) || targetingPlayer.inVent) return result;
             if (targetingPlayer.isGM()) return result;
 
@@ -1234,6 +1235,14 @@ namespace TheOtherRoles.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(CachedPlayer.LocalPlayer.PlayerControl.CmdReportDeadBody))]
     class BodyReportPatch
     {
+        static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo target)
+        {
+            if(Moriarty.brainwashed.FindAll(x => x.PlayerId == __instance.PlayerId).Count > 0)
+            {
+                return false;
+            }
+            return true;
+        }
         static void Postfix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo target)
         {
             Logger.info($"{__instance.getNameWithRole()} => {target?.getNameWithRole() ?? "null"}", "ReportDeadBody");
@@ -1431,6 +1440,7 @@ namespace TheOtherRoles.Patches
             }
 
             __instance.OnKill(target);
+            Sherlock.recordKillLog(__instance, target);
             target.OnDeath(__instance);
         }
     }

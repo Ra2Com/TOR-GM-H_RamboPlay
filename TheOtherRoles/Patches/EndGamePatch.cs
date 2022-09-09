@@ -26,6 +26,7 @@ namespace TheOtherRoles.Patches
         JekyllAndHydeWin = 20,
         AkujoWin = 21,
         ForceEnd = 22,
+        MoriartyWin = 23,
     }
 
     enum WinCondition
@@ -49,7 +50,8 @@ namespace TheOtherRoles.Patches
         PuppeteerWin,
         JekyllAndHydeWin,
         AkujoWin,
-        ForceEnd
+        ForceEnd,
+        MoriartyWin,
     }
 
     enum FinalStatus
@@ -66,6 +68,7 @@ namespace TheOtherRoles.Patches
         Diseased,
         Divined,
         Loneliness,
+        BrainWashKill,
         GMExecuted,
         Disconnected
     }
@@ -226,6 +229,7 @@ namespace TheOtherRoles.Patches
             notWinners.AddRange(JekyllAndHyde.allPlayers);
             notWinners.AddRange(Akujo.allPlayers);
             notWinners.AddRange(AkujoHonmei.allPlayers);
+            notWinners.AddRange(Moriarty.allPlayers);
             if (Puppeteer.dummy != null) notWinners.Add(Puppeteer.dummy);
             if (SchrodingersCat.team != SchrodingersCat.Team.Crew) notWinners.AddRange(SchrodingersCat.allPlayers);
 
@@ -264,6 +268,7 @@ namespace TheOtherRoles.Patches
             bool foxWin = Fox.exists && gameOverReason == (GameOverReason)CustomGameOverReason.FoxWin;
             bool puppeteerWin = Puppeteer.exists && gameOverReason == (GameOverReason)CustomGameOverReason.PuppeteerWin;
             bool jekyllAndHydeWin = JekyllAndHyde.exists && gameOverReason == (GameOverReason)CustomGameOverReason.JekyllAndHydeWin;
+            bool moriartyWin = Moriarty.exists && gameOverReason == (GameOverReason)CustomGameOverReason.MoriartyWin;
             bool everyoneDead = AdditionalTempData.playerRoles.All(x => x.Status != FinalStatus.Alive);
             bool akujoWin = Akujo.numAlive > 0 && gameOverReason != GameOverReason.HumansByTask;
             bool forceEnd = AdditionalTempData.forceEnd;
@@ -336,6 +341,33 @@ namespace TheOtherRoles.Patches
                     }
                 }
                 AdditionalTempData.winCondition = WinCondition.JekyllAndHydeWin;
+            }
+
+            else if (moriartyWin)
+            {
+                if (Moriarty.counter < Moriarty.numberToWin)
+                {
+                    TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                    AdditionalTempData.winCondition = WinCondition.EveryoneDied;
+                }
+                else
+                {
+                    TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                    foreach (var moriarty in Moriarty.players)
+                    {
+                        WinningPlayerData wpd = new(moriarty.player.Data);
+                        TempData.winners.Add(wpd);
+                    }
+                    if (SchrodingersCat.team == SchrodingersCat.Team.Moriarty)
+                    {
+                        foreach (var schrodingersCat in SchrodingersCat.allPlayers)
+                        {
+                            WinningPlayerData wpd = new(schrodingersCat.Data);
+                            TempData.winners.Add(wpd);
+                        }
+                    }
+                    AdditionalTempData.winCondition = WinCondition.MoriartyWin;
+                }
             }
 
             else if (everyoneDead)
@@ -689,6 +721,12 @@ namespace TheOtherRoles.Patches
                         textRenderer.color = JekyllAndHyde.color;
                         __instance.BackgroundBar.material.SetColor("_Color", JekyllAndHyde.color);
                     }
+                    else if (AdditionalTempData.winCondition == WinCondition.MoriartyWin)
+                    {
+                        bonusText = "moriartyWin";
+                        textRenderer.color = Moriarty.color;
+                        __instance.BackgroundBar.material.SetColor("_Color", Moriarty.color);
+                    }
                     else if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin)
                     {
                         bonusText = "crewWin";
@@ -912,6 +950,7 @@ namespace TheOtherRoles.Patches
                     if (CheckAndEndGameForPlagueDoctorWin(__instance)) return false;
                     if (CheckAndEndGameForPuppeteerWin(__instance)) return false;
                     if (CheckAndEndGameForJekyllAndHydeWin(__instance, statistics)) return false;
+                    if (CheckAndEndGameForMoriartyWin(__instance, statistics)) return false;
                     if (CheckAndEndGameForSabotageWin(__instance)) return false;
                     if (CheckAndEndGameForTaskWin(__instance)) return false;
                     if (CheckAndEndGameForLoverWin(__instance, statistics)) return false;
@@ -999,11 +1038,24 @@ namespace TheOtherRoles.Patches
                     }
 
                     if (statistics.JekyllAndHydeAlive >= statistics.TotalAlive - statistics.JekyllAndHydeAlive - statistics.FoxAlive &&
-                        statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0 &&
+                        statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0 && statistics.MoriartyAlive == 0 &&
                         (statistics.JekyllAndHydeLovers == 0 || statistics.JekyllAndHydeLovers >= statistics.CouplesAlive * 2)
                        )
                     {
                         UncheckedEndGame(CustomGameOverReason.JekyllAndHydeWin);
+                        return true;
+                    }
+
+                    return false;
+                }
+                private static bool CheckAndEndGameForMoriartyWin(ShipStatus __instance, PlayerStatistics statistics)
+                {
+                    if (statistics.MoriartyAlive >= statistics.TotalAlive - statistics.MoriartyAlive - statistics.FoxAlive &&
+                        statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0 && statistics.JekyllAndHydeAlive == 0 &&
+                        (statistics.MoriartyLovers == 0 || statistics.MoriartyLovers >= statistics.CouplesAlive * 2)
+                       )
+                    {
+                        UncheckedEndGame(CustomGameOverReason.MoriartyWin);
                         return true;
                     }
 
@@ -1106,7 +1158,7 @@ namespace TheOtherRoles.Patches
                 private static bool CheckAndEndGameForJackalWin(ShipStatus __instance, PlayerStatistics statistics)
                 {
                     if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive - statistics.FoxAlive &&
-                        statistics.TeamImpostorsAlive == 0 && statistics.JekyllAndHydeAlive == 0 &&
+                        statistics.TeamImpostorsAlive == 0 && statistics.JekyllAndHydeAlive == 0 && statistics.MoriartyAlive == 0 &&
                         (statistics.TeamJackalLovers == 0 || statistics.TeamJackalLovers >= statistics.CouplesAlive * 2)
                        )
                     {
@@ -1119,7 +1171,7 @@ namespace TheOtherRoles.Patches
                 private static bool CheckAndEndGameForImpostorWin(ShipStatus __instance, PlayerStatistics statistics)
                 {
                     if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive - statistics.FoxAlive &&
-                        statistics.TeamJackalAlive == 0 && statistics.JekyllAndHydeAlive == 0 &&
+                        statistics.TeamJackalAlive == 0 && statistics.JekyllAndHydeAlive == 0 && statistics.MoriartyAlive == 0 &&
                         (statistics.TeamImpostorLovers == 0 || statistics.TeamImpostorLovers >= statistics.CouplesAlive * 2)
                        )
                     {
@@ -1137,7 +1189,7 @@ namespace TheOtherRoles.Patches
 
                 private static bool CheckAndEndGameForCrewmateWin(ShipStatus __instance, PlayerStatistics statistics)
                 {
-                    if (statistics.TeamCrew > 0 && statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0 && statistics.JekyllAndHydeAlive == 0)
+                    if (statistics.TeamCrew > 0 && statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0 && statistics.JekyllAndHydeAlive == 0 && statistics.MoriartyAlive == 0)
                     {
                         UncheckedEndGame(GameOverReason.HumansByVote);
                         return true;
@@ -1180,6 +1232,8 @@ namespace TheOtherRoles.Patches
                 public int JekyllAndHydeLovers { get; set; }
                 public int FoxAlive { get; set; }
                 public int JekyllAndHydeAlive { get; set; }
+                public int MoriartyAlive { get; set; }
+                public int MoriartyLovers { get; set; }
 
                 public PlayerStatistics(ShipStatus __instance)
                 {
@@ -1203,6 +1257,7 @@ namespace TheOtherRoles.Patches
                     int numNeutralAlive = 0;
                     int numCrew = 0;
                     int numJekyllAndHydeAlive = JekyllAndHyde.livingPlayers.Count;
+                    int numMoriartyAlive = Moriarty.livingPlayers.Count;
 
                     int numLoversAlive = 0;
                     int numCouplesAlive = 0;
@@ -1290,6 +1345,10 @@ namespace TheOtherRoles.Patches
                     {
                         numJekyllAndHydeAlive = JekyllAndHyde.livingPlayers.Count + SchrodingersCat.livingPlayers.Count;
                     }
+                    if (SchrodingersCat.livingPlayers.Count > 0 && SchrodingersCat.team == SchrodingersCat.Team.Moriarty)
+                    {
+                        numMoriartyAlive = Moriarty.livingPlayers.Count + SchrodingersCat.livingPlayers.Count;
+                    }
 
                     // 猫の自爆中はジキルとハイドのカウントを一人減らす
                     if (SchrodingersCat.killer != null && !(SchrodingersCat.killer.Data.IsDead || SchrodingersCat.killer.Data.Disconnected) && SchrodingersCat.team == SchrodingersCat.Team.JekyllAndHyde)
@@ -1297,10 +1356,25 @@ namespace TheOtherRoles.Patches
                         --numJekyllAndHydeAlive;
                     }
 
+                    if (SchrodingersCat.killer != null && !(SchrodingersCat.killer.Data.IsDead || SchrodingersCat.killer.Data.Disconnected) && SchrodingersCat.team == SchrodingersCat.Team.Moriarty)
+                    {
+                        --numMoriartyAlive;
+                    }
+
                     // 人形使いのダミーはカウントしない
                     if (Puppeteer.dummy != null)
                     {
                         numTotalAlive--;
+                    }
+
+                    // モリアーティに洗脳されているユーザーはモリアーティー陣営としてカウントする
+                    if (Moriarty.target != null)
+                    {
+                        if (Moriarty.target.isImpostor() || (Moriarty.target.isRole(RoleType.SchrodingersCat) && SchrodingersCat.team == SchrodingersCat.Team.Impostor)) numImpostorsAlive -= 1;
+                        else if (Moriarty.target.isRole(RoleType.Jackal) || Moriarty.target.isRole(RoleType.Sidekick) || (Moriarty.target.isRole(RoleType.SchrodingersCat) && SchrodingersCat.team == SchrodingersCat.Team.Jackal)) numJackalAlive -= 1;
+                        else if (Moriarty.target.isRole(RoleType.JekyllAndHyde) || (Moriarty.target.isRole(RoleType.SchrodingersCat) && SchrodingersCat.team == SchrodingersCat.Team.JekyllAndHyde)) numJekyllAndHydeAlive -= 1;
+                        else numCrew -= 1;
+                        numMoriartyAlive += 1;
                     }
 
                     TeamCrew = numCrew;
@@ -1315,6 +1389,8 @@ namespace TheOtherRoles.Patches
                     FoxAlive = Fox.livingPlayers.Count;
                     JekyllAndHydeAlive = numJekyllAndHydeAlive;
                     JekyllAndHydeLovers = JekyllAndHyde.countLovers();
+                    MoriartyAlive = numMoriartyAlive;
+                    MoriartyLovers = Moriarty.countLovers();
                 }
             }
         }

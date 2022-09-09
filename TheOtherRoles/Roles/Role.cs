@@ -29,6 +29,7 @@ namespace TheOtherRoles
         Bait,
         Medium,
         FortuneTeller,
+        Sherlock,
 
 
         Impostor = 100,
@@ -76,6 +77,7 @@ namespace TheOtherRoles
         MimicA,
         JekyllAndHyde,
         Akujo,
+        Moriarty,
         EvilHacker,
 
 
@@ -96,6 +98,7 @@ namespace TheOtherRoles
             { RoleType.Sheriff, typeof(RoleBase<Sheriff>) },
             { RoleType.Lighter, typeof(RoleBase<Lighter>) },
             { RoleType.FortuneTeller, typeof(RoleBase<FortuneTeller>) },
+            { RoleType.Sherlock, typeof(RoleBase<Sherlock>)},
 
             // Impostor
             { RoleType.Ninja, typeof(RoleBase<Ninja>) },
@@ -117,6 +120,7 @@ namespace TheOtherRoles
             { RoleType.Puppeteer, typeof(RoleBase<Puppeteer>) },
             { RoleType.JekyllAndHyde, typeof(RoleBase<JekyllAndHyde>) },
             { RoleType.Akujo, typeof(RoleBase<Akujo>) },
+            { RoleType.Moriarty, typeof(RoleBase<Moriarty>) },
 
             // Other
             { RoleType.Watcher, typeof(RoleBase<Watcher>) },

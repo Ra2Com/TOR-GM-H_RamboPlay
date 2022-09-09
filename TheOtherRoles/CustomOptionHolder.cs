@@ -163,6 +163,11 @@ namespace TheOtherRoles
         public static CustomOption sheriffMisfireKillsTarget;
         public static CustomOption sheriffCanKillNoDeadBody;
 
+        public static CustomRoleOption sherlockSpawnRate;
+        public static CustomOption sherlockCooldown;
+        public static CustomOption sherlockRechargeTasksNumber;
+        public static CustomOption sherlockInvetigateDistance;
+
         public static CustomRoleOption lighterSpawnRate;
         public static CustomOption lighterModeLightsOnVision;
         public static CustomOption lighterModeLightsOffVision;
@@ -451,6 +456,12 @@ namespace TheOtherRoles
         public static CustomTasksOption jekyllAndHydeTasks;
         public static CustomOption jekyllAndHydeNumTasks;
 
+        public static CustomRoleOption moriartySpawnRate;
+        public static CustomOption moriartyBrainwashTime;
+        public static CustomOption moriartyBrainwashCooldown;
+        public static CustomOption moriartyNumberToWin;
+        public static CustomOption moriartyBrainwashDistance;
+        public static CustomOption moriartyKillDistance;
 
         public static CustomOption enabledHorseMode;
         public static CustomOption delayBeforeMeeting;
@@ -797,6 +808,18 @@ namespace TheOtherRoles
             jekyllAndHydeTasks = new CustomTasksOption(1106, CustomOptionType.Neutral, 1, 2, 3, jekyllAndHydeSpawnRate);
             jekyllAndHydeNumTasks = CustomOption.Create(1107, CustomOptionType.Neutral, "jekyllAndHydeNumTasks", 3f, 1f, 10f, 1f, jekyllAndHydeSpawnRate);
 
+            moriartySpawnRate = new CustomRoleOption(1110, CustomOptionType.Neutral, "moriarty", Moriarty.color, 1);
+            moriartyBrainwashCooldown = CustomOption.Create(1111, CustomOptionType.Neutral, "moriartyBrainwashCooldown", 0f, 0f, 20f, 0.25f, moriartySpawnRate);
+            moriartyBrainwashTime = CustomOption.Create(1112, CustomOptionType.Neutral, "moriartyBrainwashTime", 30f, 1f, 60f, 1f, moriartySpawnRate);
+            moriartyNumberToWin = CustomOption.Create(1114, CustomOptionType.Neutral, "moriartyNumberToWin", 2f, 0f, 10f, 1f, moriartySpawnRate);
+            moriartyBrainwashDistance = CustomOption.Create(1115, CustomOptionType.Neutral, "moriartyBrainwashDistance", new string[] { "short", "medium", "long" }, moriartySpawnRate);
+            moriartyKillDistance = CustomOption.Create(1116, CustomOptionType.Neutral, "moriartyKillDistance", new string[] { "short", "medium", "long" }, moriartySpawnRate);
+
+            sherlockSpawnRate = new CustomRoleOption(1120, CustomOptionType.Crewmate, "sherlock", Sherlock.color, 15);
+            sherlockRechargeTasksNumber = CustomOption.Create(1121, CustomOptionType.Crewmate, "sherlockRechargeTasksNumber", 4f, 1f, 15f, 1f, sherlockSpawnRate);
+            sherlockCooldown = CustomOption.Create(1122, CustomOptionType.Crewmate, "sherlockCooldown", 10f, 0f, 40f, 2.5f, sherlockSpawnRate);
+            sherlockInvetigateDistance = CustomOption.Create(1123, CustomOptionType.Crewmate, "sherlockInvetigateDistance", 5f, 1f, 15f, 1f, sherlockSpawnRate);
+
             munouSpawnRate = new CustomRoleOption(960, CustomOptionType.Modifier, "incompetent", Munou.color, 15);
             munouType = CustomOption.Create(963, CustomOptionType.Modifier, "incompetentType", new string[] { "incompetentSimple", "incompetentRandom" }, munouSpawnRate);
             munouProbability = CustomOption.Create(961, CustomOptionType.Modifier, "incompetentProbability", 60f, 0f, 100f, 10f, munouSpawnRate);
@@ -816,6 +839,7 @@ namespace TheOtherRoles
             sheriffMisfireKillsTarget = CustomOption.Create(104, CustomOptionType.Crewmate, "sheriffMisfireKillsTarget", false, sheriffSpawnRate);
             sheriffCanKillNoDeadBody = CustomOption.Create(105, CustomOptionType.Crewmate, "sheriffCanKillNoDeadBody", true, sheriffSpawnRate);
             sheriffCanKillNeutrals = CustomOption.Create(102, CustomOptionType.Crewmate, "sheriffCanKillNeutrals", false, sheriffSpawnRate);
+
 
             lighterSpawnRate = new CustomRoleOption(110, CustomOptionType.Crewmate, "lighter", Lighter.color, 15);
             lighterModeLightsOnVision = CustomOption.Create(111, CustomOptionType.Crewmate, "lighterModeLightsOnVision", 2f, 0.25f, 5f, 0.25f, lighterSpawnRate, format: "unitMultiplier");

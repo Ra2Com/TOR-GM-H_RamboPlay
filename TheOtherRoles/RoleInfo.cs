@@ -111,6 +111,8 @@ namespace TheOtherRoles
         public static RoleInfo mimicK;
         public static RoleInfo mimicA;
         public static RoleInfo jekyllAndHyde;
+        public static RoleInfo moriarty;
+        public static RoleInfo sherlock;
         public static List<RoleInfo> allRoleInfos;
         public static void Load()
         {
@@ -180,6 +182,8 @@ namespace TheOtherRoles
             mimicK = new RoleInfo("mimicK", MimicK.color, CustomOptionHolder.mimicSpawnRate, RoleType.MimicK);
             mimicA = new RoleInfo("mimicA", MimicA.color, CustomOptionHolder.mimicSpawnRate, RoleType.MimicA);
             jekyllAndHyde = new RoleInfo("jekyllAndHyde", JekyllAndHyde.color, CustomOptionHolder.jekyllAndHydeSpawnRate, RoleType.JekyllAndHyde);
+            moriarty = new RoleInfo("moriarty", Moriarty.color, CustomOptionHolder.moriartySpawnRate, RoleType.Moriarty);
+            sherlock = new RoleInfo("sherlock", Sherlock.color, CustomOptionHolder.sherlockSpawnRate, RoleType.Sherlock);
             allRoleInfos = new List<RoleInfo>()
             {
                 impostor,
@@ -248,6 +252,8 @@ namespace TheOtherRoles
                 mimicK,
                 mimicA,
                 jekyllAndHyde,
+                moriarty,
+                sherlock,
             };
         }
 
@@ -340,6 +346,9 @@ namespace TheOtherRoles
             if (p.isRole(RoleType.MimicK)) infos.Add(mimicK);
             if (p.isRole(RoleType.MimicA)) infos.Add(mimicA);
             if (p.isRole(RoleType.JekyllAndHyde)) infos.Add(jekyllAndHyde);
+            if (p.isRole(RoleType.Moriarty)) infos.Add(moriarty);
+            if (p.isRole(RoleType.Sherlock)) infos.Add(sherlock);
+
 
 
             // Default roles

@@ -968,6 +968,51 @@
         "0": "Transparent map",
         "11": "\u900f\u904e\u30de\u30c3\u30d7"
     },
+    "moriarty": {
+        "0": "Moriarty",
+        "11": "\u30e2\u30ea\u30a2\u30fc\u30c6\u30a3"
+    },
+    "moriartyBrainwashCooldown": {
+        "0": "Brainwash cooldown",
+        "11": "\u6d17\u8133\u30af\u30fc\u30eb\u30c0\u30a6\u30f3"
+    },
+    "moriartyBrainwashTime": {
+        "0": "Brainwash effective time",
+        "11": "\u6d17\u8133\u6709\u52b9\u6642\u9593"
+    },
+    "moriartyBrainwashDuration": {
+        "0": "Brainwash Duration",
+        "11": "\u6d17\u8133\u306b\u5fc5\u8981\u306a\u6642\u9593"
+    },
+    "moriartyNumberToWin": {
+        "0": "Number of kills are required to win",
+        "11": "\u52dd\u5229\u306b\u5fc5\u8981\u306a\u30ad\u30eb\u6570"
+    },
+    "moriartyBrainwashDistance": {
+        "0": "Brainwash Distance",
+        "11": "\u6d17\u8133\u8ddd\u96e2"
+    },
+    "moriartyKillDistance": {
+        "0": "Kill Distance",
+        "11": "\u30ad\u30eb\u8ddd\u96e2"
+    },
+    "short": {
+        "0": "Short",
+        "11": "\u30b7\u30e7\u30fc\u30c8"
+    },
+    "medium": {
+        "0": "Medium",
+        "11": "\u30df\u30c7\u30a3\u30a2\u30e0",
+        "13": "\u901a\u7075\u5e08"
+    },
+    "long": {
+        "0": "Long",
+        "11": "\u30ed\u30f3\u30b0"
+    },
+    "moriartyWin": {
+        "0": "Moriarty Win",
+        "11": "\u30e2\u30ea\u30a2\u30fc\u30c6\u30a3\u52dd\u5229"
+    },
     "torSettings": {
         "0": "The Other Roles Settings",
         "11": "The Other Roles\u306e\u8a2d\u5b9a",
@@ -2627,11 +2672,6 @@
         "0": "Remaining: {0}",
         "11": "\u6b8b\u308a {0}\u4f53",
         "13": "\u5269\u4f59: {0}"
-    },
-    "medium": {
-        "0": "Medium",
-        "11": "\u30df\u30c7\u30a3\u30a2\u30e0",
-        "13": "\u901a\u7075\u5e08"
     },
     "mediumIntroDesc": {
         "0": "Question the souls of the dead to gain information",

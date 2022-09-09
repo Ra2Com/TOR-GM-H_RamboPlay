@@ -57,7 +57,7 @@ namespace TheOtherRoles
                 SoundManager._Instance.PlaySound(laugh, false, 1f);
             }
             soundFlag = false;
-            if (!isAlive && (CachedPlayer.LocalPlayer.PlayerControl.isImpostor() || CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Jackal) || CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.JekyllAndHyde)))
+            if (!isAlive && (CachedPlayer.LocalPlayer.PlayerControl.isImpostor() || CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Jackal) || CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.JekyllAndHyde) || CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Moriarty)))
             {
                 string msg = $"人形遣いのカウント数 {counter}/{numKills}";
                 if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
@@ -382,7 +382,7 @@ namespace TheOtherRoles
         public static void OnTargetExiled()
         {
             bool isAlive = Puppeteer.allPlayers.FindAll(x => x.isAlive()).Count >= 1;
-            if (!target.isImpostor() && !target.isRole(RoleType.Jackal) && !target.isRole(RoleType.JekyllAndHyde) && isAlive)
+            if (!target.isImpostor() && !target.isRole(RoleType.Jackal) && !target.isRole(RoleType.JekyllAndHyde) && !target.isRole(RoleType.Moriarty) && isAlive)
             {
                 counter += 1;
             }
@@ -472,7 +472,7 @@ namespace TheOtherRoles
                 {
                     if (p.Data.IsDead || !p.Data.Role) continue;
                     Arrow arrow;
-                    if (p.Data.Role.IsImpostor || p.isRole(RoleType.Jackal) || p.isRole(RoleType.JekyllAndHyde) || p == target)
+                    if (p.Data.Role.IsImpostor || p.isRole(RoleType.Jackal) || p.isRole(RoleType.JekyllAndHyde) || p.isRole(RoleType.Moriarty) || p == target)
                     {
                         if (p.Data.Role.IsImpostor)
                         {
@@ -485,6 +485,10 @@ namespace TheOtherRoles
                         else if (p.isRole(RoleType.JekyllAndHyde))
                         {
                             arrow = new Arrow(JekyllAndHyde.color);
+                        }
+                        else if (p.isRole(RoleType.Moriarty))
+                        {
+                            arrow = new Arrow(Moriarty.color);
                         }
                         else if (p == target)
                         {

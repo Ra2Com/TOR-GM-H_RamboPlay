@@ -303,6 +303,7 @@ namespace TheOtherRoles.Patches
                 neutralSettings.Add((byte)RoleType.Puppeteer, CustomOptionHolder.puppeteerSpawnRate.data);
                 neutralSettings.Add((byte)RoleType.JekyllAndHyde, CustomOptionHolder.jekyllAndHydeSpawnRate.data);
                 neutralSettings.Add((byte)RoleType.Akujo, CustomOptionHolder.akujoSpawnRate.data);
+                neutralSettings.Add((byte)RoleType.Moriarty, CustomOptionHolder.moriartySpawnRate.data);
 
 
                 crewSettings.Add((byte)RoleType.FortuneTeller, CustomOptionHolder.fortuneTellerSpawnRate.data);
@@ -320,6 +321,7 @@ namespace TheOtherRoles.Patches
                 crewSettings.Add((byte)RoleType.Bait, CustomOptionHolder.baitSpawnRate.data);
                 crewSettings.Add((byte)RoleType.SecurityGuard, CustomOptionHolder.securityGuardSpawnRate.data);
                 crewSettings.Add((byte)RoleType.Medium, CustomOptionHolder.mediumSpawnRate.data);
+                crewSettings.Add((byte)RoleType.Sherlock, CustomOptionHolder.sherlockSpawnRate.data);
                 if (impostors.Count > 1)
                 {
                     // Only add Spy if more than 1 impostor as the spy role is otherwise useless

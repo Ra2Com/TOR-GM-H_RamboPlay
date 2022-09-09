@@ -27,6 +27,7 @@ namespace TheOtherRoles
             Impostor = 2,
             Jackal = 3,
             JekyllAndHyde = 4,
+            Moriarty = 5,
         }
 
         public static Color color = Color.grey;
@@ -68,6 +69,14 @@ namespace TheOtherRoles
                     setPlayerOutline(currentTarget, Sheriff.color);
                 }
             }
+            if (player == CachedPlayer.LocalPlayer.PlayerControl && team == Team.Moriarty)
+            {
+                if (Moriarty.livingPlayers.Count == 0 || !cantKillUntilLastOne)
+                {
+                    currentTarget = setTarget();
+                    setPlayerOutline(currentTarget, Sheriff.color);
+                }
+            }
             if (player == CachedPlayer.LocalPlayer.PlayerControl && team == Team.Impostor && !isLastImpostor() && cantKillUntilLastOne)
             {
                 FastDestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(null);
@@ -92,6 +101,7 @@ namespace TheOtherRoles
                     candidates.Add(Team.Crew);
                     candidates.Add(Team.Impostor);
                     if (JekyllAndHyde.exists) candidates.Add(Team.JekyllAndHyde);
+                    if (Moriarty.exists) candidates.Add(Team.Moriarty);
                     if (Jackal.jackal != null) candidates.Add(Team.Jackal);
                     int rndVal = rnd.Next(0, candidates.Count);
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
@@ -121,6 +131,10 @@ namespace TheOtherRoles
                 else if (killer.isRole(RoleType.JekyllAndHyde))
                 {
                     setJekyllAndHydeFlag();
+                }
+                else if (killer.isRole(RoleType.Moriarty))
+                {
+                    setMoriartyFlag();
                 }
                 else if (isCrewOrSchrodingersCat)
                 {
@@ -195,7 +209,7 @@ namespace TheOtherRoles
                     killButton.Timer = killButton.MaxTimer;
                     Jackal.currentTarget = null;
                 },
-                () => { return isJackalButtonEnable() || isJekyllAndHydeButtonEnable(); },
+                () => { return isJackalButtonEnable() || isJekyllAndHydeButtonEnable() || isMoriartyButtonEnable(); },
                 () => { return SchrodingersCat.currentTarget && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
                 () => { killButton.Timer = killButton.MaxTimer; },
                 hm.KillButton.graphic.sprite,
@@ -242,6 +256,11 @@ namespace TheOtherRoles
             team = Team.JekyllAndHyde;
             RoleInfo.jekyllAndHyde.color = JekyllAndHyde.color;
         }
+        public static void setMoriartyFlag()
+        {
+            team = Team.Moriarty;
+            RoleInfo.moriarty.color = Moriarty.color;
+        }
 
         public static bool isJackalButtonEnable()
         {
@@ -260,6 +279,18 @@ namespace TheOtherRoles
             if (team == Team.JekyllAndHyde && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.SchrodingersCat) && CachedPlayer.LocalPlayer.PlayerControl.isAlive())
             {
                 if (JekyllAndHyde.livingPlayers.Count == 0 || !cantKillUntilLastOne)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool isMoriartyButtonEnable()
+        {
+            if (team == Team.Moriarty && PlayerControl.LocalPlayer.isRole(RoleType.SchrodingersCat) && PlayerControl.LocalPlayer.isAlive())
+            {
+                if (Moriarty.livingPlayers.Count == 0 || !cantKillUntilLastOne)
                 {
                     return true;
                 }

@@ -129,6 +129,8 @@ namespace TheOtherRoles
         AkujoSetHonmei,
         AkujoSetKeep,
         AkujoSuicide,
+        SetBrainwash,
+        MoriartyKill,
     }
 
     public static class RPCProcedure
@@ -1461,6 +1463,23 @@ namespace TheOtherRoles
             }
         }
 
+        public static void setBrainwash(byte playerId)
+        {
+            var p = Helpers.playerById(playerId);
+            Moriarty.target = p;
+            Moriarty.brainwashed.Add(p);
+        }
+        public static void moriartyKill(byte targetId)
+        {
+            PlayerControl target = Helpers.getPlayerById(targetId);
+            finalStatuses[targetId] = FinalStatus.BrainWashKill;
+            if(PlayerControl.LocalPlayer == Moriarty.target)
+            {
+                if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
+            }
+            Moriarty.counter += 1;
+        }
+
         [HarmonyPatch(typeof(CustomNetworkTransform), nameof(CustomNetworkTransform.HandleRpc))]
         class CustomNetworkTransformRPCHandlerPatch
         {
@@ -1890,6 +1909,12 @@ namespace TheOtherRoles
                             byte[] timerTmp = reader.ReadBytes(4);
                             float timer = System.BitConverter.ToSingle(timerTmp, 0);
                             RPCProcedure.syncKillTimer(impostorId, timer);
+                            break;
+                        case (byte)CustomRPC.SetBrainwash:
+                            RPCProcedure.setBrainwash(reader.ReadByte());
+                            break;
+                        case (byte)CustomRPC.MoriartyKill:
+                            RPCProcedure.moriartyKill(reader.ReadByte());
                             break;
                         case (byte)CustomRPC.WorkaroundSetRoles:
                             RPCProcedure.workaroundSetRoles(reader.ReadByte(), reader);

@@ -35,6 +35,8 @@ namespace TheOtherRoles
             SoulPlayer.SetButtonCooldowns();
             JekyllAndHyde.SetButtonCooldowns();
             Akujo.SetButtonCooldowns();
+            Moriarty.SetButtonCooldowns();
+            Sherlock.SetButtonCooldowns();
             foreach (CustomButton gmButton in gmButtons)
             {
                 gmButton.MaxTimer = 0.0f;
@@ -70,6 +72,8 @@ namespace TheOtherRoles
             MimicA.MakeButtons(hm);
             JekyllAndHyde.MakeButtons(hm);
             Akujo.MakeButtons(hm);
+            Moriarty.MakeButtons(hm);
+            Sherlock.MakeButtons(hm);
 
             gmButtons = new List<CustomButton>();
             gmKillButtons = new List<CustomButton>();

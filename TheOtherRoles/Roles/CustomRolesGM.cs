@@ -45,6 +45,8 @@ namespace TheOtherRoles
             AntiTeleport.Clear();
             JekyllAndHyde.Clear();
             Akujo.Clear();
+            Moriarty.Clear();
+            Sherlock.Clear();
             Role.ClearAll();
         }
 

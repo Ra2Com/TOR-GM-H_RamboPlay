@@ -351,6 +351,7 @@ namespace TheOtherRoles
                     player.isRole(RoleType.SchrodingersCat) ||
                     player.isRole(RoleType.Puppeteer) ||
                     (player.isRole(RoleType.JekyllAndHyde) && !JekyllAndHyde.isJekyll()) ||
+                    player.isRole(RoleType.Moriarty) ||
                     player == Puppeteer.dummy ||
                     player.isRole(RoleType.Vulture) ||
                     player.isRole(RoleType.Lawyer) ||
@@ -553,6 +554,8 @@ namespace TheOtherRoles
             else if (Vulture.canUseVents && player.isRole(RoleType.Vulture))
                 roleCouldUse = true;
             else if (player.isRole(RoleType.JekyllAndHyde) && !JekyllAndHyde.isJekyll())
+                roleCouldUse = true;
+            else if (player.isRole(RoleType.Moriarty))
                 roleCouldUse = true;
             else if (player.Data?.Role != null && player.Data.Role.CanVent)
             {
@@ -816,6 +819,7 @@ namespace TheOtherRoles
                 || (player.hasModifier(ModifierType.CreatedMadmate) && CreatedMadmate.hasImpostorVision) // Impostor, Jackal/Sidekick, Spy, or Madmate with Impostor vision
                 || player.isRole(RoleType.Puppeteer)
                 || (player.isRole(RoleType.JekyllAndHyde) && !JekyllAndHyde.isJekyll())
+                || (player.isRole(RoleType.Moriarty))
                 || (Jester.jester != null && Jester.jester.PlayerId == player.PlayerId && Jester.hasImpostorVision) // Jester with Impostor vision
                 || player.isRole(RoleType.Fox))
             {

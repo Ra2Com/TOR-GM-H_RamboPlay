@@ -165,6 +165,10 @@ namespace TheOtherRoles.Patches
             {
                 setPlayerNameColor(CachedPlayer.LocalPlayer.PlayerControl, Akujo.color);
             }
+            else if (PlayerControl.LocalPlayer.isRole(RoleType.Sherlock))
+            {
+                setPlayerNameColor(PlayerControl.LocalPlayer, Sherlock.color);
+            }
 
             if (CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.Madmate))
             {
@@ -264,6 +268,7 @@ namespace TheOtherRoles.Patches
             bool impostorFlag = player.isRole(RoleType.SchrodingersCat) || player.isImpostor();
             bool jackalFlag = player.isRole(RoleType.SchrodingersCat) || player.isRole(RoleType.Jackal) || player.isRole(RoleType.Sidekick);
             bool jekyllAndHydeFlag = player.isRole(RoleType.SchrodingersCat) || player.isRole(RoleType.JekyllAndHyde);
+            bool moriartyFlag = player.isRole(RoleType.SchrodingersCat) || player.isRole(RoleType.Moriarty);
             if (SchrodingersCat.team == SchrodingersCat.Team.Crew)
             {
                 foreach (var p in SchrodingersCat.allPlayers)
@@ -308,6 +313,20 @@ namespace TheOtherRoles.Patches
                     foreach (var p in JekyllAndHyde.allPlayers)
                     {
                         setPlayerNameColor(p, JekyllAndHyde.color);
+                    }
+                }
+            }
+            else if (SchrodingersCat.team == SchrodingersCat.Team.Moriarty && moriartyFlag)
+            {
+                foreach (var p in SchrodingersCat.allPlayers)
+                {
+                    setPlayerNameColor(p, Moriarty.color);
+                }
+                if (player.isRole(RoleType.SchrodingersCat))
+                {
+                    foreach (var p in Moriarty.allPlayers)
+                    {
+                        setPlayerNameColor(p, Moriarty.color);
                     }
                 }
             }
