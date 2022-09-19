@@ -47,6 +47,7 @@ namespace TheOtherRoles
         public static ConfigEntry<ushort> Port { get; set; }
         public static ConfigEntry<string> DebugRepo { get; private set; }
         public static ConfigEntry<string> ShowPopUpVersion { get; set; }
+        public static ConfigEntry<string> WebhookUrl { get; set; }
 
         public static Sprite ModStamp;
 
@@ -58,13 +59,15 @@ namespace TheOtherRoles
                 new DnsRegionInfo("haoming-server.com", "haoming-server", StringNames.NoTranslation, "haoming-server.com", 22023, false).CastFast<IRegionInfo>(),
                 new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false).CastFast<IRegionInfo>()
             };
-            #nullable enable
-            IRegionInfo ? currentRegion = serverManager.CurrentRegion;
-            #nullable disable
-                        foreach (IRegionInfo region in regions) {
+#nullable enable
+            IRegionInfo? currentRegion = serverManager.CurrentRegion;
+#nullable disable
+            foreach (IRegionInfo region in regions)
+            {
                 if (region == null)
                     Logger.LogError("Could not add region");
-                else {
+                else
+                {
                     if (currentRegion != null && region.Name.Equals(currentRegion.Name, StringComparison.OrdinalIgnoreCase))
                         currentRegion = region;
                     serverManager.AddOrUpdateRegion(region);
@@ -72,7 +75,8 @@ namespace TheOtherRoles
             }
 
             // AU remembers the previous region that was set, so we need to restore it
-            if (currentRegion != null) {
+            if (currentRegion != null)
+            {
                 Logger.LogDebug("Resetting previous region");
                 serverManager.SetRegion(currentRegion);
             }
@@ -99,6 +103,7 @@ namespace TheOtherRoles
             StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles GM");
             StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
             DebugRepo = Config.Bind("Custom", "Debug Hat Repo", "");
+            WebhookUrl = Config.Bind("Custom", "WebhookUrl", "");
 
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);

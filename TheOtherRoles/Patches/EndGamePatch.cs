@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using HarmonyLib;
 using UnityEngine;
 using static TheOtherRoles.GameHistory;
@@ -93,6 +94,7 @@ namespace TheOtherRoles.Patches
             public string NameSuffix { get; set; }
             public List<RoleInfo> Roles { get; set; }
             public string RoleString { get; set; }
+            public int ColorId = 0;
             public int TasksCompleted { get; set; }
             public int TasksTotal { get; set; }
             public FinalStatus Status { get; set; }
@@ -184,6 +186,7 @@ namespace TheOtherRoles.Patches
                 {
                     PlayerName = p.PlayerName,
                     PlayerId = p.PlayerId,
+                    ColorId = p.DefaultOutfit.ColorId,
                     NameSuffix = Lovers.getIcon(p.Object),
                     Roles = roles,
                     RoleString = RoleInfo.GetRolesString(p.Object, true, excludeRoles, true),
@@ -808,6 +811,7 @@ namespace TheOtherRoles.Patches
                                 {
                                     float progress = AdditionalTempData.plagueDoctorProgress.ContainsKey(data.PlayerId) ? AdditionalTempData.plagueDoctorProgress[data.PlayerId] : 0f;
                                     result += PlagueDoctor.getProgressString(progress);
+
                                 }
                             }
                             roleSummaryText.AppendLine(result);
@@ -826,6 +830,46 @@ namespace TheOtherRoles.Patches
                         var roleSummaryTextMeshRectTransform = roleSummaryTextMesh.GetComponent<RectTransform>();
                         roleSummaryTextMeshRectTransform.anchoredPosition = new Vector2(position.x + 3.5f, position.y - 0.1f);
                         roleSummaryTextMesh.text = roleSummaryText.ToString();
+
+                        // webhook
+                        if (AmongUsClient.Instance.AmHost)
+                        {
+                            List<Dictionary<string, object>> msg = new();
+                            Dictionary<string, object> embeds = new();
+                            List<Dictionary<string, object>> fields = new();
+                            foreach (var data in AdditionalTempData.playerRoles)
+                            {
+                                if (data.PlayerName == "") continue;
+                                // var taskInfo = data.TasksTotal > 0 ? $"{data.TasksCompleted}/{data.TasksTotal}" : "タスクなし";
+                                var taskInfo = string.Format("{0:D2}", data.TasksCompleted) + "/" + string.Format("{0:D2}", data.TasksTotal);
+                                string aliveDead = ModTranslation.getString("roleSummary" + data.Status.ToString(), def: "-");
+                                string result = "";
+                                result += TempData.winners.ToArray().Count(x=> x.PlayerName == data.PlayerName) != 0 ? ":crown: | " : ":skull: | ";
+                                result += string.Format("{0,-6} | {1,-2} | {2}", taskInfo, aliveDead, data.RoleString);
+                                if (plagueExists && !data.Roles.Contains(RoleInfo.plagueDoctor))
+                                {
+                                    result += " | ";
+                                    if (AdditionalTempData.plagueDoctorInfected.ContainsKey(data.PlayerId))
+                                    {
+                                        result += Helpers.cs(Color.red, ModTranslation.getString("plagueDoctorInfectedText"));
+                                    }
+                                    else
+                                    {
+                                        float progress = AdditionalTempData.plagueDoctorProgress.ContainsKey(data.PlayerId) ? AdditionalTempData.plagueDoctorProgress[data.PlayerId] : 0f;
+                                        result += PlagueDoctor.getProgressString(progress);
+                                    }
+                                }
+                                Dictionary<string, object> item = new();
+                                item.Add("name", Webhook.colorIdToEmoji(data.ColorId) + data.PlayerName + data.NameSuffix);
+                                item.Add("value", Regex.Replace(result, @"<[^>]*>", ""));
+                                // item.Add("inline", true);
+                                fields.Add(item);
+                            }
+
+                            embeds.Add("fields", fields);
+                            msg.Add(embeds);
+                            Webhook.post(msg, bonusText, extraText);
+                        }
                     }
                     AdditionalTempData.clear();
                 }
