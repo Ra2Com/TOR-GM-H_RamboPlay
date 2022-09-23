@@ -91,6 +91,11 @@ namespace TheOtherRoles
                 }
             }
         }
+        public override void OnFinishShipStatusBegin()
+        {
+            PlayerControl.LocalPlayer.clearAllTasks();
+            local.assignTasks();
+        }
 
         public override void FixedUpdate()
         {
@@ -438,18 +443,6 @@ namespace TheOtherRoles
         public void assignTasks()
         {
             player.generateAndAssignTasks(numCommonTasks, numShortTasks, numLongTasks);
-        }
-
-        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
-        class BeginCrewmatePatch
-        {
-            public static void Postfix(ShipStatus __instance)
-            {
-                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Fox))
-                {
-                    local.assignTasks();
-                }
-            }
         }
 
         // 透明化

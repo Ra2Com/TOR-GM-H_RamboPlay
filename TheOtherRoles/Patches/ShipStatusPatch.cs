@@ -126,6 +126,11 @@ namespace TheOtherRoles.Patches
             PlayerControl.GameOptions.NumCommonTasks = originalNumCommonTasksOption;
             PlayerControl.GameOptions.NumShortTasks = originalNumShortTasksOption;
             PlayerControl.GameOptions.NumLongTasks = originalNumLongTasksOption;
+
+            // 一部役職のタスクを再割り当てする
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.FinishShipStatusBegin, Hazel.SendOption.Reliable, -1);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.finishShipStatusBegin();
         }
         [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Start))]
         class ShipStatusStartPatch

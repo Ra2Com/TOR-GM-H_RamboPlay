@@ -70,6 +70,15 @@ namespace TheOtherRoles
             suicideButton.Timer = suicideButton.MaxTimer;
         }
         public override void OnDeath(PlayerControl killer = null) { }
+        public override void OnFinishShipStatusBegin()
+        {
+            PlayerControl.LocalPlayer.clearAllTasks();
+            local.assignTasks();
+            oddIsJekyll = TheOtherRoles.rnd.Next(0, 2) == 1;
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetOddIsJekyll, Hazel.SendOption.Reliable, -1);
+            writer.Write(oddIsJekyll);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+        }
         public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
 
         public static void MakeButtons(HudManager hm)
@@ -248,22 +257,6 @@ namespace TheOtherRoles
         public void assignTasks()
         {
             player.generateAndAssignTasks(numCommonTasks, numShortTasks, numLongTasks);
-        }
-
-        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
-        class BeginCrewmatePatch
-        {
-            public static void Postfix(ShipStatus __instance)
-            {
-                if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.JekyllAndHyde))
-                {
-                    local.assignTasks();
-                    oddIsJekyll = TheOtherRoles.rnd.Next(0, 2) == 1;
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetOddIsJekyll, Hazel.SendOption.Reliable, -1);
-                    writer.Write(oddIsJekyll);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                }
-            }
         }
     }
 }

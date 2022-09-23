@@ -134,6 +134,7 @@ namespace TheOtherRoles
         public abstract void FixedUpdate();
         public abstract void OnKill(PlayerControl target);
         public abstract void OnDeath(PlayerControl killer = null);
+        public abstract void OnFinishShipStatusBegin();
         public abstract void HandleDisconnect(PlayerControl player, DisconnectReasons reason);
         public virtual void ResetRole() { }
         public virtual void PostInit() { }
@@ -650,6 +651,18 @@ namespace TheOtherRoles
 
             if (MeetingHud.Instance?.state != MeetingHud.VoteStates.Animating)
                 RPCProcedure.updateMeeting(player.PlayerId, true);
+        }
+
+        public static void OnFinishShipStatusBegin(this PlayerControl player)
+        {
+            HudManager.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) =>
+            {
+                if(p == 1f)
+                {
+                    Role.allRoles.DoIf(x => x.player == player, x => x.OnFinishShipStatusBegin());
+                    Modifier.allModifiers.DoIf(x => x.player == player, x => x.OnFinishShipStatusBegin());
+                }
+            })));
         }
     }
 }

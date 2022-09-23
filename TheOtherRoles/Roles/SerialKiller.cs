@@ -53,6 +53,7 @@ namespace TheOtherRoles
         }
 
         public override void OnDeath(PlayerControl killer) { }
+        public override void OnFinishShipStatusBegin() { }
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite()

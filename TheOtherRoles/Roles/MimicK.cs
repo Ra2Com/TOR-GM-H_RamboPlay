@@ -70,6 +70,7 @@ namespace TheOtherRoles
                 }
             }
         }
+        public override void OnFinishShipStatusBegin() { }
         public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
 
         public static void MakeButtons(HudManager hm) { }

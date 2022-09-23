@@ -94,6 +94,7 @@ namespace TheOtherRoles
             counter -= penaltyOnDeath;
             setOpacity(player, 1f);
         }
+        public override void OnFinishShipStatusBegin() { }
         public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
 
         public static Sprite getSampleButtonSprite()

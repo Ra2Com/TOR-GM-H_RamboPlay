@@ -92,6 +92,7 @@ namespace TheOtherRoles
                 RPCProcedure.plagueDoctorInfected(targetId);
             }
         }
+        public override void OnFinishShipStatusBegin() { }
 
         public override void FixedUpdate()
         {

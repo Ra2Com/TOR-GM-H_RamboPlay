@@ -57,6 +57,7 @@ namespace TheOtherRoles
             killCounter += 1;
         }
         public override void OnDeath(PlayerControl killer = null) { }
+        public override void OnFinishShipStatusBegin() { }
         public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
 
         public static List<CustomButton> lastImpostorButtons = new();

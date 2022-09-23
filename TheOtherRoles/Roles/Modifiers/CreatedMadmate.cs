@@ -70,6 +70,7 @@ namespace TheOtherRoles
         {
             player.clearAllTasks();
         }
+        public override void OnFinishShipStatusBegin() { }
 
         public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
 

@@ -112,6 +112,7 @@ namespace TheOtherRoles
         {
             if (player == CachedPlayer.LocalPlayer.PlayerControl && CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.Munou)) resetColors();
         }
+        public override void OnFinishShipStatusBegin() { }
         public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
 
         public static void MakeButtons(HudManager hm) { }

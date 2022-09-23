@@ -124,6 +124,7 @@ namespace TheOtherRoles
             stealthed = false;
             ninjaButton.isEffectActive = false;
         }
+        public override void OnFinishShipStatusBegin() { }
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite()

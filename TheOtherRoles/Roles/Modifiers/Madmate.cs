@@ -128,22 +128,16 @@ namespace TheOtherRoles
             player.clearAllTasks();
         }
 
+        public override void OnFinishShipStatusBegin()
+        {
+            PlayerControl.LocalPlayer.clearAllTasks();
+            local.assignTasks();
+        }
+
         public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
 
         public static void MakeButtons(HudManager hm) { }
         public static void SetButtonCooldowns() { }
-
-        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
-        class BeginCrewmatePatch
-        {
-            public static void Postfix(ShipStatus __instance)
-            {
-                if (hasTasks && hasModifier(CachedPlayer.LocalPlayer.PlayerControl))
-                {
-                    local.assignTasks();
-                }
-            }
-        }
 
         public void assignTasks()
         {

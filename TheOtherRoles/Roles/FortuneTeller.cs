@@ -62,6 +62,7 @@ namespace TheOtherRoles
         public override void OnKill(PlayerControl target) { }
         public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
         public override void OnDeath(PlayerControl killer = null) { }
+        public override void OnFinishShipStatusBegin() { }
 
         public override void FixedUpdate()
         {

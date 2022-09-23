@@ -35,6 +35,7 @@ namespace TheOtherRoles
         UncheckedEndGame,
         UncheckedSetTasks,
         DynamicMapOption,
+        FinishShipStatusBegin,
 
         // Role functionality
 
@@ -177,6 +178,11 @@ namespace TheOtherRoles
                     checkList[playerId] = true;
                 }
             }
+        }
+
+        public static void finishShipStatusBegin()
+        {
+            PlayerControl.LocalPlayer.OnFinishShipStatusBegin();
         }
 
         public static void ShareOptions(int numberOfOptions, MessageReader reader)
@@ -1503,6 +1509,9 @@ namespace TheOtherRoles
                             break;
                         case (byte)CustomRPC.FinishResetVariables:
                             RPCProcedure.finishResetVariables(reader.ReadByte());
+                            break;
+                        case (byte)CustomRPC.FinishShipStatusBegin:
+                            RPCProcedure.finishShipStatusBegin();
                             break;
                         case (byte)CustomRPC.ShareOptions:
                             RPCProcedure.ShareOptions((int)reader.ReadPackedUInt32(), reader);

@@ -75,6 +75,7 @@ namespace TheOtherRoles
             }
             meetingKiller = null;
         }
+        public override void OnFinishShipStatusBegin() { }
 
         public static void meetingKill(PlayerControl player, PlayerControl killer)
         {
