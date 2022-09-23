@@ -460,6 +460,9 @@ EvilHackerのアイデアとコード
 
 抽選処理の偏り排除のアイデアとコード  
 [yukieiji/ExtremeRoles](https://github.com/yukieiji/ExtremeRoles.git)
+
+データオブジェクトのシリアライズ
+[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
 <hr>
 ↓ここから本家のREADMEそのもの↓
 # The Other Roles: GM Edition
