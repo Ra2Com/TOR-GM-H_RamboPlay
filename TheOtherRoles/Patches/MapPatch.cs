@@ -601,4 +601,63 @@ namespace TheOtherRoles.Patches
             return false;
         }
     }
+
+    // イビルハッカー能力持ちはコミュサボの影響を受けない
+    [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.OnEnable))]
+    class MapCountOverlayEnablePatch
+    {
+        public static bool Prefix(MapCountOverlay __instance)
+        {
+            if(CustomOptionHolder.impostorCanIgnoreComms.getBool() && CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+    [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
+    class MapCountOverlayUpdatePatch
+    {
+        public static bool Prefix(MapCountOverlay __instance)
+        {
+            if(CustomOptionHolder.impostorCanIgnoreComms.getBool() && CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
+            {
+                __instance.timer += Time.deltaTime;
+                if (__instance.timer < 0.1f)
+                {
+                    return false;
+                }
+                __instance.timer = 0f;
+                for (int i = 0; i < __instance.CountAreas.Length; i++)
+                {
+                    CounterArea counterArea = __instance.CountAreas[i];
+                    PlainShipRoom plainShipRoom;
+                    if (ShipStatus.Instance.FastRooms.TryGetValue(counterArea.RoomType, out plainShipRoom) && plainShipRoom.roomArea)
+                    {
+                        int num = plainShipRoom.roomArea.OverlapCollider(__instance.filter, __instance.buffer);
+                        int num2 = num;
+                        for (int j = 0; j < num; j++)
+                        {
+                            Collider2D collider2D = __instance.buffer[j];
+                            if (!(collider2D.tag == "DeadBody"))
+                            {
+                                PlayerControl component = collider2D.GetComponent<PlayerControl>();
+                                if (!component || component.Data == null || component.Data.Disconnected || component.Data.IsDead)
+                                {
+                                    num2--;
+                                }
+                            }
+                        }
+                        counterArea.UpdateCount(num2);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Couldn't find counter for:" + counterArea.RoomType.ToString());
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+    }
 }

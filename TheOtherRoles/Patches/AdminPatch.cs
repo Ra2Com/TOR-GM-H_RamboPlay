@@ -233,6 +233,7 @@ namespace TheOtherRoles.Patches
                 bool commsActive = false;
                 foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
                     if (task.TaskType == TaskTypes.FixComms) commsActive = true;
+                if(CustomOptionHolder.impostorCanIgnoreComms.getBool() && CachedPlayer.LocalPlayer.PlayerControl.isImpostor()) commsActive = false;
 
                 if (!__instance.isSab && commsActive)
                 {
