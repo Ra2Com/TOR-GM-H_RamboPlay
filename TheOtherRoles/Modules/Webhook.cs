@@ -97,7 +97,7 @@ namespace TheOtherRoles
         }
         public static void post(List<Dictionary<string, object>> embeds, string bonusText, string extraText)
         {
-            if (TheOtherRolesPlugin.WebhookUrl.Value != "")
+            if (TheOtherRolesPlugin.WebhookUrl.Value != "" && bonusText != "forceEnd")
             {
                 var value = new Dictionary<string, object>();
                 value.Add("content", "試合結果 " + ModTranslation.getString(bonusText) + " " + ModTranslation.getString(extraText));

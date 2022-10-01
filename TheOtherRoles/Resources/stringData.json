@@ -950,6 +950,11 @@
         "0": "Can win by task without living player",
         "11": "\u751f\u5b58\u8005\u304c\u3044\u306a\u304f\u3066\u3082\u30bf\u30b9\u30af\u52dd\u5229\u3067\u304d\u308b"
     },
+    "forceEnd": {
+        "0": "Force terminated",
+        "11": "\u5ec3\u6751",
+        "13": "\u5f3a\u5236\u7ec8\u6b62"
+    },
     "torSettings": {
         "0": "The Other Roles Settings",
         "11": "The Other Roles\u306e\u8a2d\u5b9a",

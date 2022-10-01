@@ -25,6 +25,7 @@ namespace TheOtherRoles.Patches
         PuppeteerWin = 19,
         JekyllAndHydeWin = 20,
         AkujoWin = 21,
+        ForceEnd = 22,
     }
 
     enum WinCondition
@@ -48,6 +49,7 @@ namespace TheOtherRoles.Patches
         PuppeteerWin,
         JekyllAndHydeWin,
         AkujoWin,
+        ForceEnd
     }
 
     enum FinalStatus
@@ -68,8 +70,10 @@ namespace TheOtherRoles.Patches
         Disconnected
     }
 
+
     static class AdditionalTempData
     {
+        public static bool forceEnd = false;
         // Should be implemented using a proper GameOverReason in the future
         public static WinCondition winCondition = WinCondition.Default;
         public static List<WinCondition> additionalWinConditions = new();
@@ -262,6 +266,7 @@ namespace TheOtherRoles.Patches
             bool jekyllAndHydeWin = JekyllAndHyde.exists && gameOverReason == (GameOverReason)CustomGameOverReason.JekyllAndHydeWin;
             bool everyoneDead = AdditionalTempData.playerRoles.All(x => x.Status != FinalStatus.Alive);
             bool akujoWin = Akujo.numAlive > 0 && gameOverReason != GameOverReason.HumansByTask;
+            bool forceEnd = AdditionalTempData.forceEnd;
 
 
             // Mini lose
@@ -451,6 +456,14 @@ namespace TheOtherRoles.Patches
                     TempData.winners.Add(wpd);
                 }
                 AdditionalTempData.winCondition = WinCondition.FoxWin;
+            }
+
+
+            else if (forceEnd)
+            {
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                AdditionalTempData.winCondition = WinCondition.ForceEnd;
+                AdditionalTempData.forceEnd = false;
             }
 
 
@@ -703,6 +716,12 @@ namespace TheOtherRoles.Patches
                     else if (AdditionalTempData.winCondition == WinCondition.EveryoneDied)
                     {
                         bonusText = "everyoneDied";
+                        textRenderer.color = Palette.DisabledGrey;
+                        __instance.BackgroundBar.material.SetColor("_Color", Palette.DisabledGrey);
+                    }
+                    else if (AdditionalTempData.winCondition == WinCondition.ForceEnd)
+                    {
+                        bonusText = "forceEnd";
                         textRenderer.color = Palette.DisabledGrey;
                         __instance.BackgroundBar.material.SetColor("_Color", Palette.DisabledGrey);
                     }

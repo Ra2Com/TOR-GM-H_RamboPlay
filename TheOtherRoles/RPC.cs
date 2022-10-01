@@ -208,6 +208,8 @@ namespace TheOtherRoles
             foreach (PlayerControl player in CachedPlayer.AllPlayers)
             {
                 Logger.info("ForceEnd", "Debug");
+                AdditionalTempData.forceEnd = true;
+
                 if (!player.Data.Role.IsImpostor)
                 {
                     player.RemoveInfected();
