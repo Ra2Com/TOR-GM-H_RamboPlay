@@ -19,10 +19,8 @@ namespace TheOtherRoles.Objects
         }
         public static void showBanner()
         {
-            Logger.info("ShowBanner1");
-            if (isInGame("ナカムラ") || isInGame("おふろ"))
+            if (isInGame("ナカムラ") || isInGame("リタ") || isInGame("おふろ"))
             {
-                Logger.info("ShowBanner2");
                 GameObject obj = new GameObject("Cornucopia");
                 obj.transform.position = new Vector3(-4.14f, -8.12f, 0);
                 obj.transform.localScale = new Vector3(0.19f, 0.19f, 1f);
