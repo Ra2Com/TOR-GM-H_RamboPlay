@@ -856,7 +856,7 @@ namespace TheOtherRoles
             hackerNoMove = CustomOption.Create(176, CustomOptionType.Crewmate, "hackerNoMove", true, hackerSpawnRate);
 
             trackerSpawnRate = new CustomRoleOption(200, CustomOptionType.Crewmate, "tracker", Tracker.color, 1);
-            trackerUpdateInterval = CustomOption.Create(201, CustomOptionType.Crewmate, "Tracker Update Interval", 5f, 1f, 30f, 1f, trackerSpawnRate);
+            trackerUpdateInterval = CustomOption.Create(201, CustomOptionType.Crewmate, "trackerUpdateInterval", 5f, 1f, 30f, 1f, trackerSpawnRate);
             trackerResetTargetAfterMeeting = CustomOption.Create(202, CustomOptionType.Crewmate, "trackerResetTargetAfterMeeting", false, trackerSpawnRate);
             trackerCanTrackCorpses = CustomOption.Create(203, CustomOptionType.Crewmate, "trackerTrackCorpses", true, trackerSpawnRate);
             trackerCorpsesTrackingCooldown = CustomOption.Create(204, CustomOptionType.Crewmate, "trackerCorpseCooldown", 30f, 0f, 120f, 5f, trackerCanTrackCorpses, format: "unitSeconds");

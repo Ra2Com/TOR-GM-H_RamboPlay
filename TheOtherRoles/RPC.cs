@@ -755,7 +755,7 @@ namespace TheOtherRoles
             // If the local player is impostor indicate lights out
             if (CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor)
             {
-                new CustomMessage("tricksterLightsOutText", Trickster.lightsOutDuration);
+                new CustomMessage(ModTranslation.getString("tricksterLightsOutText"), Trickster.lightsOutDuration);
             }
         }
 
