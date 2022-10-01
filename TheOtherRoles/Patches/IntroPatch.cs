@@ -6,6 +6,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 using HarmonyLib;
 using Hazel;
 using UnityEngine;
+using TheOtherRoles.Objects;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.TheOtherRolesGM;
 
@@ -168,6 +169,10 @@ namespace TheOtherRoles.Patches
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.spawnDummy(playerId, CachedPlayer.LocalPlayer.PlayerControl.transform.position);
             }
+
+            // Cornucopiaのバナーを表示する
+            Cornucopia.showBanner();
+
         }
     }
 
