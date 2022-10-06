@@ -32,6 +32,7 @@ namespace TheOtherRoles.Patches
                 new SelectionBehaviour("hideFakeTasks", () => MapOptions.hideFakeTasks = TheOtherRolesPlugin.HideFakeTasks.Value = !TheOtherRolesPlugin.HideFakeTasks.Value, TheOtherRolesPlugin.HideFakeTasks.Value),
                 new SelectionBehaviour("betterSabotageMap", () => MapOptions.betterSabotageMap = TheOtherRolesPlugin.BetterSabotageMap.Value = !TheOtherRolesPlugin.BetterSabotageMap.Value, TheOtherRolesPlugin.BetterSabotageMap.Value),
                 new SelectionBehaviour("forceNormalSabotageMap", () => MapOptions.forceNormalSabotageMap = TheOtherRolesPlugin.ForceNormalSabotageMap.Value = !TheOtherRolesPlugin.ForceNormalSabotageMap.Value, TheOtherRolesPlugin.ForceNormalSabotageMap.Value),
+                new SelectionBehaviour("transparentMap", () => MapOptions.transparentMap = TheOtherRolesPlugin.TransparentMap.Value = !TheOtherRolesPlugin.TransparentMap.Value, TheOtherRolesPlugin.TransparentMap.Value),
             };
         }
 

@@ -502,7 +502,7 @@ namespace TheOtherRoles.Patches
             AdminPatch.isEvilHackerAdmin = true;
             __instance.countOverlay.gameObject.SetActive(true);
             __instance.infectedOverlay.gameObject.SetActive(MeetingHud.Instance ? false : true);
-            if ( MeetingHud.Instance != null && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker) && EvilTracker.canSeeTargetTask)
+            if (MeetingHud.Instance != null && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker) && EvilTracker.canSeeTargetTask)
             {
                 __instance.taskOverlay.Show();
             }
@@ -608,7 +608,7 @@ namespace TheOtherRoles.Patches
     {
         public static bool Prefix(MapCountOverlay __instance)
         {
-            if(CustomOptionHolder.impostorCanIgnoreComms.getBool() && CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
+            if (CustomOptionHolder.impostorCanIgnoreComms.getBool() && CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
             {
                 return false;
             }
@@ -620,7 +620,7 @@ namespace TheOtherRoles.Patches
     {
         public static bool Prefix(MapCountOverlay __instance)
         {
-            if(CustomOptionHolder.impostorCanIgnoreComms.getBool() && CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
+            if (CustomOptionHolder.impostorCanIgnoreComms.getBool() && CachedPlayer.LocalPlayer.PlayerControl.isImpostor())
             {
                 __instance.timer += Time.deltaTime;
                 if (__instance.timer < 0.1f)
@@ -658,6 +658,23 @@ namespace TheOtherRoles.Patches
                 return false;
             }
             return true;
+        }
+    }
+    [HarmonyPatch(typeof(AlphaPulse), nameof(AlphaPulse.Update))]
+    class AlphaPuluseUpdatePatch
+    {
+        public static void Postfix(AlphaPulse __instance)
+        {
+            if (!TheOtherRolesPlugin.TransparentMap.Value) return;
+            if (__instance.rend)
+            {
+                __instance.rend.color = new Color(__instance.rend.color.r, __instance.rend.color.g, __instance.rend.color.b, 0.2f);
+
+            }
+            if (__instance.mesh)
+            {
+                __instance.mesh.material.color = new Color(__instance.mesh.material.color.r, __instance.mesh.material.color.g, __instance.mesh.material.color.b, 0.2f);
+            }
         }
     }
 }

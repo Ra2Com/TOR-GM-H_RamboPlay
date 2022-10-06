@@ -48,6 +48,7 @@ namespace TheOtherRoles
         public static ConfigEntry<string> DebugRepo { get; private set; }
         public static ConfigEntry<string> ShowPopUpVersion { get; set; }
         public static ConfigEntry<string> WebhookUrl { get; set; }
+        public static ConfigEntry<bool> TransparentMap { get; set; }
 
         public static Sprite ModStamp;
 
@@ -104,6 +105,7 @@ namespace TheOtherRoles
             StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
             DebugRepo = Config.Bind("Custom", "Debug Hat Repo", "");
             WebhookUrl = Config.Bind("Custom", "WebhookUrl", "");
+            TransparentMap = Config.Bind("Custom", "TransparentMap", false);
 
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);

@@ -44,6 +44,7 @@ namespace TheOtherRoles
         public static bool hideFakeTasks = false;
         public static bool betterSabotageMap = false;
         public static bool forceNormalSabotageMap = false;
+        public static bool transparentMap = false;
 
         // Updating values
         public static int meetingsCount = 0;

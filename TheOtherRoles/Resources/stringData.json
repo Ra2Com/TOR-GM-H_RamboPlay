@@ -964,6 +964,10 @@
         "11": "\u5ec3\u6751",
         "13": "\u5f3a\u5236\u7ed3\u675f"
     },
+    "transparentMap": {
+        "0": "Transparent map",
+        "11": "\u900f\u904e\u30de\u30c3\u30d7"
+    },
     "torSettings": {
         "0": "The Other Roles Settings",
         "11": "The Other Roles\u306e\u8a2d\u5b9a",
