@@ -1031,11 +1031,11 @@
     },
     "sherlockRechargeTasksNumber": {
         "0": "Number of Tasks to activate investigation",
-        "11": "\u8abf\u67fb\u30af\u30fc\u30eb\u30c0\u30a6\u30f3"
+        "11": "\u8abf\u67fb\u306b\u5fc5\u8981\u306a\u30bf\u30b9\u30af\u6570"
     },
     "sherlockCooldown": {
         "0": "Investigtaion cooldown",
-        "11": "\u8abf\u67fb\u306b\u5fc5\u8981\u306a\u30bf\u30b9\u30af\u6570"
+        "11": "\u8abf\u67fb\u30af\u30fc\u30eb\u30c0\u30a6\u30f3"
     },
     "sherlockInvestigateDistance": {
         "0": "Investigation range",
