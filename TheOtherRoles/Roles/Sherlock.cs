@@ -20,7 +20,7 @@ namespace TheOtherRoles
         public static int killTimerCounter;
         public static int numTasks {get {return (int)CustomOptionHolder.sherlockRechargeTasksNumber.getFloat();}}
         public static int cooldown {get {return (int)CustomOptionHolder.sherlockCooldown.getFloat();}}
-        public static float investigateDistance {get {return CustomOptionHolder.sherlockInvetigateDistance.getFloat();}}
+        public static float investigateDistance {get {return CustomOptionHolder.sherlockInvestigateDistance.getFloat();}}
         public static int numUsed;
         public static List<Tuple<byte, Tuple<byte, Vector3>>> killLog;
 
