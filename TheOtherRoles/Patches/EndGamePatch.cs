@@ -901,7 +901,7 @@ namespace TheOtherRoles.Patches
                                 var taskInfo = string.Format("{0:D2}", data.TasksCompleted) + "/" + string.Format("{0:D2}", data.TasksTotal);
                                 string aliveDead = ModTranslation.getString("roleSummary" + data.Status.ToString(), def: "-");
                                 string result = "";
-                                result += TempData.winners.ToArray().Count(x=> x.PlayerName == data.PlayerName) != 0 ? ":crown: | " : ":skull: | ";
+                                result += TempData.winners.ToArray().Count(x => x.PlayerName == data.PlayerName) != 0 ? ":crown: | " : ":skull: | ";
                                 result += string.Format("{0,-6} | {1,-2} | {2}", taskInfo, aliveDead, data.RoleString);
                                 if (plagueExists && !data.Roles.Contains(RoleInfo.plagueDoctor))
                                 {
@@ -1050,6 +1050,8 @@ namespace TheOtherRoles.Patches
                 }
                 private static bool CheckAndEndGameForMoriartyWin(ShipStatus __instance, PlayerStatistics statistics)
                 {
+                    // Moriartyが生存していること
+                    if(!Moriarty.isAlive()) return false;
                     if (statistics.MoriartyAlive >= statistics.TotalAlive - statistics.MoriartyAlive - statistics.FoxAlive &&
                         statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0 && statistics.JekyllAndHydeAlive == 0 &&
                         (statistics.MoriartyLovers == 0 || statistics.MoriartyLovers >= statistics.CouplesAlive * 2)

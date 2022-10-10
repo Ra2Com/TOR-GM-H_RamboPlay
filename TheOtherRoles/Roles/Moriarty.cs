@@ -333,5 +333,10 @@ namespace TheOtherRoles
                 arrowSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Arrow.png", 300f);
             return arrowSprite;
         }
+
+        public static bool isAlive()
+        {
+            return Moriarty.allPlayers.Count(x=> x.isAlive()) != 0;
+        }
     }
 }
