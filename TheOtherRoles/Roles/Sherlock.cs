@@ -107,7 +107,7 @@ namespace TheOtherRoles
 
                     return PlayerControl.LocalPlayer.CanMove && numUsed < getNumInvestigate();
                 },
-                () =>{ sherlockInvestigateButton.Timer = sherlockWatchButton.MaxTimer;},
+                () =>{ sherlockInvestigateButton.Timer = sherlockInvestigateButton.MaxTimer;},
                 getInvestigateIcon(),
                 new Vector3(0f, 1f, 0),
                 hm,
