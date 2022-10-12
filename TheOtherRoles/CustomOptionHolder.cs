@@ -294,6 +294,7 @@ namespace TheOtherRoles
         public static CustomOption airshipDisableMovingPlatform;
         public static CustomOption airshipAdditionalLadder;
         public static CustomOption airshipOneWayLadder;
+        public static CustomOption airshipReplaceSafeTask;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
@@ -946,7 +947,7 @@ namespace TheOtherRoles
             airshipReactorDuration = CustomOption.Create(9999, CustomOptionType.General, "airshipReactorDuration", 60f, 0f, 600f, 1f, mapOptions, format: "unitSeconds");
             airshipRandomSpawn = CustomOption.Create(9916, CustomOptionType.General, "airshipRandomSpawn", false, mapOptions);
             airshipAdditionalSpawn = CustomOption.Create(9917, CustomOptionType.General, "airshipAdditionalSpawn", false, mapOptions);
-            airshipSynchronizedSpawning = CustomOption.Create(9918, CustomOptionType.General, "airshipSynchronizedSpawning", false, mapOptions);
+            airshipSynchronizedSpawning = CustomOption.Create(97918, CustomOptionType.General, "airshipSynchronizedSpawning", false, mapOptions);
             airshipSetOriginalCooldown = CustomOption.Create(9919, CustomOptionType.General, "airshipSetOriginalCooldown", false, mapOptions);
             airshipInitialDoorCooldown = CustomOption.Create(9923, CustomOptionType.General, "airshipInitialDoorCooldown", 0f, 0f, 60f, 1f, mapOptions);
             airshipInitialSabotageCooldown = CustomOption.Create(9924, CustomOptionType.General, "airshipInitialSabotageCooldown", 15f, 0f, 60f, 1f, mapOptions);
@@ -956,6 +957,7 @@ namespace TheOtherRoles
             airshipDisableMovingPlatform = CustomOption.Create(9928, CustomOptionType.General, "airshipDisableMovingPlatform", false, mapOptions);
             airshipAdditionalLadder = CustomOption.Create(9929, CustomOptionType.General, "airshipAdditionalLadder", false, mapOptions);
             airshipOneWayLadder = CustomOption.Create(9930, CustomOptionType.General, "airshipOneWayLadder", false, mapOptions);
+            airshipReplaceSafeTask = CustomOption.Create(9937, CustomOptionType.General, "airshipReplaceSafeTask", false, mapOptions);
 
             specialOptions = new CustomOptionBlank(null);
             enabledHorseMode = CustomOption.Create(552, CustomOptionType.General, "enableHorseMode", false, specialOptions, true);

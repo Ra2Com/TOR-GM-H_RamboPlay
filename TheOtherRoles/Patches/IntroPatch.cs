@@ -173,6 +173,11 @@ namespace TheOtherRoles.Patches
             // Cornucopiaのバナーを表示する
             Cornucopia.showBanner();
 
+            // マップデータのコピーを読み込み
+            if (CustomOptionHolder.airshipReplaceSafeTask.getBool())
+            {
+                MapData.LoadAssets(AmongUsClient.Instance);
+            }
         }
     }
 
