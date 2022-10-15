@@ -385,15 +385,14 @@ namespace TheOtherRoles
         public static CustomOption serialKillerSuicideTimer;
         public static CustomOption serialKillerResetTimer;
         public static CustomRoleOption foxSpawnRate;
-        public static CustomOption foxCanFixReactorAndO2;
+        public static CustomOption foxNumTasks;
+        public static CustomOption foxStayTime;
+        public static CustomOption foxTaskType;
         public static CustomOption foxCanCreateImmoralist;
-        public static CustomOption foxNumRepair;
-        public static CustomOption foxCanFixSabotageWhileStealth;
         public static CustomOption foxCrewWinsByTasks;
         public static CustomOption foxImpostorWinsBySabotage;
         public static CustomOption foxStealthCooldown;
         public static CustomOption foxStealthDuration;
-        public static CustomTasksOption foxTasks;
         public static CustomRoleOption munouSpawnRate;
         public static CustomOption munouType;
         public static CustomOption munouProbability;
@@ -769,15 +768,14 @@ namespace TheOtherRoles
 
 
             foxSpawnRate = new CustomRoleOption(910, CustomOptionType.Neutral, "fox", Fox.color, 1);
-            foxCanFixReactorAndO2 = CustomOption.Create(911, CustomOptionType.Neutral, "foxCanFixReactorAndO2", false, foxSpawnRate);
+            foxNumTasks = CustomOption.Create(911, CustomOptionType.Neutral, "foxNumTasks", 4f, 1f, 10f, 1f, foxSpawnRate);
+            foxStayTime = CustomOption.Create(913, CustomOptionType.Neutral, "foxStayTime", 5f, 1f, 20f, 1f, foxSpawnRate);
+            foxTaskType= CustomOption.Create(914, CustomOptionType.Neutral, "foxTaskType", new string[] {"foxTaskSerial", "foxTaskParallel"}, foxSpawnRate);
             foxCrewWinsByTasks = CustomOption.Create(912, CustomOptionType.Neutral, "foxCrewWinsByTasks", true, foxSpawnRate);
             foxImpostorWinsBySabotage = CustomOption.Create(919, CustomOptionType.Neutral, "foxImpostorWinsBySabotage", true, foxSpawnRate);
-            foxTasks = new CustomTasksOption(913, CustomOptionType.Neutral, 1, 1, 3, foxSpawnRate);
             foxStealthCooldown = CustomOption.Create(916, CustomOptionType.Neutral, "foxStealthCooldown", 15f, 1f, 30f, 1f, foxSpawnRate, format: "unitSeconds");
             foxStealthDuration = CustomOption.Create(917, CustomOptionType.Neutral, "foxStealthDuration", 15f, 1f, 30f, 1f, foxSpawnRate, format: "unitSeconds");
             foxCanCreateImmoralist = CustomOption.Create(918, CustomOptionType.Neutral, "foxCanCreateImmoralist", true, foxSpawnRate);
-            foxNumRepair = CustomOption.Create(920, CustomOptionType.Neutral, "foxNumRepair", 0f, 0f, 5f, 1f, foxSpawnRate, format: "unitTimes");
-            foxCanFixSabotageWhileStealth = CustomOption.Create(921, CustomOptionType.Neutral, "foxCanFixSabotageWhileStealth", true, foxSpawnRate);
 
 
             fortuneTellerSpawnRate = new CustomRoleOption(940, CustomOptionType.Crewmate, "fortuneTeller", FortuneTeller.color, 15);

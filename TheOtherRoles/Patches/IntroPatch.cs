@@ -7,8 +7,16 @@ using HarmonyLib;
 using Hazel;
 using UnityEngine;
 using TheOtherRoles.Objects;
+using TheOtherRoles.Modules;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.TheOtherRolesGM;
+using BepInEx;
+using BepInEx.IL2CPP;
+using BepInEx.Core;
+using System.Reflection;
+using UnhollowerRuntimeLib;
+
+
 
 namespace TheOtherRoles.Patches
 {
@@ -177,6 +185,24 @@ namespace TheOtherRoles.Patches
             if (CustomOptionHolder.airshipReplaceSafeTask.getBool())
             {
                 MapData.LoadAssets(AmongUsClient.Instance);
+            }
+
+            // お参りタスク
+            if (CustomOptionHolder.foxSpawnRate.getSelection() > 0)
+            {
+                Shrine.activateShrines(PlayerControl.GameOptions.MapId);
+                List<Byte> taskIdList = new();
+                Shrine.allShrine.ForEach(shrine => taskIdList.Add((byte)shrine.console.ConsoleId));
+                taskIdList.Shuffle();
+                var cpt = new CustomNormalPlayerTask("foxTaskStay", Il2CppType.Of<FoxTask>(), Fox.numTasks, taskIdList.ToArray(), Shrine.allShrine.Find(x => x.console.ConsoleId == taskIdList.ToArray()[0]).console.Room, true);
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
+                {
+                    if (p.isRole(RoleType.Fox))
+                    {
+                        p.clearAllTasks();
+                        cpt.addTaskToPlayer(p.PlayerId);
+                    }
+                }
             }
         }
     }

@@ -7,7 +7,10 @@ using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
 using TheOtherRoles.Modules;
+using TheOtherRoles.Objects;
 using UnityEngine;
+using UnhollowerRuntimeLib;
+
 
 namespace TheOtherRoles
 {
@@ -125,6 +128,9 @@ namespace TheOtherRoles
             Harmony.PatchAll();
             Patches.SubmergedPatch.Patch();
             SubmergedCompatibility.Initialize();
+
+            // オレオレオブジェクト有効化
+            ClassInjector.RegisterTypeInIl2Cpp(typeof(FoxTask));
         }
 
         public static Sprite GetModStamp()

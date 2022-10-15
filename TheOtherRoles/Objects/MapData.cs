@@ -16,29 +16,43 @@ namespace TheOtherRoles.Objects
 
         public static void LoadAssets(AmongUsClient __instance)
         {
+            AssetReference assetReference;
+            AsyncOperationHandle<GameObject> asset;
             // Skeld
-            AssetReference assetReference = __instance.ShipPrefabs.ToArray()[0];
-            AsyncOperationHandle<GameObject> asset = assetReference.LoadAsset<GameObject>();
-            asset.WaitForCompletion();
-            SkeldShip = assetReference.Asset.Cast<GameObject>().GetComponent<ShipStatus>();
+            if (!SkeldShip)
+            {
+                assetReference = __instance.ShipPrefabs.ToArray()[0];
+                asset = assetReference.LoadAsset<GameObject>();
+                asset.WaitForCompletion();
+                SkeldShip = assetReference.Asset.Cast<GameObject>().GetComponent<ShipStatus>();
+            }
 
             // Mira
-            assetReference = __instance.ShipPrefabs.ToArray()[1];
-            asset = assetReference.LoadAsset<GameObject>();
-            asset.WaitForCompletion();
-            MiraHQ = assetReference.Asset.Cast<GameObject>().GetComponent<ShipStatus>();
+            if (!MiraHQ)
+            {
+                assetReference = __instance.ShipPrefabs.ToArray()[1];
+                asset = assetReference.LoadAsset<GameObject>();
+                asset.WaitForCompletion();
+                MiraHQ = assetReference.Asset.Cast<GameObject>().GetComponent<ShipStatus>();
+            }
 
             // Polus
-            assetReference = __instance.ShipPrefabs.ToArray()[2];
-            asset = assetReference.LoadAsset<GameObject>();
-            asset.WaitForCompletion();
-            PolusShip = assetReference.Asset.Cast<GameObject>().GetComponent<ShipStatus>();
+            if (!PolusShip)
+            {
+                assetReference = __instance.ShipPrefabs.ToArray()[2];
+                asset = assetReference.LoadAsset<GameObject>();
+                asset.WaitForCompletion();
+                PolusShip = assetReference.Asset.Cast<GameObject>().GetComponent<ShipStatus>();
+            }
 
             // AirShip
-            assetReference = __instance.ShipPrefabs.ToArray()[4];
-            asset = assetReference.LoadAsset<GameObject>();
-            asset.WaitForCompletion();
-            AirShip = assetReference.Asset.Cast<GameObject>().GetComponent<ShipStatus>();
+            if(!AirShip)
+            {
+                assetReference = __instance.ShipPrefabs.ToArray()[4];
+                asset = assetReference.LoadAsset<GameObject>();
+                asset.WaitForCompletion();
+                AirShip = assetReference.Asset.Cast<GameObject>().GetComponent<ShipStatus>();
+            }
         }
     }
 }

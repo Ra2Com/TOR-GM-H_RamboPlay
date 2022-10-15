@@ -15,6 +15,11 @@ namespace TheOtherRoles
     [HarmonyPatch]
     public class Fox : RoleBase<Fox>
     {
+        public enum TaskType
+        {
+            Serial,
+            Parallel
+        }
         public static Color color = new Color32(167, 87, 168, byte.MaxValue);
         private static CustomButton foxButton;
         private static CustomButton foxRepairButton;
@@ -22,23 +27,21 @@ namespace TheOtherRoles
         public static List<Arrow> arrows = new();
         public static float updateTimer = 0f;
 
-        public static bool canFixReactorAndO2 { get { return CustomOptionHolder.foxCanFixReactorAndO2.getBool(); } }
         public static float arrowUpdateInterval = 0.5f;
         public static bool crewWinsByTasks { get { return CustomOptionHolder.foxCrewWinsByTasks.getBool(); } }
         public static bool impostorWinsBySabotage { get { return CustomOptionHolder.foxImpostorWinsBySabotage.getBool(); } }
         public static float stealthCooldown { get { return CustomOptionHolder.foxStealthCooldown.getFloat(); } }
         public static float stealthDuration { get { return CustomOptionHolder.foxStealthDuration.getFloat(); } }
-        public static int numCommonTasks { get { return CustomOptionHolder.foxTasks.commonTasks; } }
-        public static int numLongTasks { get { return CustomOptionHolder.foxTasks.longTasks; } }
-        public static int numShortTasks { get { return CustomOptionHolder.foxTasks.shortTasks; } }
+        public static int numTasks {get {return (int)CustomOptionHolder.foxNumTasks.getFloat();}}
+        public static float stayTime {get {return (int)CustomOptionHolder.foxStayTime.getFloat();}}
+        public static TaskType taskType {get {return (TaskType)CustomOptionHolder.foxTaskType.getSelection();}}
+
 
         public bool stealthed = false;
         public DateTime stealthedAt = DateTime.UtcNow;
         public static float fadeTime = 1f;
 
-        public static int optNumRepair { get { return (int)CustomOptionHolder.foxNumRepair.getFloat(); } }
         public static int numRepair = 0;
-        public static bool foxCanFixSabotageWhileStealth { get { return CustomOptionHolder.foxCanFixSabotageWhileStealth.getBool(); } }
 
         public static bool canCreateImmoralist { get { return CustomOptionHolder.foxCanCreateImmoralist.getBool(); } }
         public static PlayerControl currentTarget;
@@ -52,7 +55,6 @@ namespace TheOtherRoles
             stealthed = false;
             stealthedAt = DateTime.UtcNow;
             RoleType = roleId = RoleType.Fox;
-            numRepair = optNumRepair;
             immoralist = null;
             currentTarget = null;
             exiledFox = new List<byte>();
@@ -93,8 +95,8 @@ namespace TheOtherRoles
         }
         public override void OnFinishShipStatusBegin()
         {
-            PlayerControl.LocalPlayer.clearAllTasks();
-            local.assignTasks();
+            // PlayerControl.LocalPlayer.clearAllTasks();
+            // local.assignTasks();
         }
 
         public override void FixedUpdate()
@@ -432,7 +434,7 @@ namespace TheOtherRoles
         private static bool tasksComplete(PlayerControl p)
         {
             int counter = 0;
-            int totalTasks = numCommonTasks + numLongTasks + numShortTasks;
+            int totalTasks = 1;
             if (totalTasks == 0) return true;
             foreach (var task in p.Data.Tasks)
             {
@@ -446,7 +448,7 @@ namespace TheOtherRoles
 
         public void assignTasks()
         {
-            player.generateAndAssignTasks(numCommonTasks, numShortTasks, numLongTasks);
+            // player.generateAndAssignTasks(numCommonTasks, numShortTasks, numLongTasks);
         }
 
         // 透明化

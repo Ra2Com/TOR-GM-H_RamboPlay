@@ -159,6 +159,8 @@ namespace TheOtherRoles
             SpawnInMinigamePatch.reset();
             ElectricPatch.reset();
             MapBehaviorPatch.resetRealTasks();
+            CustomNormalPlayerTask.reset();
+            Shrine.reset();
 
             KillAnimationCoPerformKillPatch.hideNextAnimation = false;
 

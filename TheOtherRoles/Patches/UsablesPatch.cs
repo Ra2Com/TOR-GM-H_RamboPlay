@@ -40,23 +40,6 @@ namespace TheOtherRoles.Patches
                 return true;
             }
 
-            if (pc.isRole(RoleType.Fox) && (isLights || isComms || isReactor || isO2))
-            {
-                if (Fox.foxCanFixSabotageWhileStealth && Fox.isStealthed(pc))
-                {
-                    return false;
-                }
-
-                else if (isLights || isComms)
-                {
-                    return true;
-                }
-                else if ((isO2 || isReactor) && !Fox.canFixReactorAndO2)
-                {
-                    return true;
-                }
-            }
-
             if (pc.isRole(RoleType.Mafioso) && !Mafioso.canRepair && (isLights || isComms))
             {
                 return true;
@@ -69,13 +52,13 @@ namespace TheOtherRoles.Patches
 
             if (pc.isRole(RoleType.Fox) && (isLights || isComms || isReactor || isO2))
             {
-                if (isLights || isComms)
+                if (isReactor)
                 {
                     return true;
                 }
-                else if ((isO2 || isReactor) && !Fox.canFixReactorAndO2)
+                else
                 {
-                    return true;
+                    return false;
                 }
             }
 

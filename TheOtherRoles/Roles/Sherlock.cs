@@ -70,29 +70,34 @@ namespace TheOtherRoles
                         {
                             PlayerControl killer = Helpers.getPlayerById(item.Item1);
                             PlayerControl target = Helpers.getPlayerById(item.Item2.Item1);
-                            string killerTeam = "";
-                            if(killer.isImpostor())
-                            {
-                                killerTeam = "Impostor";
-                            }
-                            else if(killer.isRole(RoleType.Moriarty))
-                            {
-                                killerTeam = "Moriarty";
-                            }
-                            else if(killer.isNeutral())
-                            {
-                                killerTeam = "Neutral";
-                            }
-                            else
-                            {
-                                killerTeam = "Crewmate";
-                            }
-                            message += $"{target.name} is killed by {killerTeam} \n";
+                            string killerTeam = RoleInfo.GetRolesString(killer, true);
+
+                            // if(killer.isImpostor())
+                            // {
+                            //     killerTeam = ModTranslation.getString("sherlockImpostor");
+                            // }
+                            // else if(killer.isRole(RoleType.Moriarty))
+                            // {
+                            //     killerTeam = ModTranslation.getString("moriarty");
+                            // }
+                            // else if(killer.isRole(RoleType.Jackal))
+                            // {
+                            //     killerTeam = ModTranslation.getString("jackal");
+                            // }
+                            // else if(killer.isNeutral())
+                            // {
+                            //     killerTeam = ModTranslation.getString("sherlockNeutral");
+                            // }
+                            // else
+                            // {
+                            //     killerTeam = ModTranslation.getString("sherlockCrewmate");
+                            // }
+                            message += String.Format(ModTranslation.getString("sherlockInvestigateMessage1"), target.name, killerTeam);
                         }
                     }
                     if(message == "")
                     {
-                        message = "No incident was happend";
+                        message = "sherlockInvestigateMessage2";
                     }
                     investigateMessage(message, 5f, Color.white);
                     numUsed += 1;

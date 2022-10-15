@@ -9,13 +9,19 @@ namespace TheOtherRoles.Modules
 {
     public static class AssetLoader
     {
-        private static readonly Assembly allaudio = Assembly.GetExecutingAssembly();
+        private static readonly Assembly dll = Assembly.GetExecutingAssembly();
         private static bool flag = false;
+        public static GameObject foxTask;
         public static void LoadAssets()
+        {
+            LoadAudioAssets();
+            LoadHaomingAssets();
+        }
+        private static void LoadAudioAssets()
         {
             if (flag) return;
             flag = true;
-            var resourceAudioAssetBundleStream = allaudio.GetManifestResourceStream("TheOtherRoles.Resources.AssetBundle.audiobundle");
+            var resourceAudioAssetBundleStream = dll.GetManifestResourceStream("TheOtherRoles.Resources.AssetBundle.audiobundle");
             var assetBundleBundle = AssetBundle.LoadFromMemory(resourceAudioAssetBundleStream.ReadFully());
             Trap.activate = assetBundleBundle.LoadAsset<AudioClip>("TrapperActivate.mp3").DontUnload();
             Trap.countdown = assetBundleBundle.LoadAsset<AudioClip>("TrapperCountdown.mp3").DontUnload();
@@ -23,6 +29,13 @@ namespace TheOtherRoles.Modules
             Trap.kill = assetBundleBundle.LoadAsset<AudioClip>("TrapperKill.mp3").DontUnload();
             Trap.place = assetBundleBundle.LoadAsset<AudioClip>("TrapperPlace.mp3").DontUnload();
             Puppeteer.laugh = assetBundleBundle.LoadAsset<AudioClip>("PuppeteerLaugh.mp3").DontUnload();
+        }
+        private static void LoadHaomingAssets()
+        {
+            var resourceTestAssetBundleStream = dll.GetManifestResourceStream("TheOtherRoles.Resources.AssetBundle.haomingassets");
+            var assetBundleBundle = AssetBundle.LoadFromMemory(resourceTestAssetBundleStream.ReadFully());
+            FoxTask.prefab = assetBundleBundle.LoadAsset<GameObject>("FoxTask.prefab").DontUnload();
+            Shrine.sprite = assetBundleBundle.LoadAsset<Sprite>("shrine2.png").DontUnload();
         }
         public static byte[] ReadFully(this Stream input)
         {
