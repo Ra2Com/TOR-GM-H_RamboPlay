@@ -320,10 +320,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 ## シャーロック
 シャーロックは、調査能力を持つクルーメイトのロール。
 いくつかのタスクをこなすと、調査能力を使えるようになる。
-範囲内で事件が発生した場合、どのチームが犯罪を犯したのか、その証拠を見つけることができる。
-
-- 自身の表示はクルーメイトとなる
-- ランダムで味方に対する視認がおかしくなる(初日は100%正常)
+調査スキル使用時に過去に範囲内で事件が発生していた場合、どの陣営が犯罪を犯したのか、その証拠を見つけることができる。
 
 | オプション名         | 説明                                 |
 | -------------------- | ------------------------------------ |
@@ -489,12 +486,13 @@ EvilHackerのアイデアとコード
 [tomarai/TheOtherRoles](https://github.com/tomarai/TheOtherRoles)
 
 配線位置追加のアイデアとコード  
+スポーン位置追加、スポーン同期のアイデアとコード  
 [Dolly1016/Nebula](https://github.com/Dolly1016/Nebula)
 
 抽選処理の偏り排除のアイデアとコード  
 [yukieiji/ExtremeRoles](https://github.com/yukieiji/ExtremeRoles.git)
 
-データオブジェクトのシリアライズ
+データオブジェクトのシリアライズ  
 [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
 <hr>
 ↓ここから本家のREADMEそのもの↓
