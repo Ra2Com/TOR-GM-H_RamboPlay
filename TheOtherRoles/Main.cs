@@ -140,6 +140,7 @@ namespace TheOtherRoles
 
             // オレオレオブジェクト有効化
             ClassInjector.RegisterTypeInIl2Cpp(typeof(FoxTask));
+            ClassInjector.RegisterTypeInIl2Cpp(typeof(HaomingMenu));
         }
 
         public static Sprite GetModStamp()
@@ -222,6 +223,13 @@ namespace TheOtherRoles
                 // playerControl.SetSkin(HatManager.Instance.AllSkins[skin].ProductId);
                 // playerControl.SetNamePlate(HatManager.Instance.AllNamePlates[nameplate].ProductId);
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                var obj = new GameObject("HaomingMenu");
+                obj.AddComponent<HaomingMenu>();
+                obj.SetActive(true);
             }
 
             // ゲーム内ログ出力のトグル

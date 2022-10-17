@@ -36,6 +36,8 @@ namespace TheOtherRoles.Modules
             var assetBundleBundle = AssetBundle.LoadFromMemory(resourceTestAssetBundleStream.ReadFully());
             FoxTask.prefab = assetBundleBundle.LoadAsset<GameObject>("FoxTask.prefab").DontUnload();
             Shrine.sprite = assetBundleBundle.LoadAsset<Sprite>("shrine2.png").DontUnload();
+            HaomingMenu.menuPrefab = assetBundleBundle.LoadAsset<GameObject>("HaomingMenu.prefab").DontUnload();
+            HaomingMenu.loadSettingsPrefab = assetBundleBundle.LoadAsset<GameObject>("LoadSettingsMenu.prefab").DontUnload();
         }
         public static byte[] ReadFully(this Stream input)
         {
