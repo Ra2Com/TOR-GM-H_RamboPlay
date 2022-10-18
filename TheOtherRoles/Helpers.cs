@@ -357,6 +357,7 @@ namespace TheOtherRoles
                     player.isRole(RoleType.Lawyer) ||
                     player.isRole(RoleType.Pursuer) ||
                     player.isRole(RoleType.Akujo) ||
+                    player.isRole(RoleType.Cupid) ||
                     (player.isRole(RoleType.Shifter) && Shifter.isNeutral));
         }
 
@@ -634,6 +635,13 @@ namespace TheOtherRoles
                     RPCProcedure.timeMasterRewindTime();
                 }
                 return MurderAttemptResult.SuppressKill;
+            }
+
+            // キューピッドのシールド
+            else if (Cupid.checkShieldActive(target))
+            {
+                Cupid.scapeGoat(target);
+                return MurderAttemptResult.BlankKill;
             }
 
             return MurderAttemptResult.PerformKill;

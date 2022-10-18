@@ -69,6 +69,7 @@ namespace TheOtherRoles.Patches
         Divined,
         Loneliness,
         BrainWashKill,
+        Scapegoat,
         GMExecuted,
         Disconnected
     }
@@ -229,6 +230,7 @@ namespace TheOtherRoles.Patches
             notWinners.AddRange(Akujo.allPlayers);
             notWinners.AddRange(AkujoHonmei.allPlayers);
             notWinners.AddRange(Moriarty.allPlayers);
+            notWinners.AddRange(Cupid.allPlayers);
             if (Puppeteer.dummy != null) notWinners.Add(Puppeteer.dummy);
             if (SchrodingersCat.team != SchrodingersCat.Team.Crew) notWinners.AddRange(SchrodingersCat.allPlayers);
 
@@ -524,6 +526,20 @@ namespace TheOtherRoles.Patches
                 {
                     WinningPlayerData wpd = new(p.Data);
                     TempData.winners.Add(wpd);
+                }
+            }
+
+            // キューピッドがLoversと勝利する
+            if (loversWin)
+            {
+                foreach(var p in Cupid.allPlayers)
+                {
+                    var cupid = Cupid.players.FirstOrDefault(x => x.player == p);
+                    if(cupid.lovers1 != null & cupid.lovers1.isAlive() && cupid.lovers2 != null && cupid.lovers2.isAlive())
+                    {
+                        WinningPlayerData wpd = new(p.Data);
+                        TempData.winners.Add(wpd);
+                    }
                 }
             }
 

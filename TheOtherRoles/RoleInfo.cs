@@ -113,6 +113,7 @@ namespace TheOtherRoles
         public static RoleInfo jekyllAndHyde;
         public static RoleInfo moriarty;
         public static RoleInfo sherlock;
+        public static RoleInfo cupid;
         public static List<RoleInfo> allRoleInfos;
         public static void Load()
         {
@@ -184,6 +185,7 @@ namespace TheOtherRoles
             jekyllAndHyde = new RoleInfo("jekyllAndHyde", JekyllAndHyde.color, CustomOptionHolder.jekyllAndHydeSpawnRate, RoleType.JekyllAndHyde);
             moriarty = new RoleInfo("moriarty", Moriarty.color, CustomOptionHolder.moriartySpawnRate, RoleType.Moriarty);
             sherlock = new RoleInfo("sherlock", Sherlock.color, CustomOptionHolder.sherlockSpawnRate, RoleType.Sherlock);
+            cupid = new RoleInfo("cupid", Cupid.color, CustomOptionHolder.cupidSpawnRate, RoleType.Cupid);
             allRoleInfos = new List<RoleInfo>()
             {
                 impostor,
@@ -254,6 +256,7 @@ namespace TheOtherRoles
                 jekyllAndHyde,
                 moriarty,
                 sherlock,
+                cupid,
             };
         }
 
@@ -348,6 +351,7 @@ namespace TheOtherRoles
             if (p.isRole(RoleType.JekyllAndHyde)) infos.Add(jekyllAndHyde);
             if (p.isRole(RoleType.Moriarty)) infos.Add(moriarty);
             if (p.isRole(RoleType.Sherlock)) infos.Add(sherlock);
+            if (p.isRole(RoleType.Cupid)) infos.Add(cupid);
 
 
 

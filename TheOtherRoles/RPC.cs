@@ -25,6 +25,7 @@ namespace TheOtherRoles
         SetRole,
         FinishSetRole,
         SetLovers,
+        SetCupidLovers,
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
@@ -130,6 +131,8 @@ namespace TheOtherRoles
         AkujoSuicide,
         SetBrainwash,
         MoriartyKill,
+        CupidSuicide,
+        SetCupidShield,
     }
 
     public static class RPCProcedure
@@ -249,6 +252,22 @@ namespace TheOtherRoles
         public static void setLovers(byte playerId1, byte playerId2)
         {
             Lovers.addCouple(Helpers.playerById(playerId1), Helpers.playerById(playerId2));
+        }
+        public static void setCupidLovers(byte playerId1, byte playerId2, byte cupidId)
+        {
+            var p1 = Helpers.playerById(playerId1);
+            var p2 = Helpers.playerById(playerId2);
+            var cupid = Cupid.allRoles.FirstOrDefault(x => x.player.PlayerId == cupidId) as Cupid;
+            cupid.lovers1 = p1;
+            cupid.lovers2 = p2;
+            Cupid.breakCouple(p1, p2, cupid.player);
+            Cupid.breakCouple(p2, p1, cupid.player);
+            Lovers.addCouple(p1, p2);
+        }
+        public static void setCupidShield(byte cupidId, byte targetId)
+        {
+            var cupid = Cupid.players.FirstOrDefault(x => x.player.PlayerId == cupidId);
+            cupid.shielded = Helpers.getPlayerById(targetId);
         }
 
         public static void overrideNativeRole(byte playerId, byte roleType)
@@ -1007,6 +1026,17 @@ namespace TheOtherRoles
             }
         }
 
+        public static void cupidSuicide(byte cupidId, bool isScapegoat)
+        {
+            Cupid cupid = Cupid.getRole(Helpers.playerById(cupidId));
+            if (cupid != null)
+            {
+                cupid.player.MurderPlayer(cupid.player);
+                finalStatuses[cupid.player.PlayerId] = isScapegoat ? FinalStatus.Scapegoat : FinalStatus.Suicide;
+            }
+
+        }
+
         public static void impostorPromotesToLastImpostor(byte targetId)
         {
             PlayerControl player = Helpers.playerById(targetId);
@@ -1459,7 +1489,7 @@ namespace TheOtherRoles
         {
             PlayerControl target = Helpers.getPlayerById(targetId);
             finalStatuses[targetId] = FinalStatus.BrainWashKill;
-            if(PlayerControl.LocalPlayer == Moriarty.target)
+            if (PlayerControl.LocalPlayer == Moriarty.target)
             {
                 if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
             }
@@ -1533,6 +1563,9 @@ namespace TheOtherRoles
                             break;
                         case (byte)CustomRPC.SetLovers:
                             RPCProcedure.setLovers(reader.ReadByte(), reader.ReadByte());
+                            break;
+                        case (byte)CustomRPC.SetCupidLovers:
+                            RPCProcedure.setCupidLovers(reader.ReadByte(), reader.ReadByte(), reader.ReadByte());
                             break;
                         case (byte)CustomRPC.OverrideNativeRole:
                             RPCProcedure.overrideNativeRole(reader.ReadByte(), reader.ReadByte());
@@ -1785,6 +1818,12 @@ namespace TheOtherRoles
                             break;
                         case (byte)CustomRPC.AkujoSuicide:
                             RPCProcedure.akujoSuicide(reader.ReadByte());
+                            break;
+                        case (byte)CustomRPC.CupidSuicide:
+                            RPCProcedure.cupidSuicide(reader.ReadByte(), reader.ReadBoolean());
+                            break;
+                        case (byte)CustomRPC.SetCupidShield:
+                            RPCProcedure.setCupidShield(reader.ReadByte(), reader.ReadByte());
                             break;
                         case (byte)CustomRPC.ImpostorPromotesToLastImpostor:
                             RPCProcedure.impostorPromotesToLastImpostor(reader.ReadByte());

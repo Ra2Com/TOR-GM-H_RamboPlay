@@ -215,6 +215,7 @@ namespace TheOtherRoles.Patches
 
                 blockLovers = new List<byte> {
                     (byte)RoleType.Bait,
+                    (byte)RoleType.Cupid
                 };
 
                 if (!Lovers.hasTasks)
@@ -304,6 +305,7 @@ namespace TheOtherRoles.Patches
                 neutralSettings.Add((byte)RoleType.JekyllAndHyde, CustomOptionHolder.jekyllAndHydeSpawnRate.data);
                 neutralSettings.Add((byte)RoleType.Akujo, CustomOptionHolder.akujoSpawnRate.data);
                 neutralSettings.Add((byte)RoleType.Moriarty, CustomOptionHolder.moriartySpawnRate.data);
+                neutralSettings.Add((byte)RoleType.Cupid, CustomOptionHolder.cupidSpawnRate.data);
 
 
                 crewSettings.Add((byte)RoleType.FortuneTeller, CustomOptionHolder.fortuneTellerSpawnRate.data);

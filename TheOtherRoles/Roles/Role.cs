@@ -78,6 +78,7 @@ namespace TheOtherRoles
         JekyllAndHyde,
         Akujo,
         Moriarty,
+        Cupid,
         EvilHacker,
 
 
@@ -121,6 +122,7 @@ namespace TheOtherRoles
             { RoleType.JekyllAndHyde, typeof(RoleBase<JekyllAndHyde>) },
             { RoleType.Akujo, typeof(RoleBase<Akujo>) },
             { RoleType.Moriarty, typeof(RoleBase<Moriarty>) },
+            { RoleType.Cupid, typeof(RoleBase<Cupid>) },
 
             // Other
             { RoleType.Watcher, typeof(RoleBase<Watcher>) },
@@ -652,6 +654,10 @@ namespace TheOtherRoles
             // Lover suicide trigger on exile/death
             if (player.isLovers())
                 Lovers.killLovers(player, killer);
+
+            // Cupidを道連れにする
+            if (Cupid.isCupidLovers(player))
+                Cupid.killCupid(player, killer);
 
             if (MeetingHud.Instance?.state != MeetingHud.VoteStates.Animating)
                 RPCProcedure.updateMeeting(player.PlayerId, true);

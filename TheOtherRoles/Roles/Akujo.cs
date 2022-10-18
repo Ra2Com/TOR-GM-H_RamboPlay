@@ -34,7 +34,7 @@ namespace TheOtherRoles
                 new Color32(255, 0, 0, 255),   // red
             };
 
-        public static float timeLimit { get { return CustomOptionHolder.akujoTimeLimit.getFloat() + 10f; } }
+        public static float timeLimit { get { return CustomOptionHolder.akujoTimeLimit.getFloat() + 1000f; } }
         public static bool knowsRoles { get { return CustomOptionHolder.akujoKnowsRoles.getBool(); } }
         public static int numKeeps { get { return Math.Min(Mathf.RoundToInt(CustomOptionHolder.akujoNumKeeps.getFloat()), PlayerControl.AllPlayerControls.Count - 2); } }
 

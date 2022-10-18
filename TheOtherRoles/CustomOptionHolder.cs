@@ -462,6 +462,9 @@ namespace TheOtherRoles
         public static CustomOption moriartyNumberToWin;
         public static CustomOption moriartyBrainwashDistance;
         public static CustomOption moriartyKillDistance;
+        public static CustomRoleOption cupidSpawnRate;
+        public static CustomOption cupidTimeLimit;
+        public static CustomOption cupidShield;
 
         public static CustomOption enabledHorseMode;
         public static CustomOption delayBeforeMeeting;
@@ -767,7 +770,7 @@ namespace TheOtherRoles
             foxSpawnRate = new CustomRoleOption(910, CustomOptionType.Neutral, "fox", Fox.color, 1);
             foxNumTasks = CustomOption.Create(911, CustomOptionType.Neutral, "foxNumTasks", 4f, 1f, 10f, 1f, foxSpawnRate);
             foxStayTime = CustomOption.Create(913, CustomOptionType.Neutral, "foxStayTime", 5f, 1f, 20f, 1f, foxSpawnRate);
-            foxTaskType= CustomOption.Create(914, CustomOptionType.Neutral, "foxTaskType", new string[] {"foxTaskSerial", "foxTaskParallel"}, foxSpawnRate);
+            foxTaskType = CustomOption.Create(914, CustomOptionType.Neutral, "foxTaskType", new string[] { "foxTaskSerial", "foxTaskParallel" }, foxSpawnRate);
             foxCrewWinsByTasks = CustomOption.Create(912, CustomOptionType.Neutral, "foxCrewWinsByTasks", true, foxSpawnRate);
             foxImpostorWinsBySabotage = CustomOption.Create(919, CustomOptionType.Neutral, "foxImpostorWinsBySabotage", true, foxSpawnRate);
             foxStealthCooldown = CustomOption.Create(916, CustomOptionType.Neutral, "foxStealthCooldown", 15f, 1f, 30f, 1f, foxSpawnRate, format: "unitSeconds");
@@ -815,6 +818,10 @@ namespace TheOtherRoles
             sherlockRechargeTasksNumber = CustomOption.Create(1141, CustomOptionType.Crewmate, "sherlockRechargeTasksNumber", 4f, 1f, 15f, 1f, sherlockSpawnRate);
             sherlockCooldown = CustomOption.Create(1142, CustomOptionType.Crewmate, "sherlockCooldown", 10f, 0f, 40f, 2.5f, sherlockSpawnRate);
             sherlockInvestigateDistance = CustomOption.Create(1143, CustomOptionType.Crewmate, "sherlockInvestigateDistance", 5f, 1f, 15f, 1f, sherlockSpawnRate);
+
+            cupidSpawnRate = new CustomRoleOption(1150, CustomOptionType.Neutral, "cupid", Cupid.color, 1);
+            cupidTimeLimit = CustomOption.Create(1151, CustomOptionType.Neutral, "cupidTimeLimit", 300f, 30f, 1200f, 30f, cupidSpawnRate, format: "unitSeconds");
+            cupidShield = CustomOption.Create(1152, CustomOptionType.Neutral, "cupidShield", true, cupidSpawnRate);
 
             munouSpawnRate = new CustomRoleOption(960, CustomOptionType.Modifier, "incompetent", Munou.color, 15);
             munouType = CustomOption.Create(963, CustomOptionType.Modifier, "incompetentType", new string[] { "incompetentSimple", "incompetentRandom" }, munouSpawnRate);

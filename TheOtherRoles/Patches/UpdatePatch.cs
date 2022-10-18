@@ -169,6 +169,33 @@ namespace TheOtherRoles.Patches
             {
                 setPlayerNameColor(PlayerControl.LocalPlayer, Sherlock.color);
             }
+            else if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Cupid))
+            {
+                setPlayerNameColor(CachedPlayer.LocalPlayer.PlayerControl, Cupid.color);
+                var cupid = Cupid.allRoles.FirstOrDefault(x => x.player == PlayerControl.LocalPlayer) as Cupid;
+                bool meetingShow = MeetingHud.Instance != null &&
+                    (MeetingHud.Instance.state == MeetingHud.VoteStates.Voted ||
+                    MeetingHud.Instance.state == MeetingHud.VoteStates.NotVoted ||
+                    MeetingHud.Instance.state == MeetingHud.VoteStates.Discussion);
+                string suffix = Helpers.cs(Lovers.color, " ♥");
+                foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+                {
+                    if (p == cupid.lovers1 || p ==cupid.lovers2)
+                    {
+                        p.cosmetics.nameText.text += suffix;
+                        if (meetingShow)
+                        {
+                            foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
+                            {
+                                if (p.PlayerId == pva.TargetPlayerId)
+                                {
+                                    pva.NameText.text += suffix;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             if (CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.Madmate))
             {
@@ -201,7 +228,6 @@ namespace TheOtherRoles.Patches
                     }
                 }
             }
-
 
             else if (CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.LastImpostor))
             {

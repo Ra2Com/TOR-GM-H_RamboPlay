@@ -37,6 +37,7 @@ namespace TheOtherRoles
             Akujo.SetButtonCooldowns();
             Moriarty.SetButtonCooldowns();
             Sherlock.SetButtonCooldowns();
+            Cupid.SetButtonCooldowns();
             foreach (CustomButton gmButton in gmButtons)
             {
                 gmButton.MaxTimer = 0.0f;
@@ -74,6 +75,7 @@ namespace TheOtherRoles
             Akujo.MakeButtons(hm);
             Moriarty.MakeButtons(hm);
             Sherlock.MakeButtons(hm);
+            Cupid.MakeButtons(hm);
 
             gmButtons = new List<CustomButton>();
             gmKillButtons = new List<CustomButton>();
