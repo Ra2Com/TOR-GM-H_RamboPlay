@@ -220,11 +220,11 @@ namespace TheOtherRoles.Modules
 
                         List<CustomHat> customhats = createCustomHatDetails(hats);
                         foreach (CustomHat ch in customhats)
-                            __instance.allHats.Add(CreateHatData(ch));
+                            __instance.allHats.AddItem(CreateHatData(ch));
                     }
                     while (CustomHatLoader.hatDetails.Count > 0)
                     {
-                        __instance.allHats.Add(CreateHatData(CustomHatLoader.hatDetails[0]));
+                        __instance.allHats.AddItem(CreateHatData(CustomHatLoader.hatDetails[0]));
                         Logger.info(String.Format("Add CustomHat Author:{0} Name:{1}", CustomHatLoader.hatDetails[0].author.PadRightV2(20), CustomHatLoader.hatDetails[0].name), "CustomHats");
                         CustomHatLoader.hatDetails.RemoveAt(0);
                     }
