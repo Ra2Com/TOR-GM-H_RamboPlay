@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Net.Http;
 using System.Text;
 using UnityEngine;
@@ -26,6 +27,11 @@ namespace TheOtherRoles.Objects
         private Button closeButton;
         private Button loadSettingsButton;
         private TMP_Dropdown dropdown;
+        private TextMeshProUGUI log;
+        private string logText;
+        private string title;
+        private string fileName;
+
         private static int selected = 0;
         public static GameObject menuPrefab;
         public static GameObject loadSettingsPrefab;
@@ -99,6 +105,9 @@ namespace TheOtherRoles.Objects
 
         void showloadSettingsMenu()
         {
+            title = "";
+            fileName = "";
+
             string filePath = Path.GetDirectoryName(Application.dataPath) + @"\Regulations\";
             bool exists = System.IO.Directory.Exists(filePath);
             if (!exists) System.IO.Directory.CreateDirectory(filePath);
@@ -133,6 +142,29 @@ namespace TheOtherRoles.Objects
             dropdown.RefreshShownValue();
             dropdown.onValueChanged = new TMP_Dropdown.DropdownEvent();
             dropdown.onValueChanged.AddListener((UnityAction<int>)onValueChanged);
+
+
+            var inputFields = content.GetComponentsInChildren<TMP_InputField>();
+            var titleField = inputFields.FirstOrDefault(x => x.name == "TitleInputField");
+            titleField.onValueChanged = new TMP_InputField.OnChangeEvent();
+            titleField.onValueChanged.AddListener((UnityAction<String>)onTitleChanged);
+            var fileNameField = inputFields.FirstOrDefault(x => x.name == "FileNameInputField");
+            fileNameField.onValueChanged = new TMP_InputField.OnChangeEvent();
+            fileNameField.onValueChanged.AddListener((UnityAction<String>)onFileNameChanged);
+
+            var scrollView = content.GetComponentsInChildren<ScrollRect>().FirstOrDefault(x => x.name == "Scroll View");
+            log = scrollView.GetComponentsInChildren<TextMeshProUGUI>().FirstOrDefault(x => x.name == "Log");
+            log.text = logText;
+        }
+
+        void onTitleChanged(string value)
+        {
+            title = value;
+        }
+
+        void onFileNameChanged(string value)
+        {
+            fileName = value;
         }
 
         void onValueChanged(int value)
@@ -142,13 +174,19 @@ namespace TheOtherRoles.Objects
         }
         void close()
         {
-            Logger.info("close");
             GameObject.Destroy(this.gameObject);
         }
         void load()
         {
             var fileList = getFileList();
             Regulation.load(fileList[selected]);
+            sendLog($"{fileList[selected]} is loaded");
+        }
+
+        void sendLog(string s)
+        {
+            logText = s + "\n" + log.text;
+            log.text = logText;
         }
 
         void save()
@@ -156,8 +194,24 @@ namespace TheOtherRoles.Objects
             string filePath = Path.GetDirectoryName(Application.dataPath) + @"\Regulations\";
             bool exists = System.IO.Directory.Exists(filePath);
             if (!exists) System.IO.Directory.CreateDirectory(filePath);
-            filePath += @"\regulation.json";
-            Regulation.save(filePath);
+            if (fileName == null || fileName == string.Empty)
+            {
+                sendLog($"FileName can not be empty");
+                return;
+            }
+
+            if (title == null || title == string.Empty)
+            {
+                sendLog($"Title can not be empty");
+                return;
+            }
+            if (!Regex.IsMatch(fileName, @".*\.json"))
+            {
+                fileName += ".json";
+            }
+            filePath += fileName;
+            Regulation.save(filePath, title);
+            sendLog($"{title} is saved to {filePath}");
             showloadSettingsMenu();
         }
 
@@ -177,10 +231,10 @@ namespace TheOtherRoles.Objects
 
         class Regulation
         {
-            public static void save(string s)
+            public static void save(string filePath, string title)
             {
                 var value = new Dictionary<string, object>();
-                value.Add("title", "regulation.json");
+                value.Add("title", title);
 
                 // AmongUsオプション保存
                 value.Add("Map", (int)PlayerControl.GameOptions.MapId);
@@ -226,15 +280,16 @@ namespace TheOtherRoles.Objects
                 });
                 string data = method.Invoke(null, new object[] { value }) as string;
 
-                File.WriteAllText(s, data);
-                string filePath = Path.GetDirectoryName(Application.dataPath) + @"\Regulations\";
-                System.Diagnostics.Process.Start(filePath);
+                File.WriteAllText(filePath, data);
+                string fileDir = Path.GetDirectoryName(Application.dataPath) + @"\Regulations\";
+                System.Diagnostics.Process.Start(fileDir);
             }
 
             public static void load(string file)
             {
                 string json = File.ReadAllText(file);
                 JToken jobj = JObject.Parse(json);
+                string title = jobj["title"].ToString();
 
                 PlayerControl.GameOptions.MapId = (byte)int.Parse(jobj["Map"].ToString());
                 PlayerControl.GameOptions.NumImpostors = int.Parse(jobj["NumImpostors"].ToString());
@@ -262,7 +317,6 @@ namespace TheOtherRoles.Objects
                     int value = int.Parse(current["value"].ToString());
                     CustomOption.options.FirstOrDefault(x => x.id == id).updateSelection(value);
                 }
-
             }
         }
 
