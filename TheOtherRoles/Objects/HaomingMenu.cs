@@ -89,7 +89,7 @@ namespace TheOtherRoles.Objects
 
         public void OnDisable()
         {
-            menuObj.SetActive(false);
+            if (menuObj) menuObj.SetActive(false);
         }
 
         public void OnDestroy()
@@ -101,7 +101,7 @@ namespace TheOtherRoles.Objects
         {
             string filePath = Path.GetDirectoryName(Application.dataPath) + @"\Regulations\";
             bool exists = System.IO.Directory.Exists(filePath);
-            if(!exists) System.IO.Directory.CreateDirectory(filePath);
+            if (!exists) System.IO.Directory.CreateDirectory(filePath);
 
             if (content) GameObject.Destroy(content);
             content = GameObject.Instantiate(loadSettingsPrefab, menuObj.transform);
@@ -155,7 +155,7 @@ namespace TheOtherRoles.Objects
         {
             string filePath = Path.GetDirectoryName(Application.dataPath) + @"\Regulations\";
             bool exists = System.IO.Directory.Exists(filePath);
-            if(!exists) System.IO.Directory.CreateDirectory(filePath);
+            if (!exists) System.IO.Directory.CreateDirectory(filePath);
             filePath += @"\regulation.json";
             Regulation.save(filePath);
             showloadSettingsMenu();

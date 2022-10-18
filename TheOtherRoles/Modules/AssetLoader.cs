@@ -14,13 +14,13 @@ namespace TheOtherRoles.Modules
         public static GameObject foxTask;
         public static void LoadAssets()
         {
+            if (flag) return;
+            flag = true;
             LoadAudioAssets();
             LoadHaomingAssets();
         }
         private static void LoadAudioAssets()
         {
-            if (flag) return;
-            flag = true;
             var resourceAudioAssetBundleStream = dll.GetManifestResourceStream("TheOtherRoles.Resources.AssetBundle.audiobundle");
             var assetBundleBundle = AssetBundle.LoadFromMemory(resourceAudioAssetBundleStream.ReadFully());
             Trap.activate = assetBundleBundle.LoadAsset<AudioClip>("TrapperActivate.mp3").DontUnload();
