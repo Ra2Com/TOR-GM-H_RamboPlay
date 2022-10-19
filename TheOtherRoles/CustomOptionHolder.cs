@@ -469,9 +469,6 @@ namespace TheOtherRoles
         public static CustomOption numWireTask;
         public static CustomOption additionalWireTask;
         public static CustomOption disableVentAnimation;
-        public static CustomOption alwaysReduceCooldown;
-        public static CustomOption exceptInVent;
-        public static CustomOption exceptOnTask;
         public static CustomOption additionalEmergencyCooldown;
         public static CustomOption additionalEmergencyCooldownTime;
         public static CustomOption additionalVents;
@@ -928,9 +925,6 @@ namespace TheOtherRoles
             deadImpostorCanSeeKillColdown = CustomOption.Create(9933, CustomOptionType.General, "deadImpostorCanSeeKillCooldown", true, mapOptions);
             impostorCanIgnoreComms = CustomOption.Create(9936, CustomOptionType.General, "impostorCanIgnoreComms", false, mapOptions);
             disableVentAnimation = CustomOption.Create(9910, CustomOptionType.General, "disableVentAnimation", false, mapOptions);
-            alwaysReduceCooldown = CustomOption.Create(9911, CustomOptionType.General, "alwaysReduceCooldown", false, mapOptions);
-            exceptInVent = CustomOption.Create(9912, CustomOptionType.General, "exceptInVent", false, alwaysReduceCooldown);
-            exceptOnTask = CustomOption.Create(9931, CustomOptionType.General, "exceptOnTask", false, alwaysReduceCooldown);
             additionalEmergencyCooldown = CustomOption.Create(9934, CustomOptionType.General, "additionalEmergencyCooldown", 0f, 0f, 15f, 1f, mapOptions, format: "unitPlayers");
             additionalEmergencyCooldownTime = CustomOption.Create(9935, CustomOptionType.General, "additionalEmergencyCooldownTime", 10f, 0f, 60f, 1f, additionalEmergencyCooldown, format: "unitSeconds");
 

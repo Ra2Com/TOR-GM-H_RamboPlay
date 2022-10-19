@@ -1088,21 +1088,6 @@ namespace TheOtherRoles.Patches
             setPlayerOutline(Witch.currentTarget, Witch.color);
         }
 
-        static void reduceKillCooldown(PlayerControl __instance)
-        {
-            if (CustomOptionHolder.alwaysReduceCooldown.getBool())
-            {
-                // オプションがONの場合はベント内はクールダウン減少を止める
-                bool exceptInVent = CustomOptionHolder.exceptInVent.getBool() && __instance.inVent;
-                // 配電盤タスク中はクールダウン減少を止める
-                bool exceptOnTask = CustomOptionHolder.exceptOnTask.getBool() && Patches.ElectricPatch.onTask;
-
-                if (!__instance.Data.IsDead && !__instance.CanMove && !exceptInVent && !exceptOnTask)
-                    __instance.SetKillTimer(__instance.killTimer - Time.fixedDeltaTime);
-            }
-
-        }
-
 
         public static void Postfix(PlayerControl __instance)
         {
@@ -1189,9 +1174,6 @@ namespace TheOtherRoles.Patches
                 hackerUpdate();
                 // Bomber
                 BombEffect.UpdateAll();
-
-                // always reduce kill cooldown if setting is on
-                reduceKillCooldown(__instance);
 
                 SoulPlayer.FixedUpdate();
             }
