@@ -315,7 +315,7 @@ namespace TheOtherRoles.Objects
                 {
                     int id = int.Parse(current["id"].ToString());
                     int value = int.Parse(current["value"].ToString());
-                    CustomOption.options.FirstOrDefault(x => x.id == id).updateSelection(value);
+                    CustomOption.options.FirstOrDefault(x => x.id == id)?.updateSelection(value);
                 }
             }
         }
