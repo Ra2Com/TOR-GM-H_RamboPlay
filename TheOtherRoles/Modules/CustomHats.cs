@@ -19,6 +19,7 @@ namespace TheOtherRoles.Modules
     public class CustomHats
     {
         public static Material hatShader;
+        public static List<HatData> allHats = new();
 
         public static Dictionary<string, HatExtension> CustomHatRegistry = new();
         public static HatExtension TestExt = null;
@@ -220,11 +221,11 @@ namespace TheOtherRoles.Modules
 
                         List<CustomHat> customhats = createCustomHatDetails(hats);
                         foreach (CustomHat ch in customhats)
-                            __instance.allHats.AddItem(CreateHatData(ch));
+                            allHats.Add(CreateHatData(ch));
                     }
                     while (CustomHatLoader.hatDetails.Count > 0)
                     {
-                        __instance.allHats.AddItem(CreateHatData(CustomHatLoader.hatDetails[0]));
+                        allHats.Add(CreateHatData(CustomHatLoader.hatDetails[0]));
                         Logger.info(String.Format("Add CustomHat Author:{0} Name:{1}", CustomHatLoader.hatDetails[0].author.PadRightV2(20), CustomHatLoader.hatDetails[0].name), "CustomHats");
                         CustomHatLoader.hatDetails.RemoveAt(0);
                     }
@@ -235,6 +236,10 @@ namespace TheOtherRoles.Modules
                         Logger.error("Unable to add Custom Hats\n" + e, "CustomHats");
                 }
                 LOADED = true;
+                var hatData = __instance.allHats.ToList();
+                hatData.AddRange(allHats);
+                __instance.allHats = hatData.ToArray();
+
             }
             static void Postfix(HatManager __instance)
             {
