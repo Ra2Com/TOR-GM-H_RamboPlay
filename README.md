@@ -69,7 +69,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 リリースの簡易化のため一部表を省略しています。
 | Among Us Version              | GM本家 | Haoming Edition | Download                                                                                                                               |
 | ----------------------------- | ------ | --------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| 2022.8.24s                    |        | 最新版          | [ダウンロード](https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/latest/)                                                 |
+| 2022.10.18s                    |        | 最新版          | [ダウンロード](https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/latest/)                                                 |
 | -                             | -      | -               | -                                                                                                                                      |
 | 2022.3.29s                    | v3.5.4 | v2.0.12         | [ダウンロード](https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/v2.0.12/TheOtherRoles-GM-Haoming.v2.0.12.zip)   |
 | 2022.3.29s                    | v3.5.4 | v2.0.11         | [ダウンロード](https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/v2.0.11/TheOtherRoles-GM-Haoming.v2.0.11.zip)   |
