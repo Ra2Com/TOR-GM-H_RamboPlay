@@ -353,6 +353,7 @@ namespace TheOtherRoles.Objects
                 var obj = new GameObject("HaomingMenu");
                 obj.AddComponent<HaomingMenu>();
                 console.MenuPrefab = HaomingMenu.prefab;
+                leftBox.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
             }
         }
     }
