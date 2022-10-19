@@ -55,7 +55,6 @@ package:
     - mkdir -p TheOtherRoles-GM-Haoming/TheOtherHats/Test
     - cp CICD/TestHat.png TheOtherRoles-GM-Haoming/TheOtherHats/Test/
     - cp CICD/steam_appid.txt TheOtherRoles-GM-Haoming/
-    - cp CICD/Newtonsoft.Json.dll.bak TheOtherRoles-GM-Haoming/BepinEx/plugins
     - mv TheOtherRolesGM.dll TheOtherRoles-GM-Haoming/BepinEx/plugins
     #- curl -L https://github.com/SubmergedAmongUs/Submerged/releases/download/v2022.5.8/Submerged.dll -o TheOtherRoles-GM-Haoming/BepinEx/plugins/Submerged.dll
     - cd TheOtherRoles-GM-Haoming
