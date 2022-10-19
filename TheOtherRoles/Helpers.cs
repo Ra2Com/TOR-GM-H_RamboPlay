@@ -872,5 +872,15 @@ namespace TheOtherRoles
             else rpcName = callId.ToString();
             return rpcName;
         }
+
+        public static string SerializeObject(object value)
+        {
+            Type type = TheOtherRolesPlugin.JsonNet.GetType("Newtonsoft.Json.JsonConvert");
+            MethodInfo method = type.GetMethods().FirstOrDefault(c =>
+            {
+                return c.Name == "SerializeObject" && c.GetParameters().Length == 1;
+            });
+            return method.Invoke(null, new object[] { value }) as string;
+        }
     }
 }

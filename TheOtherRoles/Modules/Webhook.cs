@@ -1,14 +1,6 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using LogLevel = BepInEx.Logging.LogLevel;
-using UnityEngine;
-using System.Reflection;
-using System.Net.Http;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
 
 
 namespace TheOtherRoles
@@ -112,14 +104,7 @@ namespace TheOtherRoles
                 value.Add("embeds", embeds);
 
                 // json変換
-                var dll = Assembly.LoadFile(Path.GetDirectoryName(Application.dataPath) + @"\BepinEx\Plugins\Newtonsoft.Json.dll.bak");
-                string className = "Newtonsoft.Json.JsonConvert";
-                Type type = dll.GetType(className);
-                MethodInfo method = type.GetMethods().FirstOrDefault(c =>
-                {
-                    return c.Name == "SerializeObject" && c.GetParameters().Length == 1;
-                });
-                string data = method.Invoke(null, new object[] { value }) as string;
+                string data = Helpers.SerializeObject(value);
                 Logger.info(data);
 
                 var content = new StringContent(data, Encoding.UTF8, "application/json");

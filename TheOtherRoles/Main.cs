@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
@@ -8,8 +9,8 @@ using HarmonyLib;
 using Hazel;
 using TheOtherRoles.Modules;
 using TheOtherRoles.Objects;
-using UnityEngine;
 using UnhollowerRuntimeLib;
+using UnityEngine;
 
 
 namespace TheOtherRoles
@@ -52,6 +53,8 @@ namespace TheOtherRoles
         public static ConfigEntry<string> ShowPopUpVersion { get; set; }
         public static ConfigEntry<string> WebhookUrl { get; set; }
         public static ConfigEntry<bool> TransparentMap { get; set; }
+
+        public static Assembly JsonNet;
 
         public static Sprite ModStamp;
 
@@ -128,6 +131,12 @@ namespace TheOtherRoles
             Harmony.PatchAll();
             Patches.SubmergedPatch.Patch();
             SubmergedCompatibility.Initialize();
+
+            //Newtonsoft.Jsonを読み込み
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("TheOtherRoles.Resources.Newtonsoft.Json.dll");
+            byte[] buffer = new byte[stream.Length];
+            stream.Read(buffer, 0, buffer.Length);
+            JsonNet = Assembly.Load(buffer);
 
             // オレオレオブジェクト有効化
             ClassInjector.RegisterTypeInIl2Cpp(typeof(FoxTask));
