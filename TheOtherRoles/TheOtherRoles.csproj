@@ -54,6 +54,10 @@
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
         <Exec Command="py &quot;$(SolutionDir)stringsToJson.py&quot;" />
-        <Exec Command="copy &quot;$(SolutionDir)UnityAssets\HaomingAssets\AssetBundles\StandaloneWindows\haomingassets&quot; &quot;$(SolutionDir)TheOtherRoles\Resources\AssetBundle\haomingassets&quot;" />
+		<Copy
+            SourceFiles="$(SolutionDir)UnityAssets\HaomingAssets\AssetBundles\StandaloneWindows\haomingassets"
+            DestinationFolder="$(SolutionDir)TheOtherRoles\Resources\AssetBundle\"
+            ContinueOnError="true"
+        />
     </Target>
 </Project>
