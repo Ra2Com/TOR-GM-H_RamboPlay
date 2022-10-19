@@ -229,6 +229,12 @@ namespace TheOtherRoles.Modules
                         Logger.info(String.Format("Add CustomHat Author:{0} Name:{1}", CustomHatLoader.hatDetails[0].author.PadRightV2(20), CustomHatLoader.hatDetails[0].name), "CustomHats");
                         CustomHatLoader.hatDetails.RemoveAt(0);
                     }
+                    if (!LOADED)
+                    {
+                        var hatData = __instance.allHats.ToList();
+                        hatData.AddRange(allHats);
+                        __instance.allHats = hatData.ToArray();
+                    }
                 }
                 catch (System.Exception e)
                 {
@@ -236,9 +242,6 @@ namespace TheOtherRoles.Modules
                         Logger.error("Unable to add Custom Hats\n" + e, "CustomHats");
                 }
                 LOADED = true;
-                var hatData = __instance.allHats.ToList();
-                hatData.AddRange(allHats);
-                __instance.allHats = hatData.ToArray();
 
             }
             static void Postfix(HatManager __instance)
