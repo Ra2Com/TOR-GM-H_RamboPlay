@@ -9,8 +9,9 @@ using HarmonyLib;
 using Hazel;
 using TheOtherRoles.Modules;
 using TheOtherRoles.Objects;
-using UnhollowerRuntimeLib;
+using TheOtherRoles.Patches;
 using UnityEngine;
+using UnhollowerRuntimeLib;
 
 
 namespace TheOtherRoles
@@ -187,9 +188,7 @@ namespace TheOtherRoles
                 //ゲーム強制終了
                 if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.F5))
                 {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.forceEnd();
+                    ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.ForceEnd, false);
                 }
             }
 

@@ -22,7 +22,6 @@ namespace TheOtherRoles
         ResetVariables = 60,
         FinishResetVariables,
         ShareOptions,
-        ForceEnd,
         SetRole,
         FinishSetRole,
         SetLovers,
@@ -207,21 +206,6 @@ namespace TheOtherRoles
             }
         }
 
-        public static void forceEnd()
-        {
-            foreach (PlayerControl player in CachedPlayer.AllPlayers)
-            {
-                Logger.info("ForceEnd", "Debug");
-                AdditionalTempData.forceEnd = true;
-
-                if (!player.Data.Role.IsImpostor)
-                {
-                    player.RemoveInfected();
-                    player.MurderPlayer(player);
-                    player.Data.IsDead = true;
-                }
-            }
-        }
         public static void workaroundSetRoles(byte numberOfRoles, MessageReader reader)
         {
             for (int i = 0; i < numberOfRoles; i++)
@@ -1538,9 +1522,6 @@ namespace TheOtherRoles
                             break;
                         case (byte)CustomRPC.ShareOptions:
                             RPCProcedure.ShareOptions((int)reader.ReadPackedUInt32(), reader);
-                            break;
-                        case (byte)CustomRPC.ForceEnd:
-                            RPCProcedure.forceEnd();
                             break;
                         case (byte)CustomRPC.SetRole:
                             byte roleId = reader.ReadByte();

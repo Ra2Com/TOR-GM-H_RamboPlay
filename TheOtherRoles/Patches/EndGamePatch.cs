@@ -76,7 +76,6 @@ namespace TheOtherRoles.Patches
 
     static class AdditionalTempData
     {
-        public static bool forceEnd = false;
         // Should be implemented using a proper GameOverReason in the future
         public static WinCondition winCondition = WinCondition.Default;
         public static List<WinCondition> additionalWinConditions = new();
@@ -271,7 +270,7 @@ namespace TheOtherRoles.Patches
             bool moriartyWin = Moriarty.exists && gameOverReason == (GameOverReason)CustomGameOverReason.MoriartyWin;
             bool everyoneDead = AdditionalTempData.playerRoles.All(x => x.Status != FinalStatus.Alive);
             bool akujoWin = Akujo.numAlive > 0 && gameOverReason != GameOverReason.HumansByTask;
-            bool forceEnd = AdditionalTempData.forceEnd;
+            bool forceEnd = gameOverReason == (GameOverReason)CustomGameOverReason.ForceEnd;
 
 
             // Mini lose
@@ -491,11 +490,10 @@ namespace TheOtherRoles.Patches
             }
 
 
-            else if (forceEnd)
+            if (forceEnd)
             {
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                 AdditionalTempData.winCondition = WinCondition.ForceEnd;
-                AdditionalTempData.forceEnd = false;
             }
 
 
