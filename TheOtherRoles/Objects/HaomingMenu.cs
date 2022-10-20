@@ -271,14 +271,7 @@ namespace TheOtherRoles.Objects
                 value.Add("mod_options", mod_options);
 
                 // json変換
-                var dll = Assembly.LoadFile(Path.GetDirectoryName(Application.dataPath) + @"\BepinEx\Plugins\Newtonsoft.Json.dll.bak");
-                string className = "Newtonsoft.Json.JsonConvert";
-                Type type = dll.GetType(className);
-                MethodInfo method = type.GetMethods().FirstOrDefault(c =>
-                {
-                    return c.Name == "SerializeObject" && c.GetParameters().Length == 1;
-                });
-                string data = method.Invoke(null, new object[] { value }) as string;
+                string data = Helpers.SerializeObject(value);
 
                 File.WriteAllText(filePath, data);
                 string fileDir = Path.GetDirectoryName(Application.dataPath) + @"\Regulations\";
