@@ -61,15 +61,15 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 | [トラッパー](#トラッパー)                        |                               | [人形遣い(テスト中)](#人形遣い)               |
 | [爆弾魔](#爆弾魔)                                |                               | [ジキルとハイド(テスト中)](#ジキルとハイド)   |       |
 | [イビルトラッカー](#イビルトラッカー)            |                               | [モリアーティ](#モリアーティ)                 |       |
-| [ミミック](#ミミック)                            |                               |                                               |       |
+| [ミミック](#ミミック)                            |                               | [キューピッド](#キューピッド)                 |       |
 
 
 # GM本家とのバージョン対応表
-
+きゅーきゅー
 リリースの簡易化のため一部表を省略しています。
 | Among Us Version              | GM本家 | Haoming Edition | Download                                                                                                                               |
 | ----------------------------- | ------ | --------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| 2022.10.18s                    |        | 最新版          | [ダウンロード](https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/latest/)                                                 |
+| 2022.10.18s                   |        | 最新版          | [ダウンロード](https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/latest/)                                                 |
 | -                             | -      | -               | -                                                                                                                                      |
 | 2022.3.29s                    | v3.5.4 | v2.0.12         | [ダウンロード](https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/v2.0.12/TheOtherRoles-GM-Haoming.v2.0.12.zip)   |
 | 2022.3.29s                    | v3.5.4 | v2.0.11         | [ダウンロード](https://github.com/haoming37/TheOtherRoles-GM-Haoming/releases/download/v2.0.11/TheOtherRoles-GM-Haoming.v2.0.11.zip)   |
@@ -477,6 +477,24 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 | 勝利に必要なキル数 | 勝利に必要なキル数           |
 | 洗脳距離           | 洗脳できる距離               |
 | キル距離           | 洗脳者のキル可能距離         |
+
+
+## キューピッド
+任意の二人をLoversにすることができる(タスクフェイズで選択、会議後に有効化）
+自身が選んだLoversが最後まで生存すると勝利
+
+- 一定時間以内に選定しないと自殺
+- 自身が選んだ対象のどちらかが死亡した場合に後追い自殺
+- キューピッドは（通常の）Loversに選出されない
+- （通常の）Loversの片方をCupidのLoversに選択した場合残された一人は会議終了後に死亡する（死体はでない）
+- キューピッドは任意の対象にシールドを付与することができる(オプション)
+- シールドを付与した対象がキルされると代わりにキューピッドが死亡する
+- シールドを付与された対象はキルされたことを認識することができない
+
+| オプション名             | 説明                                             |
+| ------------------------ | ------------------------------------------------ |
+| パートナー選びの時間制限 | 制限時間内にパートナー二人を選定しないと自殺する |
+| シールド有効化           | シールド能力の有効化 ON/OFF                      |
 
 # クレジット
 EvilHackerのアイデアとコード  
