@@ -7,6 +7,8 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using Hazel;
 using UnityEngine;
+using AmongUs.Data;
+using AmongUs.Data.Legacy;
 
 namespace TheOtherRoles
 {
@@ -965,25 +967,25 @@ namespace TheOtherRoles
         }
     }
 
-    [HarmonyPatch(typeof(SaveManager), "GameHostOptions", MethodType.Getter)]
-    public static class SaveManagerGameHostOptionsPatch
-    {
-        private static int numImpostors;
-        public static void Prefix()
-        {
-            if (SaveManager.hostOptionsData == null)
-            {
-                SaveManager.hostOptionsData = SaveManager.LoadGameOptions("gameHostOptions");
-            }
+    // [HarmonyPatch(typeof(LegacySaveManager), "GameHostOptions", MethodType.Getter)]
+    // public static class SaveManagerGameHostOptionsPatch
+    // {
+    //     private static int numImpostors;
+    //     public static void Prefix()
+    //     {
+    //         if (SaveManager.hostOptionsData == null)
+    //         {
+    //             LegacySaveManager.hostOptionsData = LegacySaveManager.LoadGameOptions("gameHostOptions");
+    //         }
 
-            numImpostors = SaveManager.hostOptionsData.NumImpostors;
-        }
+    //         numImpostors = SaveManager.hostOptionsData.NumImpostors;
+    //     }
 
-        public static void Postfix(ref GameOptionsData __result)
-        {
-            __result.NumImpostors = numImpostors;
-        }
-    }
+    //     public static void Postfix(ref GameOptionsData __result)
+    //     {
+    //         __result.NumImpostors = numImpostors;
+    //     }
+    // }
 
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class GameOptionsNextPagePatch

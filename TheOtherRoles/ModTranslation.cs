@@ -77,7 +77,7 @@ namespace TheOtherRoles
             }
 
             var data = stringData[keyClean];
-            int lang = (int)SaveManager.LastLanguage;
+            int lang = (int)AmongUs.Data.DataManager.Settings.Language.CurrentLanguage;
 
             if (data.ContainsKey(lang))
             {

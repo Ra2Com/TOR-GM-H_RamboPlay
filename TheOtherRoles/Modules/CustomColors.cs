@@ -3,6 +3,8 @@ using System.Linq;
 using HarmonyLib;
 using UnhollowerBaseLib;
 using UnityEngine;
+using AmongUs.Data;
+using AmongUs.Data.Legacy;
 
 namespace TheOtherRoles.Modules
 {
@@ -259,19 +261,19 @@ namespace TheOtherRoles.Modules
                     }
                 }
             }
-            [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.LoadPlayerPrefs))]
+            [HarmonyPatch(typeof(LegacySaveManager), nameof(LegacySaveManager.LoadPlayerPrefs))]
             private static class LoadPlayerPrefsPatch
             { // Fix Potential issues with broken colors
                 private static bool needsPatch = false;
                 public static void Prefix([HarmonyArgument(0)] bool overrideLoad)
                 {
-                    if (!SaveManager.loaded || overrideLoad)
+                    if (!LegacySaveManager.loaded || overrideLoad)
                         needsPatch = true;
                 }
                 public static void Postfix()
                 {
                     if (!needsPatch) return;
-                    SaveManager.colorConfig %= CustomColors.pickableColors;
+                    LegacySaveManager.colorConfig %= CustomColors.pickableColors;
                     needsPatch = false;
                 }
             }

@@ -10,11 +10,12 @@ namespace TheOtherRoles.Patches
         {
             static bool Prefix(AccountManager __instance)
             {
-                if (SaveManager.lastPlayerName == null)
-                    return true;
-                SaveManager.PlayerName = SaveManager.lastPlayerName;
-                __instance.accountTab.UpdateNameDisplay();
-                return false; // Don't execute original
+                return true;
+                // if (SaveManager.lastPlayerName == null)
+                //     return true;
+                // SaveManager.PlayerName = SaveManager.lastPlayerName;
+                // __instance.accountTab.UpdateNameDisplay();
+                // return false; // Don't execute original
             }
         }
     }

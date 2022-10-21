@@ -1379,10 +1379,10 @@ namespace TheOtherRoles
                     else if (randomNumber == 2) msg = string.Format(ModTranslation.getString("mediumQuestion3"), Math.Round(timeSinceDeath / 1000)) + name;
                     else msg = string.Format(ModTranslation.getString("mediumQuestion4"), RoleInfo.GetRolesString(Medium.target.killerIfExisting, false, includeHidden: true)) + name; ; // Excludes mini
 
-                    bool CensorChat = SaveManager.CensorChat;
-                    if (CensorChat) SaveManager.CensorChat = false;
+                    bool CensorChat = AmongUs.Data.DataManager.Settings.Multiplayer.CensorChat;
+                    if (CensorChat)  AmongUs.Data.DataManager.Settings.Multiplayer.CensorChat = false;
                     FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"{msg}");
-                    SaveManager.CensorChat = CensorChat;
+                    AmongUs.Data.DataManager.Settings.Multiplayer.CensorChat = CensorChat;
 
                     // Remove soul
                     if (Medium.oneTimeUse)

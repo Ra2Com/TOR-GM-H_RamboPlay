@@ -168,8 +168,8 @@ namespace TheOtherRoles
         {
             if (!EOSManager.Instance.isKWSMinor)
             {
-                SaveManager.chatModeType = 1;
-                SaveManager.isGuest = false;
+                AmongUs.Data.DataManager.Settings.Multiplayer.chatMode = (InnerNet.QuickChatModes)1;
+                // SaveManager.isGuest = false;
             }
         }
     }
