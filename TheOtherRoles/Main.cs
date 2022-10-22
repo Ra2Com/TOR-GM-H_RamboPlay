@@ -23,7 +23,7 @@ namespace TheOtherRoles
     {
         public const string Id = "me.eisbison.theotherroles";
 
-        public const string VersionString = "999.999.999";
+        public const string VersionString = "2022.10.21.0";
 
         public static System.Version Version = System.Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
@@ -168,7 +168,12 @@ namespace TheOtherRoles
         {
             if (!EOSManager.Instance.isKWSMinor)
             {
+#if Steam
                 AmongUs.Data.DataManager.Settings.Multiplayer.chatMode = (InnerNet.QuickChatModes)1;
+#elif Epic
+                SaveManager.chatModeType = 1;
+                SaveManager.isGuest = false;
+#endif
                 // SaveManager.isGuest = false;
             }
         }

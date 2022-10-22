@@ -7,8 +7,6 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using Hazel;
 using UnityEngine;
-using AmongUs.Data;
-using AmongUs.Data.Legacy;
 
 namespace TheOtherRoles
 {

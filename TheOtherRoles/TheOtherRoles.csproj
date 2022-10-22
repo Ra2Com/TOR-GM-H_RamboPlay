@@ -4,8 +4,11 @@
         <Version>999.999.999</Version>
         <Description>TheOtherRoles: GM Haoming Edition</Description>
         <Authors>Haoming</Authors>
+		<Platforms>AnyCPU;x64;x86</Platforms>
 		<Configurations>Debug;Release;Release_Dev;Release_Local;Embedded</Configurations>
 		<LangVersion>latest</LangVersion>
+		<DefineConstants Condition="'$(GamePlatform)' == 'Steam'">Steam</DefineConstants>
+		<DefineConstants Condition="'$(GamePlatform)' == 'Epic'">Epic</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -42,8 +45,8 @@
     </ItemGroup>
 
     <ItemGroup>
-		<Reference Include="$(AmongUs)/BepInEx/core/*.dll" />
-        <Reference Include="$(AmongUs)/BepInEx/unhollowed/*.dll" />
+        <PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.10.25" Condition="'$(GamePlatform)' == 'Steam'" />
+        <PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.10.18" Condition="'$(GamePlatform)' == 'Epic'" />
         <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.570" />
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" />
     </ItemGroup>
