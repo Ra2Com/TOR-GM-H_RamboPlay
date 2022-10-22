@@ -64,7 +64,6 @@ namespace TheOtherRoles
                         timeLimitText.text = timeString;
                         timeLimitText.enabled = true;
                     }
-                    Logger.info($"{timeLeft}");
                     if (timeLeft <= 0 && (lovers1 == null || lovers2 == null) && player.isAlive())
                     {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.CupidSuicide, Hazel.SendOption.Reliable, -1);
@@ -305,6 +304,12 @@ namespace TheOtherRoles
         public static bool isCupidLovers(PlayerControl player)
         {
             return 0 < Cupid.players.Count(x => x.lovers1 == player || x.lovers2 == player);
+        }
+
+        public static string getIcon(PlayerControl player)
+        {
+            bool isLovers = 0 < Cupid.players.Count(x => x.lovers1 == player || x.lovers2 == player);
+            return isLovers ? Helpers.cs(Cupid.color, " ♥"): "";
         }
     }
 

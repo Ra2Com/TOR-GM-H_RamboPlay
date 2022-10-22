@@ -21,7 +21,8 @@ namespace TheOtherRoles
         public static TMPro.TMP_Text timeLimitText;
         public static TMPro.TMP_Text numKeepsText;
 
-        public static Color color = new Color32(232, 57, 185, byte.MaxValue);
+        // public static Color color = new Color32(232, 57, 185, byte.MaxValue);
+        public static Color color = new Color32(142, 69, 147, byte.MaxValue);
 
         public static List<Color> iconColors = new List<Color>
             {
@@ -71,6 +72,17 @@ namespace TheOtherRoles
         }
 
         public Color iconColor;
+
+        public static string getIcon(PlayerControl player)
+        {
+            // 本命と悪女
+            var akujo = Akujo.players.FirstOrDefault(x => x.player == player || x.honmei?.player == player);
+            if (akujo != null) return Helpers.cs(akujo.iconColor, " ♥");
+            // キープの場合
+            akujo = Akujo.players.FirstOrDefault(x =>  0  < x.keeps.Count(x => x.player == player));
+            if (akujo != null) return Helpers.cs(Color.black, " ♥");
+            return "";
+        }
 
         public Akujo()
         {

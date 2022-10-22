@@ -194,7 +194,7 @@ namespace TheOtherRoles.Patches
                     PlayerName = p.PlayerName,
                     PlayerId = p.PlayerId,
                     ColorId = p.DefaultOutfit.ColorId,
-                    NameSuffix = Lovers.getIcon(p.Object),
+                    NameSuffix = Lovers.getIcon(p.Object) + Cupid.getIcon(p.Object) + Akujo.getIcon(p.Object),
                     Roles = roles,
                     RoleString = RoleInfo.GetRolesString(p.Object, true, excludeRoles, true),
                     TasksTotal = tasksTotal,

@@ -215,7 +215,8 @@ namespace TheOtherRoles.Patches
 
                 blockLovers = new List<byte> {
                     (byte)RoleType.Bait,
-                    (byte)RoleType.Cupid
+                    (byte)RoleType.Cupid,
+                    (byte)RoleType.Akujo
                 };
 
                 if (!Lovers.hasTasks)
@@ -375,7 +376,7 @@ namespace TheOtherRoles.Patches
                 }
 
                 // Assign Lovers
-                if (CustomOptionHolder.loversSpawnRate.enabled && !CustomOptionHolder.akujoSpawnRate.enabled)
+                if (CustomOptionHolder.loversSpawnRate.enabled)
                 {
                     for (int i = 0; i < CustomOptionHolder.loversNumCouples.getFloat(); i++)
                     {
