@@ -76,11 +76,11 @@ namespace TheOtherRoles
         public static string getIcon(PlayerControl player)
         {
             // 本命と悪女
-            var akujo = Akujo.players.FirstOrDefault(x => x.player == player || x.honmei?.player == player);
+            var akujo = Akujo.players.FirstOrDefault(x => x.player == player || x.honmei?.player == player || x.cupidHonmei == player);
             if (akujo != null) return Helpers.cs(akujo.iconColor, " ♥");
             // キープの場合
-            akujo = Akujo.players.FirstOrDefault(x =>  0  < x.keeps.Count(x => x.player == player));
-            if (akujo != null) return Helpers.cs(Color.black, " ♥");
+            akujo = Akujo.players.FirstOrDefault(x =>  0  < x.keeps?.Count(x => x.player == player));
+            if (akujo != null) return Helpers.cs(Color.grey, " ♥");
             return "";
         }
 
