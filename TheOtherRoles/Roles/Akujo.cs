@@ -40,6 +40,7 @@ namespace TheOtherRoles
 
         public PlayerControl currentTarget;
         public AkujoHonmei honmei = null;
+        public PlayerControl cupidHonmei = null;
         public List<AkujoKeep> keeps = new List<AkujoKeep>();
 
         public DateTime startTime = DateTime.UtcNow;
@@ -92,11 +93,21 @@ namespace TheOtherRoles
 
                 if (player.isAlive())
                 {
-                    if (timeLeft > 0 && (honmei == null || keepsLeft > 0))
+                    if (timeLeft > 0 && ((honmei == null && cupidHonmei == null) || keepsLeft > 0))
                     {
                         List<PlayerControl> untargetablePlayers = new List<PlayerControl>();
                         if (honmei != null) untargetablePlayers.Add(honmei.player);
                         untargetablePlayers.AddRange(keeps.Select(x => x.player));
+                        untargetablePlayers.AddRange(Cupid.allPlayers);
+                        if(Cupid.isCupidLovers(player))
+                        {
+                            var cupid = Cupid.players.FirstOrDefault(x => x.lovers1 == player || x.lovers2 == player);
+                            if (cupid != null)
+                            {
+                                untargetablePlayers.Add(cupid.lovers1);
+                                untargetablePlayers.Add(cupid.lovers2);
+                            }
+                        }
 
                         currentTarget = setTarget(untargetablePlayers: untargetablePlayers);
                         setPlayerOutline(currentTarget, Akujo.color);
@@ -107,7 +118,7 @@ namespace TheOtherRoles
                             timeLimitText.enabled = Helpers.ShowButtons;
                         }
                     }
-                    else if (timeLeft <= 0 && (honmei == null || keepsLeft == numKeeps))
+                    else if (timeLeft <= 0 && ((honmei == null && cupidHonmei == null) || keepsLeft == numKeeps))
                     {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.AkujoSuicide, Hazel.SendOption.Reliable, -1);
                         writer.Write(player.PlayerId);
@@ -186,8 +197,8 @@ namespace TheOtherRoles
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     local.setHonmei(local.currentTarget);
                 },
-                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Akujo) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && local.honmei == null && local.timeLeft > 0; },
-                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Akujo) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && local.currentTarget != null && local.honmei == null && local.timeLeft > 0; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Akujo) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && (local.honmei == null && local.cupidHonmei == null) && local.timeLeft > 0; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Akujo) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && local.currentTarget != null && (local.honmei == null && local.cupidHonmei == null) && local.timeLeft > 0; },
                 () => { honmeiButton.Timer = honmeiButton.MaxTimer; },
                 getHonmeiSprite(),
                 new Vector3(0f, 1.0f, 0),
@@ -253,6 +264,7 @@ namespace TheOtherRoles
                 return;
             honmei = AkujoHonmei.addModifier(target);
             honmei.akujo = this;
+            breakCouple(target);
         }
 
         public void setKeep(PlayerControl target)
@@ -262,6 +274,29 @@ namespace TheOtherRoles
             var keep = AkujoKeep.addModifier(target);
             keep.akujo = this;
             keeps.Add(keep);
+            breakCouple(target);
+        }
+
+        public static void breakCouple(PlayerControl p1)
+        {
+            // ラヴァーズ寝取り
+            if (p1.isLovers())
+            {
+                var couple = Lovers.couples.FirstOrDefault(x => x.lover1 == p1 || x.lover2 == p1);
+                if (couple != null)
+                {
+                    if (couple.lover1 == p1)
+                    {
+                        Lovers.eraseCouple(p1);
+                        couple.lover2.MurderPlayer(couple.lover2);
+                    }
+                    else if (couple.lover2 == p1)
+                    {
+                        Lovers.eraseCouple(p1);
+                        couple.lover1.MurderPlayer(couple.lover1);
+                    }
+                }
+            }
         }
 
         public static bool isPartner(PlayerControl player, PlayerControl partner)
@@ -277,6 +312,15 @@ namespace TheOtherRoles
         public bool isPartner(PlayerControl partner)
         {
             return honmei?.player == partner || keeps.Any(x => x.player == partner);
+        }
+
+        public static bool isHonmei(PlayerControl player)
+        {
+            return 0 < Akujo.players.Count(x => x.honmei?.player == player);
+        }
+        public static bool isKeep(PlayerControl player)
+        {
+            return 0 < Akujo.players.Count(x => 0 < x.keeps.Count(y => y.player == player));
         }
 
         public static Color getAvailableColor()

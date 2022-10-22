@@ -48,7 +48,6 @@ namespace TheOtherRoles
         public override void OnMeetingStart() { }
         public override void OnMeetingEnd()
         {
-            if (lovers1 != null && lovers2 != null && PlayerControl.LocalPlayer == player && PlayerControl.LocalPlayer.isAlive()) createLovers();
         }
 
         public override void FixedUpdate()
@@ -132,6 +131,7 @@ namespace TheOtherRoles
                             local.lovers2 = local.currentTarget;
                         }
                     }
+                    if (local.lovers1 != null && local.lovers2 != null) createLovers();
                 },
                 () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Cupid) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && local.lovers2 == null && local.timeLeft > 0; },
                 () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Cupid) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && local.currentTarget != null && local.lovers2 == null && local.timeLeft > 0; },
@@ -201,8 +201,9 @@ namespace TheOtherRoles
             return arrowSprite;
         }
 
-        public static void breakCouple(PlayerControl p1, PlayerControl p2, PlayerControl cupid)
+        public static void breakCouple(PlayerControl p1, PlayerControl p2)
         {
+            // ラヴァーズ寝取り
             if (p1.isLovers())
             {
                 var couple = Lovers.couples.FirstOrDefault(x => x.lover1 == p1 || x.lover2 == p1);
@@ -211,25 +212,69 @@ namespace TheOtherRoles
                     if (couple.lover1 == p1 && couple.lover2 != p2)
                     {
                         Lovers.eraseCouple(p1);
-                        couple.lover2.Exiled();
-                        if (couple.lover2 == PlayerControl.LocalPlayer)
-                        {
-                            FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(cupid.Data, couple.lover2.Data);
-                        }
+                        couple.lover2.MurderPlayer(couple.lover2);
+                        finalStatuses[couple.lover2.PlayerId] = FinalStatus.Suicide;
                     }
                     else if (couple.lover2 == p1 && couple.lover1 != p2)
                     {
                         Lovers.eraseCouple(p1);
-                        couple.lover1.Exiled();
-                        if (couple.lover1 == PlayerControl.LocalPlayer)
-                        {
-                            FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(cupid.Data, couple.lover1.Data);
-                        }
+                        couple.lover1.MurderPlayer(couple.lover1);
+                        finalStatuses[couple.lover1.PlayerId] = FinalStatus.Suicide;
                     }
                     else
                     {
                         Lovers.eraseCouple(p1);
                     }
+                }
+            }
+            // 本命寝取り
+            if (Akujo.isHonmei(p1) && !p2.isRole(RoleType.Akujo))
+            {
+                // 悪女と本命を解消させる
+                var honmei = AkujoHonmei.getModifier(p1);
+                var akujo = honmei.akujo;
+                akujo.honmei = null;
+                AkujoHonmei.eraseModifier(honmei.player);
+                // 悪女を自殺させる
+                akujo.player.MurderPlayer(akujo.player);
+                finalStatuses[akujo.player.PlayerId] = FinalStatus.Suicide;
+            }
+            // 悪女寝取り
+            else if (p1.isRole(RoleType.Akujo) && !Akujo.isHonmei(p2))
+            {
+                // 悪女と本命を解消させる
+                var akujo = Akujo.getRole(p1);
+                var honmei = akujo.honmei;
+                if (honmei != null)
+                {
+                    AkujoHonmei.eraseModifier(honmei.player);
+                    akujo.honmei = null;
+                    // 本命を自殺させる
+                    honmei.player.MurderPlayer(honmei.player);
+                    finalStatuses[honmei.player.PlayerId] = FinalStatus.Suicide;
+                }
+                akujo.cupidHonmei = p2;
+
+            }
+            // 悪女、本命が選択された場合
+            else if (p1.isRole(RoleType.Akujo) && Akujo.isHonmei(p2))
+            {
+                var akujo = Akujo.getRole(p1);
+                akujo.honmei = null;
+                akujo.cupidHonmei = p2;
+            }
+            // キープ寝取り
+            else if (Akujo.isKeep(p1) && !p2.isRole(RoleType.Akujo))
+            {
+                foreach (var akujo in Akujo.players)
+                {
+                    List<AkujoKeep> removeList = new();
+                    akujo.keeps.ForEach(x =>
+                    {
+                        if (x.player == p1) removeList.Add(x);
+                    });
+                    removeList.ForEach(x => akujo.keeps.Remove(x));
+                    AkujoKeep.eraseModifier(p1);
                 }
             }
         }

@@ -398,6 +398,11 @@ namespace TheOtherRoles.Patches
                         TempData.winners.Add(new WinningPlayerData(akujo.player.Data));
                         TempData.winners.Add(new WinningPlayerData(akujo.honmei.player.Data));
                     }
+                    if (akujo.player.isAlive() && akujo.cupidHonmei != null && akujo.cupidHonmei.isAlive())
+                    {
+                        TempData.winners.Add(new WinningPlayerData(akujo.player.Data));
+                        TempData.winners.Add(new WinningPlayerData(akujo.cupidHonmei.Data));
+                    }
                 }
             }
 
@@ -529,19 +534,32 @@ namespace TheOtherRoles.Patches
                 }
             }
 
-            // キューピッドがLoversと勝利する
-            if (loversWin)
+            // キューピッドが悪女と勝利する
+            if (akujoWin)
             {
-                foreach(var p in Cupid.allPlayers)
+                foreach(var p in Cupid.players)
                 {
-                    var cupid = Cupid.players.FirstOrDefault(x => x.player == p);
-                    if(cupid.lovers1 != null & cupid.lovers1.isAlive() && cupid.lovers2 != null && cupid.lovers2.isAlive())
+                    if (p.player.isDead()) continue;
+                    if ((p.lovers1 != null && p.lovers1.isRole(RoleType.Akujo)) || (p.lovers2 != null && p.lovers2.isRole(RoleType.Akujo)))
                     {
-                        WinningPlayerData wpd = new(p.Data);
+                        WinningPlayerData wpd = new(p.player.Data);
                         TempData.winners.Add(wpd);
                     }
                 }
             }
+            // キューピッドがLoversと勝利する
+            else if (loversWin)
+            {
+                foreach(var cupid in Cupid.players)
+                {
+                    if(cupid.lovers1 != null & cupid.lovers1.isAlive() && cupid.lovers2 != null && cupid.lovers2.isAlive())
+                    {
+                        WinningPlayerData wpd = new(cupid.player.Data);
+                        TempData.winners.Add(wpd);
+                    }
+                }
+            }
+
 
             // Possible Additional winner: Lawyer
             if (!lawyerSoloWin && Lawyer.lawyer != null && Lawyer.target != null && Lawyer.target.isAlive())

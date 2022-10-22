@@ -260,8 +260,8 @@ namespace TheOtherRoles
             var cupid = Cupid.allRoles.FirstOrDefault(x => x.player.PlayerId == cupidId) as Cupid;
             cupid.lovers1 = p1;
             cupid.lovers2 = p2;
-            Cupid.breakCouple(p1, p2, cupid.player);
-            Cupid.breakCouple(p2, p1, cupid.player);
+            Cupid.breakCouple(p1, p2);
+            Cupid.breakCouple(p2, p1);
             Lovers.addCouple(p1, p2);
         }
         public static void setCupidShield(byte cupidId, byte targetId)

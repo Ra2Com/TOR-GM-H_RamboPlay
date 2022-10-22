@@ -169,7 +169,7 @@ namespace TheOtherRoles.Patches
             {
                 setPlayerNameColor(PlayerControl.LocalPlayer, Sherlock.color);
             }
-            else if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Cupid))
+            else if (CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.Cupid) && CachedPlayer.LocalPlayer.PlayerControl.isAlive())
             {
                 setPlayerNameColor(CachedPlayer.LocalPlayer.PlayerControl, Cupid.color);
                 var cupid = Cupid.allRoles.FirstOrDefault(x => x.player == PlayerControl.LocalPlayer) as Cupid;
@@ -177,7 +177,7 @@ namespace TheOtherRoles.Patches
                     (MeetingHud.Instance.state == MeetingHud.VoteStates.Voted ||
                     MeetingHud.Instance.state == MeetingHud.VoteStates.NotVoted ||
                     MeetingHud.Instance.state == MeetingHud.VoteStates.Discussion);
-                string suffix = Helpers.cs(Lovers.color, " ♥");
+                string suffix = Helpers.cs(Cupid.color, " ♥");
                 foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     if (p == cupid.lovers1 || p ==cupid.lovers2)
@@ -399,6 +399,10 @@ namespace TheOtherRoles.Patches
             if (CachedPlayer.LocalPlayer.PlayerControl.isLovers() && CachedPlayer.LocalPlayer.PlayerControl.isAlive())
             {
                 string suffix = Lovers.getIcon(CachedPlayer.LocalPlayer.PlayerControl);
+                if(Cupid.isCupidLovers(CachedPlayer.LocalPlayer))
+                {
+                    suffix = Helpers.cs(Cupid.color, " ♥");
+                }
                 var lover1 = CachedPlayer.LocalPlayer.PlayerControl;
                 var lover2 = CachedPlayer.LocalPlayer.PlayerControl.getPartner();
 
@@ -465,6 +469,10 @@ namespace TheOtherRoles.Patches
                 foreach (var couple in Lovers.couples)
                 {
                     string suffix = Lovers.getIcon(couple.lover1);
+                    if(Cupid.isCupidLovers(couple.lover1))
+                    {
+                        suffix = Helpers.cs(Cupid.color, " ♥");
+                    }
                     couple.lover1.cosmetics.nameText.text += suffix;
                     couple.lover2.cosmetics.nameText.text += suffix;
 
