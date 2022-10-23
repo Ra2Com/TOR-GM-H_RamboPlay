@@ -1026,12 +1026,19 @@ namespace TheOtherRoles
             }
         }
 
-        public static void cupidSuicide(byte cupidId, bool isScapegoat)
+        public static void cupidSuicide(byte cupidId, bool isScapegoat, bool isExiled)
         {
             Cupid cupid = Cupid.getRole(Helpers.playerById(cupidId));
             if (cupid != null)
             {
-                cupid.player.MurderPlayer(cupid.player);
+                if(!isExiled)
+                {
+                    cupid.player.MurderPlayer(cupid.player);
+                }
+                else
+                {
+                    cupid.player.Exiled();
+                }
                 finalStatuses[cupid.player.PlayerId] = isScapegoat ? FinalStatus.Scapegoat : FinalStatus.Suicide;
             }
 
@@ -1820,7 +1827,7 @@ namespace TheOtherRoles
                             RPCProcedure.akujoSuicide(reader.ReadByte());
                             break;
                         case (byte)CustomRPC.CupidSuicide:
-                            RPCProcedure.cupidSuicide(reader.ReadByte(), reader.ReadBoolean());
+                            RPCProcedure.cupidSuicide(reader.ReadByte(), reader.ReadBoolean(), reader.ReadBoolean());
                             break;
                         case (byte)CustomRPC.SetCupidShield:
                             RPCProcedure.setCupidShield(reader.ReadByte(), reader.ReadByte());

@@ -69,8 +69,9 @@ namespace TheOtherRoles
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.CupidSuicide, Hazel.SendOption.Reliable, -1);
                         writer.Write(player.PlayerId);
                         writer.Write(false);
+                        writer.Write(false);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.cupidSuicide(player.PlayerId, false);
+                        RPCProcedure.cupidSuicide(player.PlayerId, false, false);
                     }
                 }
             }
@@ -89,8 +90,9 @@ namespace TheOtherRoles
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.CupidSuicide, Hazel.SendOption.Reliable, -1);
                 writer.Write(x.player.PlayerId);
                 writer.Write(true);
+                writer.Write(false);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.cupidSuicide(x.player.PlayerId, true);
+                RPCProcedure.cupidSuicide(x.player.PlayerId, true, false);
             });
 
         }
@@ -290,12 +292,18 @@ namespace TheOtherRoles
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.CupidSuicide, Hazel.SendOption.Reliable, -1);
                         writer.Write(cupid.player.PlayerId);
                         writer.Write(false);
+                        writer.Write(false);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.cupidSuicide(cupid.player.PlayerId, false);
+                        RPCProcedure.cupidSuicide(cupid.player.PlayerId, false, false);
                     }
                     else
                     {
-                        cupid.player.Exiled();
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.CupidSuicide, Hazel.SendOption.Reliable, -1);
+                        writer.Write(cupid.player.PlayerId);
+                        writer.Write(false);
+                        writer.Write(true);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.cupidSuicide(cupid.player.PlayerId, false, true);
                     }
                     finalStatuses[cupid.player.PlayerId] = FinalStatus.Suicide;
                 }
@@ -309,7 +317,7 @@ namespace TheOtherRoles
         public static string getIcon(PlayerControl player)
         {
             bool isLovers = 0 < Cupid.players.Count(x => x.lovers1 == player || x.lovers2 == player);
-            return isLovers ? Helpers.cs(Cupid.color, " ♥"): "";
+            return isLovers ? Helpers.cs(Cupid.color, " ♥") : "";
         }
     }
 
