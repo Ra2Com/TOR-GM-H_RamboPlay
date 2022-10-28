@@ -61,11 +61,7 @@ namespace TheOtherRoles.Modules
             {
                 DynamicLobbies.LobbyLimit = settings.MaxPlayers;
                 settings.MaxPlayers = 15; // Force 15 Player Lobby on Server
-#if Steam
                 AmongUs.Data.DataManager.Settings.Multiplayer.chatMode = InnerNet.QuickChatModes.FreeChatOrQuickChat;
-#elif Epic
-                SaveManager.ChatModeType = InnerNet.QuickChatModes.FreeChatOrQuickChat;
-#endif
             }
             public static void Postfix(InnerNet.InnerNetClient __instance, [HarmonyArgument(0)] GameOptionsData settings)
             {
@@ -77,11 +73,7 @@ namespace TheOtherRoles.Modules
         {
             public static void Prefix(InnerNet.InnerNetClient __instance)
             {
-#if Steam
                 AmongUs.Data.DataManager.Settings.Multiplayer.chatMode = InnerNet.QuickChatModes.FreeChatOrQuickChat;
-#elif EPIC
-                SaveManager.ChatModeType = InnerNet.QuickChatModes.FreeChatOrQuickChat;
-#endif
             }
         }
         [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]

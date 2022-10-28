@@ -360,21 +360,13 @@ namespace TheOtherRoles.Modules
                     float ypos = offset - (i / __instance.NumPerRow) * __instance.YOffset;
                     ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab, __instance.scroller.Inner);
 
-#if Steam
                     int color = __instance.HasLocalPlayer() ? CachedPlayer.LocalPlayer.PlayerControl.Data.DefaultOutfit.ColorId : AmongUs.Data.DataManager.Player.Customization.Color;
-#elif Epic
-                    int color = __instance.HasLocalPlayer() ? CachedPlayer.LocalPlayer.PlayerControl.Data.DefaultOutfit.ColorId : SaveManager.BodyColor;
-#endif
 
                     colorChip.transform.localPosition = new Vector3(xpos, ypos, inventoryZ);
                     if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
                     {
                         colorChip.Button.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
-#if Steam
                         colorChip.Button.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(FastDestroyableSingleton<HatManager>.Instance.GetHatById(AmongUs.Data.DataManager.Player.Customization.Hat))));
-#elif Epic
-                        colorChip.Button.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(FastDestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
-#endif
                         colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
                     }
                     else

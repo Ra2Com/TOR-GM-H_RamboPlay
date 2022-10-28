@@ -77,11 +77,7 @@ namespace TheOtherRoles
             }
 
             var data = stringData[keyClean];
-#if Steam
             int lang = (int)AmongUs.Data.DataManager.Settings.Language.CurrentLanguage;
-#elif Epic
-            int lang = (int)SaveManager.LastLanguage;
-#endif
 
             if (data.ContainsKey(lang))
             {

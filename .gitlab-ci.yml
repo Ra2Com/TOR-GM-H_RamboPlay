@@ -31,7 +31,7 @@ build:
     - sed -i "s/999.999.999/${VERSION}/" TheOtherRoles/TheOtherRoles.csproj
     - sed -i "s/999.999.999/${VERSION}/" TheOtherRoles/Main.cs
     - dotnet restore --packages $NUGET_PACKAGES_DIRECTORY
-    - dotnet build --configuration Release --no-restore
+    - dotnet build --configuration Release --no-restore /p:GamePlatform=Steam
     - mv ${SOURCE_CODE_PATH}/obj/Release/netstandard2.1/TheOtherRolesGM.dll ${CI_PROJECT_DIR}
   artifacts:
     name: "TheOtherRoles-GM-H-dll-v${VERSION}"
