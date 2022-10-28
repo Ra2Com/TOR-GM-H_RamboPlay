@@ -103,11 +103,9 @@ namespace TheOtherRoles
             nmks = new List<PlayerControl>();
         }
 
-        private static Sprite buttonSprite;
+        public static Sprite buttonSprite;
         public static Sprite getButtonSprite()
         {
-            if (buttonSprite) return buttonSprite;
-            buttonSprite = ModTranslation.getImage("LighterButton", 115f);
             return buttonSprite;
         }
     }

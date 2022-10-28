@@ -18,6 +18,9 @@ namespace TheOtherRoles.Modules
             flag = true;
             LoadAudioAssets();
             LoadHaomingAssets();
+#if DEV
+            LoadDevAssets();
+#endif
         }
         private static void LoadAudioAssets()
         {
@@ -39,6 +42,15 @@ namespace TheOtherRoles.Modules
             HaomingMenu.menuPrefab = assetBundleBundle.LoadAsset<GameObject>("HaomingMenu.prefab").DontUnload();
             HaomingMenu.loadSettingsPrefab = assetBundleBundle.LoadAsset<GameObject>("LoadSettingsMenu.prefab").DontUnload();
         }
+
+#if DEV
+        private static void LoadDevAssets()
+        {
+            var resourceTestAssetBundleStream = dll.GetManifestResourceStream("TheOtherRoles.Resources.AssetBundle.devassets");
+            var assetBundleBundle = AssetBundle.LoadFromMemory(resourceTestAssetBundleStream.ReadFully());
+            NMK.buttonSprite = assetBundleBundle.LoadAsset<Sprite>("nmkbutton.png").DontUnload();
+        }
+#endif
         public static byte[] ReadFully(this Stream input)
         {
             using var ms = new MemoryStream();
