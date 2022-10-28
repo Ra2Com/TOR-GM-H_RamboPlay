@@ -139,11 +139,11 @@ namespace TheOtherRoles.Patches
                                 message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {ModTranslation.getString("errorNewerVersion")} (v{playerVersions[client.Id].version})\n</color>";
                                 blockStart = true;
                             }
-                            // else if (!PV.GuidMatches())
-                            // { // version presumably matches, check if Guid matches
-                            //     message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {ModTranslation.getString("errorWrongVersion")} v{playerVersions[client.Id].version} <size=30%>({PV.guid})</size>\n</color>";
-                            //     blockStart = true;
-                            // }
+                            else if (!PV.GuidMatches())
+                            { // version presumably matches, check if Guid matches
+                                message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {ModTranslation.getString("errorWrongVersion")} v{playerVersions[client.Id].version} <size=30%>({PV.guid})</size>\n</color>";
+                                blockStart = true;
+                            }
                         }
                     }
                     if (blockStart)
