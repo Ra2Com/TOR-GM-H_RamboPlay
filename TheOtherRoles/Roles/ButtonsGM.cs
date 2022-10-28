@@ -38,6 +38,9 @@ namespace TheOtherRoles
             Moriarty.SetButtonCooldowns();
             Sherlock.SetButtonCooldowns();
             Cupid.SetButtonCooldowns();
+#if DEV
+            NMK.SetButtonCooldowns();
+#endif
             foreach (CustomButton gmButton in gmButtons)
             {
                 gmButton.MaxTimer = 0.0f;
@@ -76,6 +79,9 @@ namespace TheOtherRoles
             Moriarty.MakeButtons(hm);
             Sherlock.MakeButtons(hm);
             Cupid.MakeButtons(hm);
+#if DEV
+            NMK.MakeButtons(hm);
+#endif
 
             gmButtons = new List<CustomButton>();
             gmKillButtons = new List<CustomButton>();

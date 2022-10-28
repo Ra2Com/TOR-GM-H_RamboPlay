@@ -330,6 +330,9 @@ namespace TheOtherRoles.Patches
                     // Only add Spy if more than 1 impostor as the spy role is otherwise useless
                     crewSettings.Add((byte)RoleType.Spy, CustomOptionHolder.spySpawnRate.data);
                 }
+#if DEV
+                crewSettings.Add((byte)RoleType.NMK, CustomOptionHolder.nmkSpawnRate.data);
+#endif
 
 
                 return new RoleAssignmentData

@@ -80,6 +80,9 @@ namespace TheOtherRoles
         Moriarty,
         Cupid,
         EvilHacker,
+#if DEV
+        NMK,
+#endif
 
 
 
@@ -100,6 +103,9 @@ namespace TheOtherRoles
             { RoleType.Lighter, typeof(RoleBase<Lighter>) },
             { RoleType.FortuneTeller, typeof(RoleBase<FortuneTeller>) },
             { RoleType.Sherlock, typeof(RoleBase<Sherlock>)},
+#if DEV
+            { RoleType.NMK, typeof(RoleBase<NMK>)},
+#endif
 
             // Impostor
             { RoleType.Ninja, typeof(RoleBase<Ninja>) },

@@ -487,6 +487,10 @@ namespace TheOtherRoles
         public static CustomOption akujoKnowsRoles;
         public static CustomOption akujoNumKeeps;
         public static CustomOption akujoSheriffKillsHonmei;
+#if DEV
+        public static CustomRoleOption nmkSpawnRate;
+        public static CustomOption nmkNum;
+#endif
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new();
 
@@ -919,6 +923,10 @@ namespace TheOtherRoles
             mediumCooldown = CustomOption.Create(371, CustomOptionType.Crewmate, "mediumCooldown", 30f, 5f, 120f, 5f, mediumSpawnRate, format: "unitSeconds");
             mediumDuration = CustomOption.Create(372, CustomOptionType.Crewmate, "mediumDuration", 3f, 0f, 15f, 1f, mediumSpawnRate, format: "unitSeconds");
             mediumOneTimeUse = CustomOption.Create(373, CustomOptionType.Crewmate, "mediumOneTimeUse", false, mediumSpawnRate);
+#if DEV
+            nmkSpawnRate = new CustomRoleOption(1 + 100000, CustomOptionType.Crewmate, "nmk", NMK.color, 7, roleEnabled: true);
+            nmkNum = CustomOption.Create(2 + 100000, CustomOptionType.Crewmate, "akujoTimeLimit", 2f, 1f, 10f, 1f, nmkSpawnRate);
+#endif
 
             // Other options
 

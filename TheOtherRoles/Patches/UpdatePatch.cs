@@ -363,6 +363,13 @@ namespace TheOtherRoles.Patches
 
             // Crewmate roles with no changes: Mini
             // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter,  Witch and Mafioso
+
+#if DEV
+            if (player.isRole(RoleType.NMK))
+            {
+                setPlayerNameColor(player, NMK.color);
+            }
+#endif
         }
 
         static void setNameTags()

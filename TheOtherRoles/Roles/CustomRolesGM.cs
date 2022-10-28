@@ -47,6 +47,9 @@ namespace TheOtherRoles
             Akujo.Clear();
             Moriarty.Clear();
             Sherlock.Clear();
+#if DEV
+            NMK.Clear();
+#endif
             Role.ClearAll();
         }
 

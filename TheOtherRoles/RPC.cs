@@ -133,6 +133,9 @@ namespace TheOtherRoles
         MoriartyKill,
         CupidSuicide,
         SetCupidShield,
+#if DEV
+        SetNMK,
+#endif
     }
 
     public static class RPCProcedure
@@ -1031,7 +1034,7 @@ namespace TheOtherRoles
             Cupid cupid = Cupid.getRole(Helpers.playerById(cupidId));
             if (cupid != null)
             {
-                if(!isExiled)
+                if (!isExiled)
                 {
                     cupid.player.MurderPlayer(cupid.player);
                 }
@@ -1503,6 +1506,12 @@ namespace TheOtherRoles
             Moriarty.counter += 1;
         }
 
+        public static void setNMK(byte playerId)
+        {
+            var p = Helpers.getPlayerById(playerId);
+            NMK.nmks.Add(p);
+        }
+
         [HarmonyPatch(typeof(CustomNetworkTransform), nameof(CustomNetworkTransform.HandleRpc))]
         class CustomNetworkTransformRPCHandlerPatch
         {
@@ -1948,6 +1957,11 @@ namespace TheOtherRoles
                         case (byte)CustomRPC.WorkaroundSetRoles:
                             RPCProcedure.workaroundSetRoles(reader.ReadByte(), reader);
                             break;
+#if DEV
+                        case (byte)CustomRPC.SetNMK:
+                            RPCProcedure.setNMK(reader.ReadByte());
+                            break;
+#endif
                     }
                 }
                 catch (Exception ex)
