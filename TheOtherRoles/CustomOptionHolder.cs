@@ -924,8 +924,8 @@ namespace TheOtherRoles
             mediumDuration = CustomOption.Create(372, CustomOptionType.Crewmate, "mediumDuration", 3f, 0f, 15f, 1f, mediumSpawnRate, format: "unitSeconds");
             mediumOneTimeUse = CustomOption.Create(373, CustomOptionType.Crewmate, "mediumOneTimeUse", false, mediumSpawnRate);
 #if DEV
-            nmkSpawnRate = new CustomRoleOption(1 + 100000, CustomOptionType.Crewmate, "nmk", NMK.color, 7, roleEnabled: true);
-            nmkNum = CustomOption.Create(2 + 100000, CustomOptionType.Crewmate, "akujoTimeLimit", 2f, 1f, 10f, 1f, nmkSpawnRate);
+            nmkSpawnRate = new CustomRoleOption(1 + 100000, CustomOptionType.Crewmate, "nmk", NMK.color, 1);
+            nmkNum = CustomOption.Create(2 + 100000, CustomOptionType.Crewmate, "numNMK", 2f, 1f, 10f, 1f, nmkSpawnRate);
 #endif
 
             // Other options

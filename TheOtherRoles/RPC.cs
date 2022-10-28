@@ -1506,11 +1506,22 @@ namespace TheOtherRoles
             Moriarty.counter += 1;
         }
 
+
+#if DEV
         public static void setNMK(byte playerId)
         {
             var p = Helpers.getPlayerById(playerId);
-            NMK.nmks.Add(p);
+            p.Data.Outfits[PlayerOutfitType.Shapeshifted] = p.Data.DefaultOutfit;
+            p.CurrentOutfitType = PlayerOutfitType.Shapeshifted;
+            p.RawSetHat("hat_pkHW01_Wolf", 15);
+            p.RawSetVisor("", 15);
+            p.RawSetColor(15);
+            Helpers.setSkinWithAnim(p.MyPhysics, "skin_SuitB");
+            if (p.cosmetics.currentPet) UnityEngine.Object.Destroy(p.cosmetics.currentPet.gameObject);
+            p.RawSetName("なめこ");
+            if(NMK.nmks.Count(x => x.PlayerId == playerId) == 0) NMK.nmks.Add(p);
         }
+#endif
 
         [HarmonyPatch(typeof(CustomNetworkTransform), nameof(CustomNetworkTransform.HandleRpc))]
         class CustomNetworkTransformRPCHandlerPatch

@@ -1,4 +1,24 @@
 {
+    "nmk": {
+        "0": "NMK",
+        "11": "NMK"
+    },
+    "numNMK": {
+        "0": "number of NMK button",
+        "11": "\u306a\u3081\u3053\u3092\u4f5c\u308c\u308b\u6570"
+    },
+    "nmkShortDesc": {
+        "0": "NMK! NMK!",
+        "11": "NMK! NMK!"
+    },
+    "nmkIntroDesc": {
+        "0": "NMK! NMK!",
+        "11": "NMK! NMK!"
+    },
+    "nmkFullDesc": {
+        "0": "NMK! NMK!",
+        "11": "NMK! NMK!"
+    },
     "foxCanFixSabotageWhileStealth": {
         "0": "Fox can fix sabotage in stealth",
         "11": "\u900f\u660e\u4e2d\u306b\u30b5\u30dc\u30bf\u30fc\u30b8\u30e5\u3092\u76f4\u305b\u308b",

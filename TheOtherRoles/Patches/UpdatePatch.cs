@@ -180,7 +180,7 @@ namespace TheOtherRoles.Patches
                 string suffix = Helpers.cs(Cupid.color, " ♥");
                 foreach (var p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
-                    if (p == cupid.lovers1 || p ==cupid.lovers2)
+                    if (p == cupid.lovers1 || p == cupid.lovers2)
                     {
                         p.cosmetics.nameText.text += suffix;
                         if (meetingShow)
@@ -406,7 +406,7 @@ namespace TheOtherRoles.Patches
             if (CachedPlayer.LocalPlayer.PlayerControl.isLovers() && CachedPlayer.LocalPlayer.PlayerControl.isAlive())
             {
                 string suffix = Lovers.getIcon(CachedPlayer.LocalPlayer.PlayerControl);
-                if(Cupid.isCupidLovers(CachedPlayer.LocalPlayer))
+                if (Cupid.isCupidLovers(CachedPlayer.LocalPlayer))
                 {
                     suffix = Helpers.cs(Cupid.color, " ♥");
                 }
@@ -476,7 +476,7 @@ namespace TheOtherRoles.Patches
                 foreach (var couple in Lovers.couples)
                 {
                     string suffix = Lovers.getIcon(couple.lover1);
-                    if(Cupid.isCupidLovers(couple.lover1))
+                    if (Cupid.isCupidLovers(couple.lover1))
                     {
                         suffix = Helpers.cs(Cupid.color, " ♥");
                     }
@@ -537,6 +537,14 @@ namespace TheOtherRoles.Patches
                     }
                 }
             }
+
+#if DEV
+            foreach(var p in NMK.nmks)
+            {
+                p.cosmetics.nameText.text = "なめこ";
+            }
+#endif
+
         }
 
         static void updateShielded()
