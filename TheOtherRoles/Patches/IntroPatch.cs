@@ -333,6 +333,11 @@ namespace TheOtherRoles.Patches
                 __instance.RoleText.color = roleInfo.color;
                 __instance.RoleBlurbText.text = roleInfo.introDescription;
                 __instance.RoleBlurbText.color = roleInfo.color;
+                if (roleInfo == RoleInfo.crewmate && PlayerControl.LocalPlayer.name == "卯ノ花しうね")
+                {
+                    __instance.RoleText.text = "素村";
+                    __instance.RoleBlurbText.text = "大当たりー";
+                }
 
                 if (CachedPlayer.LocalPlayer.PlayerControl.hasModifier(ModifierType.Madmate))
                 {
