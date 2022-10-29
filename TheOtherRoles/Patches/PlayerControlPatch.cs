@@ -1088,6 +1088,16 @@ namespace TheOtherRoles.Patches
             setPlayerOutline(Witch.currentTarget, Witch.color);
         }
 
+        private static void StopCooldown(PlayerControl __instance)
+        {
+            if (CustomOptionHolder.exceptOnTask.getBool())
+            {
+                if (Patches.ElectricPatch.onTask)
+                {
+                    __instance.SetKillTimer(__instance.killTimer + Time.fixedDeltaTime);
+                }
+            }
+        }
 
         public static void Postfix(PlayerControl __instance)
         {
@@ -1179,6 +1189,7 @@ namespace TheOtherRoles.Patches
             }
 
             TheOtherRolesGM.FixedUpdate(__instance);
+            StopCooldown(__instance);
         }
     }
 

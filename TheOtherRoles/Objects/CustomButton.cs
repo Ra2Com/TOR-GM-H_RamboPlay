@@ -191,7 +191,8 @@ namespace TheOtherRoles.Objects
                     Timer -= Time.deltaTime;
                 else if (!CachedPlayer.LocalPlayer.PlayerControl.inVent)
                 {
-                    Timer -= Time.deltaTime;
+                    if(!(CustomOptionHolder.exceptOnTask.getBool() && Patches.ElectricPatch.onTask))
+                        Timer -= Time.deltaTime;
                 }
             }
 
