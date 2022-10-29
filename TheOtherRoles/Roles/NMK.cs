@@ -65,8 +65,7 @@ namespace TheOtherRoles
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.setNMK(local.currentTarget.PlayerId);
                 },
-                // () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.NMK) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
-                () => {return true;},
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.NMK) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
                 () =>
                 {
                     if (numNMKText != null)
