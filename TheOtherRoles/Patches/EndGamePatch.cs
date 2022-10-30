@@ -257,6 +257,8 @@ namespace TheOtherRoles.Patches
             foreach (var winner in winnersToRemove) TempData.winners.Remove(winner);
 
             bool saboWin = gameOverReason == GameOverReason.ImpostorBySabotage;
+            bool impostorWin = gameOverReason == GameOverReason.ImpostorByKill || gameOverReason == GameOverReason.ImpostorByVote || gameOverReason == GameOverReason.ImpostorDisconnect;
+            bool crewWin = gameOverReason == GameOverReason.HumansByTask || gameOverReason == GameOverReason.HumansByVote || gameOverReason == GameOverReason.HumansDisconnect;
 
             bool jesterWin = Jester.jester != null && gameOverReason == (GameOverReason)CustomGameOverReason.JesterWin;
             bool arsonistWin = Arsonist.arsonist != null && gameOverReason == (GameOverReason)CustomGameOverReason.ArsonistWin;
@@ -274,6 +276,42 @@ namespace TheOtherRoles.Patches
             bool akujoWin = Akujo.numAlive > 0 && gameOverReason != GameOverReason.HumansByTask;
             bool forceEnd = gameOverReason == (GameOverReason)CustomGameOverReason.ForceEnd;
 
+
+            // 勝利画面が正常にでないことがあるのでインポスター・クルーの勝利者追加処理をここに移動
+            if (impostorWin)
+            {
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                foreach (var p in PlayerControl.AllPlayerControls)
+                {
+                    if (p.isImpostor() || p.hasModifier(ModifierType.Madmate) || p.hasModifier(ModifierType.CreatedMadmate))
+                    {
+                        WinningPlayerData wpd = new(p.Data);
+                        TempData.winners.Add(wpd);
+                        continue;
+                    }
+
+                    if (SchrodingersCat.team == SchrodingersCat.Team.Impostor)
+                    {
+                        foreach (var cat in SchrodingersCat.allPlayers)
+                        {
+                            WinningPlayerData wpd = new(cat.Data);
+                            TempData.winners.Add(wpd);
+                        }
+                    }
+                }
+            }
+            else if (crewWin)
+            {
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                foreach (var p in PlayerControl.AllPlayerControls)
+                {
+                    if (p.isCrew())
+                    {
+                        WinningPlayerData wpd = new(p.Data);
+                        TempData.winners.Add(wpd);
+                    }
+                }
+            }
 
             // Mini lose
             if (miniLose)
@@ -505,39 +543,10 @@ namespace TheOtherRoles.Patches
 
 
 
-            // Madmate win with impostors
-            if (Madmate.exists && TempData.winners.ToArray().Any(x => x.IsImpostor))
-            {
-                foreach (var p in Madmate.allPlayers)
-                {
-                    WinningPlayerData wpd = new(p.Data);
-                    TempData.winners.Add(wpd);
-                }
-            }
-
-            // Created Madmate win with impostors
-            if (CreatedMadmate.exists && TempData.winners.ToArray().Any(x => x.IsImpostor))
-            {
-                foreach (var p in CreatedMadmate.allPlayers)
-                {
-                    WinningPlayerData wpd = new(p.Data);
-                    TempData.winners.Add(wpd);
-                }
-            }
-
-            if (SchrodingersCat.team == SchrodingersCat.Team.Impostor && TempData.winners.ToArray().Any(x => x.IsImpostor))
-            {
-                foreach (var p in SchrodingersCat.allPlayers)
-                {
-                    WinningPlayerData wpd = new(p.Data);
-                    TempData.winners.Add(wpd);
-                }
-            }
-
             // キューピッドが悪女と勝利する
             if (akujoWin)
             {
-                foreach(var p in Cupid.players)
+                foreach (var p in Cupid.players)
                 {
                     if (p.player.isDead()) continue;
                     if ((p.lovers1 != null && p.lovers1.isRole(RoleType.Akujo)) || (p.lovers2 != null && p.lovers2.isRole(RoleType.Akujo)))
@@ -550,9 +559,9 @@ namespace TheOtherRoles.Patches
             // キューピッドがLoversと勝利する
             else if (loversWin)
             {
-                foreach(var cupid in Cupid.players)
+                foreach (var cupid in Cupid.players)
                 {
-                    if(cupid.lovers1 != null & cupid.lovers1.isAlive() && cupid.lovers2 != null && cupid.lovers2.isAlive())
+                    if (cupid.lovers1 != null & cupid.lovers1.isAlive() && cupid.lovers2 != null && cupid.lovers2.isAlive())
                     {
                         WinningPlayerData wpd = new(cupid.player.Data);
                         TempData.winners.Add(wpd);
@@ -1083,7 +1092,7 @@ namespace TheOtherRoles.Patches
                 private static bool CheckAndEndGameForMoriartyWin(ShipStatus __instance, PlayerStatistics statistics)
                 {
                     // Moriartyが生存していること
-                    if(!Moriarty.isAlive()) return false;
+                    if (!Moriarty.isAlive()) return false;
                     if (statistics.MoriartyAlive >= statistics.TotalAlive - statistics.MoriartyAlive - statistics.FoxAlive &&
                         statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0 && statistics.JekyllAndHydeAlive == 0 &&
                         (statistics.MoriartyLovers == 0 || statistics.MoriartyLovers >= statistics.CouplesAlive * 2)
