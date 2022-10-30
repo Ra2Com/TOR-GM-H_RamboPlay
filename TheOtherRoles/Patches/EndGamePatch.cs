@@ -249,13 +249,6 @@ namespace TheOtherRoles.Patches
                 }
             }
 
-            List<WinningPlayerData> winnersToRemove = new();
-            foreach (WinningPlayerData winner in TempData.winners)
-            {
-                if (notWinners.Any(x => x.Data.PlayerName == winner.PlayerName)) winnersToRemove.Add(winner);
-            }
-            foreach (var winner in winnersToRemove) TempData.winners.Remove(winner);
-
             bool saboWin = gameOverReason == GameOverReason.ImpostorBySabotage;
             bool impostorWin = gameOverReason == GameOverReason.ImpostorByKill || gameOverReason == GameOverReason.ImpostorByVote || gameOverReason == GameOverReason.ImpostorDisconnect;
             bool crewWin = gameOverReason == GameOverReason.HumansByTask || gameOverReason == GameOverReason.HumansByVote || gameOverReason == GameOverReason.HumansDisconnect;
@@ -312,6 +305,14 @@ namespace TheOtherRoles.Patches
                     }
                 }
             }
+
+            // 勝利画面から不要なキャラを追放する
+            List<WinningPlayerData> winnersToRemove = new();
+            foreach (WinningPlayerData winner in TempData.winners)
+            {
+                if (notWinners.Any(x => x.Data.PlayerName == winner.PlayerName)) winnersToRemove.Add(winner);
+            }
+            foreach (var winner in winnersToRemove) TempData.winners.Remove(winner);
 
             // Mini lose
             if (miniLose)
