@@ -1,5 +1,5 @@
-#if DEV
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Hazel;
@@ -8,7 +8,7 @@ using TheOtherRoles.Objects;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.Patches.PlayerControlFixedUpdatePatch;
 using UnityEngine;
-
+using BepInEx.IL2CPP.Utils.Collections;
 namespace TheOtherRoles
 {
     [HarmonyPatch]
@@ -28,6 +28,11 @@ namespace TheOtherRoles
 
         public bool lightActive = false;
 
+        public static AudioClip nattyae;
+        public static AudioClip siteyaru;
+        public static AudioClip syouti;
+        public static AudioClip yeah;
+
         public NMK()
         {
             RoleType = roleId = RoleType.NMK;
@@ -36,7 +41,7 @@ namespace TheOtherRoles
         public override void OnMeetingStart() { }
         public override void OnMeetingEnd()
         {
-            foreach(var p in nmks)
+            foreach (var p in nmks)
             {
                 // MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetNMK, Hazel.SendOption.Reliable, -1);
                 // writer.Write(p.PlayerId);
@@ -64,6 +69,11 @@ namespace TheOtherRoles
                     writer.Write(local.currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.setNMK(local.currentTarget.PlayerId);
+                    writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.PlayNMKVoice, Hazel.SendOption.Reliable, -1);
+                    writer.Write(local.currentTarget.PlayerId);
+                    writer.Write(local.player.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.playNMKVoice(local.currentTarget.PlayerId, local.player.PlayerId);
                 },
                 () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.NMK) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
                 () =>
@@ -83,7 +93,8 @@ namespace TheOtherRoles
                 hm,
                 hm.UseButton,
                 KeyCode.F
-            ){buttonText = "NMK!"};
+            )
+            { buttonText = "NMK!" };
             numNMKText = GameObject.Instantiate(nmkButton.actionButton.cooldownTimerText, nmkButton.actionButton.cooldownTimerText.transform.parent);
             numNMKText.text = "";
             numNMKText.enableWordWrapping = false;
@@ -107,6 +118,72 @@ namespace TheOtherRoles
         {
             return buttonSprite;
         }
+
+        public static void playVoice(byte targetPlayerId, byte nmkId)
+        {
+            HudManager.Instance.StartCoroutine(CoPlayVoice(targetPlayerId, nmkId).WrapToIl2Cpp());
+        }
+
+        public static IEnumerator CoPlayVoice(byte targetPlayerId, byte nmkId)
+        {
+            var targetClip = getClipById(rnd.Next(2, 4));
+            var nmkClip = getClipById(rnd.Next(0, 2));
+            var target = Helpers.playerById(targetPlayerId);
+            var nmk = Helpers.playerById(nmkId);
+            AudioSource nmkAudioSource = nmk.gameObject.GetComponent<AudioSource>();
+            if (nmkAudioSource == null)
+            {
+                nmkAudioSource = nmk.gameObject.AddComponent<AudioSource>();
+                nmkAudioSource.priority = 0;
+                nmkAudioSource.spatialBlend = 1;
+                nmkAudioSource.clip = nmkClip;
+                nmkAudioSource.loop = false;
+                nmkAudioSource.playOnAwake = false;
+                nmkAudioSource.maxDistance = 3;
+                nmkAudioSource.minDistance = 1;
+                nmkAudioSource.rolloffMode = AudioRolloffMode.Linear;
+            }
+            AudioSource targetAudioSource = target.gameObject.GetComponent<AudioSource>();
+            if (targetAudioSource == null)
+            {
+                targetAudioSource = target.gameObject.AddComponent<AudioSource>();
+                targetAudioSource.priority = 0;
+                targetAudioSource.spatialBlend = 1;
+                targetAudioSource.clip = targetClip;
+                targetAudioSource.loop = false;
+                targetAudioSource.playOnAwake = false;
+                targetAudioSource.maxDistance = 3;
+                targetAudioSource.minDistance = 1;
+                targetAudioSource.rolloffMode = AudioRolloffMode.Linear;
+            }
+            nmkAudioSource.PlayOneShot(nmkClip);
+            while (nmkAudioSource.isPlaying)
+            {
+                yield return new WaitForSeconds(1);
+            }
+            targetAudioSource.PlayOneShot(targetClip);
+            while (nmkAudioSource.isPlaying)
+            {
+                yield return new WaitForSeconds(1);
+            }
+            yield break;
+        }
+
+        public static AudioClip getClipById(int audioNum)
+        {
+            switch (audioNum)
+            {
+                case 0:
+                    return nattyae;
+                case 1:
+                    return siteyaru;
+                case 2:
+                    return syouti;
+                case 3:
+                    return yeah;
+                default:
+                    return nattyae;
+            }
+        }
     }
 }
-#endif

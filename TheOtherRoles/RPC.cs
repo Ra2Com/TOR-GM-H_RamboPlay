@@ -135,6 +135,7 @@ namespace TheOtherRoles
         SetCupidShield,
 #if DEV
         SetNMK,
+        PlayNMKVoice,
 #endif
     }
 
@@ -1521,6 +1522,11 @@ namespace TheOtherRoles
             p.RawSetName("なめこ");
             if(NMK.nmks.Count(x => x.PlayerId == playerId) == 0) NMK.nmks.Add(p);
         }
+
+        public static void playNMKVoice(byte playerId, byte nmkId)
+        {
+            NMK.playVoice(playerId, nmkId);
+        }
 #endif
 
         [HarmonyPatch(typeof(CustomNetworkTransform), nameof(CustomNetworkTransform.HandleRpc))]
@@ -1971,6 +1977,9 @@ namespace TheOtherRoles
 #if DEV
                         case (byte)CustomRPC.SetNMK:
                             RPCProcedure.setNMK(reader.ReadByte());
+                            break;
+                        case (byte)CustomRPC.PlayNMKVoice:
+                            RPCProcedure.playNMKVoice(reader.ReadByte(), reader.ReadByte());
                             break;
 #endif
                     }

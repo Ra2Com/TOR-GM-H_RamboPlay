@@ -49,6 +49,10 @@ namespace TheOtherRoles.Modules
             var resourceTestAssetBundleStream = dll.GetManifestResourceStream("TheOtherRoles.Resources.AssetBundle.devassets");
             var assetBundleBundle = AssetBundle.LoadFromMemory(resourceTestAssetBundleStream.ReadFully());
             NMK.buttonSprite = assetBundleBundle.LoadAsset<Sprite>("nmkbutton.png").DontUnload();
+            NMK.nattyae= assetBundleBundle.LoadAsset<AudioClip>("NMKnattyae.mp3").DontUnload();
+            NMK.siteyaru= assetBundleBundle.LoadAsset<AudioClip>("NMKsiteyaru.mp3").DontUnload();
+            NMK.syouti = assetBundleBundle.LoadAsset<AudioClip>("NMKsyouti.mp3").DontUnload();
+            NMK.yeah = assetBundleBundle.LoadAsset<AudioClip>("NMKyeah.mp3").DontUnload();
         }
 #endif
         public static byte[] ReadFully(this Stream input)
