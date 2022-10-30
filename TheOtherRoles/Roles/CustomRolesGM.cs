@@ -49,6 +49,7 @@ namespace TheOtherRoles
             Sherlock.Clear();
 #if DEV
             NMK.Clear();
+            PLT.Clear();
 #endif
             Role.ClearAll();
         }

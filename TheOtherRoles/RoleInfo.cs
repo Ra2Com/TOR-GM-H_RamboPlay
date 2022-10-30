@@ -116,6 +116,7 @@ namespace TheOtherRoles
         public static RoleInfo cupid;
 #if DEV
         public static RoleInfo nmk;
+        public static RoleInfo plt;
 #endif
         public static List<RoleInfo> allRoleInfos;
         public static void Load()
@@ -191,6 +192,7 @@ namespace TheOtherRoles
             cupid = new RoleInfo("cupid", Cupid.color, CustomOptionHolder.cupidSpawnRate, RoleType.Cupid);
 #if DEV
             nmk = new RoleInfo("nmk", NMK.color, CustomOptionHolder.nmkSpawnRate, RoleType.NMK);
+            plt = new RoleInfo("plt", PLT.color, CustomOptionHolder.pltSpawnRate, RoleType.PLT);
 #endif
             allRoleInfos = new List<RoleInfo>()
             {
@@ -265,6 +267,7 @@ namespace TheOtherRoles
                 cupid,
 #if DEV
                 nmk,
+                plt,
 #endif
             };
         }
@@ -363,6 +366,7 @@ namespace TheOtherRoles
             if (p.isRole(RoleType.Cupid)) infos.Add(cupid);
 #if DEV
             if (p.isRole(RoleType.NMK)) infos.Add(nmk);
+            if (p.isRole(RoleType.PLT)) infos.Add(plt);
 #endif
 
 

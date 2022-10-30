@@ -76,7 +76,7 @@ namespace TheOtherRoles
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.playNMKVoice(local.currentTarget.PlayerId, local.player.PlayerId);
                 },
-                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.NMK) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.NMK) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && numNMK > nmks.Count(); },
                 () =>
                 {
                     if (numNMKText != null)

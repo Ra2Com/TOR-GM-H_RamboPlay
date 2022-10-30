@@ -136,6 +136,7 @@ namespace TheOtherRoles
 #if DEV
         SetNMK,
         PlayNMKVoice,
+        PlayPLTVoice,
 #endif
     }
 
@@ -1527,6 +1528,11 @@ namespace TheOtherRoles
         {
             NMK.playVoice(playerId, nmkId);
         }
+
+        public static void playPLTVoice(byte pltId)
+        {
+            PLT.playVoice(pltId);
+        }
 #endif
 
         [HarmonyPatch(typeof(CustomNetworkTransform), nameof(CustomNetworkTransform.HandleRpc))]
@@ -1980,6 +1986,9 @@ namespace TheOtherRoles
                             break;
                         case (byte)CustomRPC.PlayNMKVoice:
                             RPCProcedure.playNMKVoice(reader.ReadByte(), reader.ReadByte());
+                            break;
+                        case (byte)CustomRPC.PlayPLTVoice:
+                            RPCProcedure.playPLTVoice(reader.ReadByte());
                             break;
 #endif
                     }

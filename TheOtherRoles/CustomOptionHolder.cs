@@ -491,6 +491,7 @@ namespace TheOtherRoles
 #if DEV
         public static CustomRoleOption nmkSpawnRate;
         public static CustomOption nmkNum;
+        public static CustomRoleOption pltSpawnRate;
 #endif
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new();
@@ -927,6 +928,7 @@ namespace TheOtherRoles
 #if DEV
             nmkSpawnRate = new CustomRoleOption(1 + 100000, CustomOptionType.Crewmate, "nmk", NMK.color, 1);
             nmkNum = CustomOption.Create(2 + 100000, CustomOptionType.Crewmate, "numNMK", 2f, 1f, 10f, 1f, nmkSpawnRate);
+            pltSpawnRate = new CustomRoleOption(10 + 100000, CustomOptionType.Impostor, "plt", PLT.color, 1);
 #endif
 
             // Other options

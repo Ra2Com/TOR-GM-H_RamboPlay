@@ -369,6 +369,10 @@ namespace TheOtherRoles.Patches
             {
                 setPlayerNameColor(player, NMK.color);
             }
+            else if (player.isRole(RoleType.PLT))
+            {
+                setPlayerNameColor(player, PLT.color);
+            }
 #endif
         }
 

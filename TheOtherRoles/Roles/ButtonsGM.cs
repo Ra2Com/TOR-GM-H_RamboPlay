@@ -40,6 +40,7 @@ namespace TheOtherRoles
             Cupid.SetButtonCooldowns();
 #if DEV
             NMK.SetButtonCooldowns();
+            PLT.SetButtonCooldowns();
 #endif
             foreach (CustomButton gmButton in gmButtons)
             {
@@ -81,6 +82,7 @@ namespace TheOtherRoles
             Cupid.MakeButtons(hm);
 #if DEV
             NMK.MakeButtons(hm);
+            PLT.MakeButtons(hm);
 #endif
 
             gmButtons = new List<CustomButton>();

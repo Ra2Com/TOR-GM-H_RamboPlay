@@ -82,6 +82,7 @@ namespace TheOtherRoles
         EvilHacker,
 #if DEV
         NMK,
+        PLT,
 #endif
 
 
@@ -117,6 +118,9 @@ namespace TheOtherRoles
             { RoleType.EvilTracker, typeof(RoleBase<EvilTracker>) },
             { RoleType.MimicK, typeof(RoleBase<MimicK>) },
             { RoleType.MimicA, typeof(RoleBase<MimicA>) },
+#if DEV
+            { RoleType.PLT, typeof(RoleBase<PLT>) },
+#endif
 
             // Neutral
             { RoleType.Opportunist, typeof(RoleBase<Opportunist>) },

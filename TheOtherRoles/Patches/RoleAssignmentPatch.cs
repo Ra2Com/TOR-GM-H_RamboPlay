@@ -332,6 +332,7 @@ namespace TheOtherRoles.Patches
                 }
 #if DEV
                 crewSettings.Add((byte)RoleType.NMK, CustomOptionHolder.nmkSpawnRate.data);
+                impSettings.Add((byte)RoleType.PLT, CustomOptionHolder.pltSpawnRate.data);
 #endif
 
 
