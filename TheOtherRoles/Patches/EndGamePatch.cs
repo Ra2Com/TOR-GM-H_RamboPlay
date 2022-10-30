@@ -305,7 +305,7 @@ namespace TheOtherRoles.Patches
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                 foreach (var p in PlayerControl.AllPlayerControls)
                 {
-                    if (p.isCrew())
+                    if (p.isCrew() && !p.hasModifier(ModifierType.Madmate) && !p.hasModifier(ModifierType.CreatedMadmate))
                     {
                         WinningPlayerData wpd = new(p.Data);
                         TempData.winners.Add(wpd);
