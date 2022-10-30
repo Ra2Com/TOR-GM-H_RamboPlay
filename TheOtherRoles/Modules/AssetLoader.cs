@@ -53,25 +53,16 @@ namespace TheOtherRoles.Modules
             NMK.siteyaru= assetBundleBundle.LoadAsset<AudioClip>("NMKsiteyaru.mp3").DontUnload();
             NMK.syouti = assetBundleBundle.LoadAsset<AudioClip>("NMKsyouti.mp3").DontUnload();
             NMK.yeah = assetBundleBundle.LoadAsset<AudioClip>("NMKyeah.mp3").DontUnload();
-            Logger.currentMethod();
             PLT.kii = assetBundleBundle.LoadAsset<AudioClip>("pltkii.mp3").DontUnload();
-            Logger.currentMethod();
             PLT.kuroji = assetBundleBundle.LoadAsset<AudioClip>("pltkuroji.mp3").DontUnload();
-            Logger.currentMethod();
+            PLT.kmtm = assetBundleBundle.LoadAsset<AudioClip>("pltkmtm.mp3").DontUnload();
             PLT.narumi = assetBundleBundle.LoadAsset<AudioClip>("pltnarumi.mp3").DontUnload();
-            Logger.currentMethod();
             PLT.nmk = assetBundleBundle.LoadAsset<AudioClip>("pltnmk.mp3").DontUnload();
-            Logger.currentMethod();
             PLT.nmk2 = assetBundleBundle.LoadAsset<AudioClip>("pltnmk2.mp3").DontUnload();
-            Logger.currentMethod();
             PLT.nazekuroji = assetBundleBundle.LoadAsset<AudioClip>("pltnazekuroji.mp3").DontUnload();
-            Logger.currentMethod();
             PLT.nazenarumi = assetBundleBundle.LoadAsset<AudioClip>("pltnazenarumi.mp3").DontUnload();
-            Logger.currentMethod();
             PLT.nazenmk = assetBundleBundle.LoadAsset<AudioClip>("pltnazenmk.mp3").DontUnload();
-            Logger.currentMethod();
             PLT.tasuketejoari = assetBundleBundle.LoadAsset<AudioClip>("plttasuketejoari.mp3").DontUnload();
-            Logger.currentMethod();
             PLT.tasuketekii = assetBundleBundle.LoadAsset<AudioClip>("plttasuketekii.mp3").DontUnload();
         }
 #endif

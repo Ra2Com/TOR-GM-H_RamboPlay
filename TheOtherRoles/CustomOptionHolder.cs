@@ -491,7 +491,11 @@ namespace TheOtherRoles
 #if DEV
         public static CustomRoleOption nmkSpawnRate;
         public static CustomOption nmkNum;
+        public static CustomOption nmkMaxDistance;
+        public static CustomOption nmkMinDistance;
         public static CustomRoleOption pltSpawnRate;
+        public static CustomOption pltMaxDistance;
+        public static CustomOption pltMinDistance;
 #endif
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new();
@@ -928,7 +932,11 @@ namespace TheOtherRoles
 #if DEV
             nmkSpawnRate = new CustomRoleOption(1 + 100000, CustomOptionType.Crewmate, "nmk", NMK.color, 1);
             nmkNum = CustomOption.Create(2 + 100000, CustomOptionType.Crewmate, "numNMK", 2f, 1f, 10f, 1f, nmkSpawnRate);
+            nmkMinDistance = CustomOption.Create(3 + 100000, CustomOptionType.Crewmate, "音声減衰開始距離", 10f, 1f, 50f, 1f, nmkSpawnRate);
+            nmkMaxDistance = CustomOption.Create(4 + 100000, CustomOptionType.Crewmate, "音声最大距離", 20f, 1f, 50f, 1f, nmkSpawnRate);
             pltSpawnRate = new CustomRoleOption(10 + 100000, CustomOptionType.Impostor, "plt", PLT.color, 1);
+            pltMinDistance = CustomOption.Create(11 + 100000, CustomOptionType.Impostor, "音声減衰開始距離", 1f, 1f, 10f, 0.25f, pltSpawnRate);
+            pltMaxDistance = CustomOption.Create(12 + 100000, CustomOptionType.Impostor, "音声最大距離", 2f, 1f, 10f, 0.25f, pltSpawnRate);
 #endif
 
             // Other options

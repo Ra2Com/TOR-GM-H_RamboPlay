@@ -15,8 +15,12 @@ namespace TheOtherRoles
     [HarmonyPatch]
     public class NMK : RoleBase<NMK>
     {
+        public static GameObject targetAudioObject;
+        public static GameObject nmkAudioObject;
         public static TMPro.TMP_Text numNMKText;
         private static CustomButton nmkButton;
+        public static float maxDistance {get {return CustomOptionHolder.nmkMaxDistance.getFloat();}}
+        public static float minDistance {get {return CustomOptionHolder.nmkMinDistance.getFloat();}}
 
         public static Color color = new Color32(172, 213, 239, byte.MaxValue);
 
@@ -131,10 +135,11 @@ namespace TheOtherRoles
             var nmkClip = getClipById(rnd.Next(0, 2));
             var target = Helpers.playerById(targetPlayerId);
             var nmk = Helpers.playerById(nmkId);
-            AudioSource nmkAudioSource = nmk.gameObject.GetComponent<AudioSource>();
+            if (!nmkAudioObject) nmkAudioObject = new GameObject("nmkAudioSource");
+            AudioSource nmkAudioSource = nmkAudioObject.GetComponent<AudioSource>();
             if (nmkAudioSource == null)
             {
-                nmkAudioSource = nmk.gameObject.AddComponent<AudioSource>();
+                nmkAudioSource = nmkAudioObject.AddComponent<AudioSource>();
                 nmkAudioSource.priority = 0;
                 nmkAudioSource.spatialBlend = 1;
                 nmkAudioSource.clip = nmkClip;
@@ -144,6 +149,8 @@ namespace TheOtherRoles
                 nmkAudioSource.minDistance = 1;
                 nmkAudioSource.rolloffMode = AudioRolloffMode.Linear;
             }
+
+            if (!targetAudioObject) targetAudioObject= new GameObject("targetAudioSource");
             AudioSource targetAudioSource = target.gameObject.GetComponent<AudioSource>();
             if (targetAudioSource == null)
             {
@@ -153,19 +160,23 @@ namespace TheOtherRoles
                 targetAudioSource.clip = targetClip;
                 targetAudioSource.loop = false;
                 targetAudioSource.playOnAwake = false;
-                targetAudioSource.maxDistance = 3;
-                targetAudioSource.minDistance = 1;
+                targetAudioSource.maxDistance = maxDistance;
+                targetAudioSource.minDistance = minDistance;
                 targetAudioSource.rolloffMode = AudioRolloffMode.Linear;
             }
+            nmkAudioObject.transform.position = nmk.transform.position;
             nmkAudioSource.PlayOneShot(nmkClip);
             while (nmkAudioSource.isPlaying)
             {
-                yield return new WaitForSeconds(1);
+                nmkAudioObject.transform.position = nmk.transform.position;
+                yield return new WaitForSeconds(0.04f);
             }
+            targetAudioObject.transform.position = target.transform.position;
             targetAudioSource.PlayOneShot(targetClip);
-            while (nmkAudioSource.isPlaying)
+            while (targetAudioSource.isPlaying)
             {
-                yield return new WaitForSeconds(1);
+                targetAudioObject.transform.position = target.transform.position;
+                yield return new WaitForSeconds(0.04f);
             }
             yield break;
         }
