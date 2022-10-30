@@ -64,7 +64,7 @@
             ContinueOnError="true"
         />
 		<Copy
-            SourceFiles="$(SolutionDir)UnityAssets\DevAssets\AssetBundles\StandaloneWindows\devassets"
+            SourceFiles="$(SolutionDir)..\DevAssets\AssetBundles\StandaloneWindows\devassets"
             DestinationFolder="$(SolutionDir)TheOtherRoles\Resources\AssetBundle\"
             ContinueOnError="true"
         />
