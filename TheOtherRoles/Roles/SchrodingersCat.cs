@@ -5,6 +5,8 @@ using Hazel;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Patches;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 using static TheOtherRoles.Patches.PlayerControlFixedUpdatePatch;
 using static TheOtherRoles.TheOtherRoles;
 
@@ -227,10 +229,11 @@ namespace TheOtherRoles
             switchButton = new CustomButton(
                 () =>
                 {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
-                    writer.Write((byte)SchrodingersCat.Team.Impostor);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Impostor);
+                    showMenu();
+                    // MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
+                    // writer.Write((byte)SchrodingersCat.Team.Impostor);
+                    // AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    // RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Impostor);
                 },
                 () => { return SchrodingersCat.team == SchrodingersCat.Team.None && canChooseImpostor && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.SchrodingersCat) && tasksComplete(CachedPlayer.LocalPlayer.PlayerControl); },
                 () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
@@ -240,7 +243,8 @@ namespace TheOtherRoles
                 hm,
                 hm.AbilityButton,
                 KeyCode.F
-            ){buttonText = ModTranslation.getString("schrodingersCatImpostorButton")};
+            )
+            { buttonText = ModTranslation.getString("schrodingersCatSwitchTeamButton") };
             switchButton.Timer = switchButton.MaxTimer = 0;
         }
         public static void SetButtonCooldowns()
@@ -254,6 +258,8 @@ namespace TheOtherRoles
             team = Team.None;
             RoleInfo.schrodingersCat.color = color;
             killer = null;
+            shownMenu = false;
+            teams = new List<PoolablePlayer>();
         }
 
         public static void setImpostorFlag()
@@ -379,6 +385,120 @@ namespace TheOtherRoles
             if (blankButtonSprite) return blankButtonSprite;
             blankButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlankButton.png", 115f);
             return blankButtonSprite;
+        }
+
+        public static PoolablePlayer playerTemplate;
+        public static GameObject parent;
+        private static List<PoolablePlayer> teams;
+        private static bool shownMenu = false;
+
+        private static void showMenu()
+        {
+            if (!shownMenu)
+            {
+                if (teams.Count == 0)
+                {
+                    var colorBG = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.White.png", 100f);
+                    var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+                    parent = new GameObject("PoolableParent");
+                    parent.transform.parent = hudManager.transform;
+                    parent.transform.localPosition = new Vector3(0, 0, 0);
+                    var impostor = createPoolable(parent, "schrodingersCatImpostor", 0, (UnityAction)(() =>
+                    {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
+                        writer.Write((byte)SchrodingersCat.Team.Impostor);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Impostor);
+                        showMenu();
+                    }));
+                    teams.Add(impostor);
+                    var jackal = createPoolable(parent, "jackal", 1, (UnityAction)(() =>
+                    {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
+                        writer.Write((byte)SchrodingersCat.Team.Jackal);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Jackal);
+                        showMenu();
+                    }));
+                    teams.Add(jackal);
+                    var moriarty = createPoolable(parent, "moriarty", 2, (UnityAction)(() =>
+                    {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
+                        writer.Write((byte)SchrodingersCat.Team.Moriarty);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Moriarty);
+                        showMenu();
+                    }));
+                    teams.Add(moriarty);
+                    var jekyllAndHyde = createPoolable(parent, "jekyllAndHyde", 6, (UnityAction)(() =>
+                    {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
+                        writer.Write((byte)SchrodingersCat.Team.JekyllAndHyde);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.JekyllAndHyde);
+                        showMenu();
+                    }));
+                    teams.Add(jekyllAndHyde);
+                    var crewmate = createPoolable(parent, "schrodingersCatCrew", 10, (UnityAction)(() =>
+                    {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
+                        writer.Write((byte)SchrodingersCat.Team.Crew);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Crew);
+                        showMenu();
+                    }));
+                    teams.Add(crewmate);
+                    layoutPoolable();
+                }
+                else
+                {
+                    teams.ForEach(x =>
+                    {
+                        x.gameObject.SetActive(true);
+                    });
+                    layoutPoolable();
+                }
+            }
+            else
+            {
+                teams.ForEach(x =>
+                {
+                    x.gameObject.SetActive(false);
+                });
+            }
+            shownMenu = !shownMenu;
+        }
+
+        private static PoolablePlayer createPoolable(GameObject parent, string name, int color, UnityAction func)
+        {
+            var poolable = GameObject.Instantiate(playerTemplate, parent.transform);
+            var actionButton = UnityEngine.Object.Instantiate(FastDestroyableSingleton<HudManager>.Instance.KillButton, poolable.gameObject.transform);
+            SpriteRenderer spriteRenderer = actionButton.GetComponent<SpriteRenderer>();
+            spriteRenderer.sprite = null;
+            actionButton.transform.localPosition = new Vector3(0, 0, 0);
+            actionButton.gameObject.SetActive(true);
+            PassiveButton button = actionButton.GetComponent<PassiveButton>();
+            button.OnClick = new Button.ButtonClickedEvent();
+            button.OnClick.AddListener((UnityAction)func);
+            var texts = actionButton.GetComponentsInChildren<TMPro.TextMeshPro>();
+            texts.ForEach(x => x.gameObject.SetActive(false));
+            poolable.gameObject.SetActive(true);
+            poolable.SetBodyColor(color);
+            poolable.SetName(ModTranslation.getString(name));
+            return poolable;
+        }
+
+        public static void layoutPoolable()
+        {
+            float offset = 2f;
+            int center = teams.Count / 2;
+            for (int i = 0; i < teams.Count; i++)
+            {
+                float x = teams.Count % 2 != 0 ? (offset * (i - center)) : (offset * (i - center)) + (offset * 0.5f);
+                teams[i].transform.localPosition = new Vector3(x, 0, 0);
+                teams[i].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                teams[i].GetComponentInChildren<ActionButton>().transform.position = teams[i].transform.position;
+            }
         }
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]

@@ -204,6 +204,15 @@ namespace TheOtherRoles.Patches
                     }
                 }
             }
+
+            // シュレディンガーの猫変身メニュー用テンプレート
+            SchrodingersCat.playerTemplate = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, FastDestroyableSingleton<HudManager>.Instance.transform);
+            SchrodingersCat.playerTemplate.UpdateFromPlayerOutfit((GameData.PlayerOutfit)CachedPlayer.LocalPlayer.PlayerControl.Data.DefaultOutfit, PlayerMaterial.MaskType.ComplexUI, false, true);
+            SchrodingersCat.playerTemplate.SetFlipX(true);
+            SchrodingersCat.playerTemplate.gameObject.SetActive(false);
+            SchrodingersCat.playerTemplate.cosmetics.currentPet?.gameObject.SetActive(false);
+            SchrodingersCat.playerTemplate.cosmetics.nameText.text = "";
+            SchrodingersCat.playerTemplate.gameObject.SetActive(false);
         }
     }
 
@@ -215,9 +224,12 @@ namespace TheOtherRoles.Patches
             // Intro solo teams
             if (CachedPlayer.LocalPlayer.PlayerControl.isNeutral() || CachedPlayer.LocalPlayer.PlayerControl == GM.gm)
             {
-                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-                soloTeam.Add(CachedPlayer.LocalPlayer.PlayerControl);
-                yourTeam = soloTeam;
+                if(!(CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.SchrodingersCat) && SchrodingersCat.hideRole))
+                {
+                    var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                    soloTeam.Add(CachedPlayer.LocalPlayer.PlayerControl);
+                    yourTeam = soloTeam;
+                }
             }
 
             // Don't show the GM

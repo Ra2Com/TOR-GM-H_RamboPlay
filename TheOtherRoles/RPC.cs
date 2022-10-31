@@ -1243,6 +1243,9 @@ namespace TheOtherRoles
                 case SchrodingersCat.Team.JekyllAndHyde:
                     SchrodingersCat.setJekyllAndHydeFlag();
                     break;
+                case SchrodingersCat.Team.Moriarty:
+                    SchrodingersCat.setMoriartyFlag();
+                    break;
                 default:
                     SchrodingersCat.setCrewFlag();
                     break;

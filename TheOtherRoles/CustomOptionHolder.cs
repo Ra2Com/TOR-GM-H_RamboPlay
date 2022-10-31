@@ -806,7 +806,7 @@ namespace TheOtherRoles
             schrodingersCatJustDieOnKilledByCrew = CustomOption.Create(976, CustomOptionType.Neutral, "schrodingersCatJustDieOnKilledByCrew", false, schrodingersCatSpawnRate);
             schrodingersCatHideRole = CustomOption.Create(977, CustomOptionType.Neutral, "schrodingersCatHideRole", false, schrodingersCatSpawnRate);
             schrodingersCatCanWinAsCrewmate = CustomOption.Create(978, CustomOptionType.Neutral, "schrodingersCatCanWinAsCrewmate", false, schrodingersCatHideRole);
-            schrodingersCatCanChooseImpostor = CustomOption.Create(979, CustomOptionType.Neutral, "schrodingersCatCanChooseImpostor", false, schrodingersCatHideRole);
+            schrodingersCatCanChooseImpostor = CustomOption.Create(979, CustomOptionType.Neutral, "schrodingersCatCanChooseTeam", false, schrodingersCatHideRole);
 
             puppeteerSpawnRate = new CustomRoleOption(1060, CustomOptionType.Neutral, "puppeteer", Puppeteer.color, 1);
             puppeteerNumKills = CustomOption.Create(1061, CustomOptionType.Neutral, "puppeteerNumKills", 3f, 1f, 15f, 1f, puppeteerSpawnRate);
