@@ -192,7 +192,7 @@ namespace TheOtherRoles
             cupid = new RoleInfo("cupid", Cupid.color, CustomOptionHolder.cupidSpawnRate, RoleType.Cupid);
 #if DEV
             nmk = new RoleInfo("nmk", NMK.color, CustomOptionHolder.nmkSpawnRate, RoleType.NMK);
-            plt = new RoleInfo("plt", PLT.color, CustomOptionHolder.pltSpawnRate, RoleType.PLT);
+            plt = new RoleInfo("PLT", PLT.color, CustomOptionHolder.pltSpawnRate, RoleType.PLT);
 #endif
             allRoleInfos = new List<RoleInfo>()
             {
@@ -352,7 +352,17 @@ namespace TheOtherRoles
             if (p.isRole(RoleType.Akujo)) infos.Add(akujo);
 
             // はおみんオリジナル
-            if (p.isRole(RoleType.SchrodingersCat)) infos.Add(schrodingersCat);
+            if (p.isRole(RoleType.SchrodingersCat))
+            {
+                if(SchrodingersCat.hideRole && !SchrodingersCat.hasTeam() && !includeHidden)
+                {
+                    infos.Add(crewmate);
+                }
+                else
+                {
+                    infos.Add(schrodingersCat);
+                }
+            }
             if (p.isRole(RoleType.Trapper)) infos.Add(trapper);
             if (p.isRole(RoleType.BomberA)) infos.Add(bomberA);
             if (p.isRole(RoleType.BomberB)) infos.Add(bomberB);

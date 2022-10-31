@@ -295,7 +295,11 @@ namespace TheOtherRoles.Patches
             bool jackalFlag = player.isRole(RoleType.SchrodingersCat) || player.isRole(RoleType.Jackal) || player.isRole(RoleType.Sidekick);
             bool jekyllAndHydeFlag = player.isRole(RoleType.SchrodingersCat) || player.isRole(RoleType.JekyllAndHyde);
             bool moriartyFlag = player.isRole(RoleType.SchrodingersCat) || player.isRole(RoleType.Moriarty);
-            if (SchrodingersCat.team == SchrodingersCat.Team.Crew)
+            if (!SchrodingersCat.hasTeam() && SchrodingersCat.hideRole)
+            {
+                // 何もしない
+            }
+            else if (SchrodingersCat.team == SchrodingersCat.Team.Crew)
             {
                 foreach (var p in SchrodingersCat.allPlayers)
                 {

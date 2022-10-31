@@ -254,10 +254,13 @@ namespace TheOtherRoles.Patches
             if (roleInfo == null) return;
             if (CachedPlayer.LocalPlayer.PlayerControl.isNeutral() || CachedPlayer.LocalPlayer.PlayerControl.isGM())
             {
-                __instance.BackgroundBar.material.color = roleInfo.color;
-                __instance.TeamTitle.text = roleInfo.name;
-                __instance.TeamTitle.color = roleInfo.color;
-                __instance.ImpostorText.text = "";
+                if (!(CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.SchrodingersCat) && SchrodingersCat.hideRole))
+                {
+                    __instance.BackgroundBar.material.color = roleInfo.color;
+                    __instance.TeamTitle.text = roleInfo.name;
+                    __instance.TeamTitle.color = roleInfo.color;
+                    __instance.ImpostorText.text = "";
+                }
             }
         }
 
@@ -334,7 +337,8 @@ namespace TheOtherRoles.Patches
                 __instance.RoleBlurbText.text = roleInfo.introDescription;
                 __instance.RoleBlurbText.color = roleInfo.color;
 
-                if (roleInfo == RoleInfo.crewmate && PlayerControl.LocalPlayer.name == "卯ノ花しうね" && DateTime.Now.Hour > 21)
+                var isSiuneInGame = CachedPlayer.AllPlayers.ToArray().Count(player => player.Data.PlayerName == "卯ノ花しうね") != 0;
+                if (roleInfo == RoleInfo.crewmate && isSiuneInGame && rnd.Next(1, 101) > 90)
                 {
                     __instance.RoleText.text = "素村";
                     __instance.RoleBlurbText.text = "大当たりー";

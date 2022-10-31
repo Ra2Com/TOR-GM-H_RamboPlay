@@ -232,7 +232,7 @@ namespace TheOtherRoles.Patches
             notWinners.AddRange(Moriarty.allPlayers);
             notWinners.AddRange(Cupid.allPlayers);
             if (Puppeteer.dummy != null) notWinners.Add(Puppeteer.dummy);
-            if (SchrodingersCat.team != SchrodingersCat.Team.Crew) notWinners.AddRange(SchrodingersCat.allPlayers);
+            if (SchrodingersCat.team != SchrodingersCat.Team.Crew && !(SchrodingersCat.team == SchrodingersCat.Team.None && SchrodingersCat.canWinAsCrewmate)) notWinners.AddRange(SchrodingersCat.allPlayers);
 
             // Neutral shifter can't win
             if (Shifter.shifter != null && Shifter.isNeutral) notWinners.Add(Shifter.shifter);
@@ -302,6 +302,14 @@ namespace TheOtherRoles.Patches
                     {
                         WinningPlayerData wpd = new(p.Data);
                         TempData.winners.Add(wpd);
+                    }
+                    if (p.isRole(RoleType.SchrodingersCat))
+                    {
+                        if(SchrodingersCat.team == SchrodingersCat.Team.Crew || (SchrodingersCat.team == SchrodingersCat.Team.None && SchrodingersCat.canWinAsCrewmate))
+                        {
+                            WinningPlayerData wpd = new(p.Data);
+                            TempData.winners.Add(wpd);
+                        }
                     }
                 }
             }

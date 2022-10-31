@@ -381,6 +381,7 @@ namespace TheOtherRoles
 
         public static bool neutralHasTasks(this PlayerControl player)
         {
+            if (player.isRole(RoleType.SchrodingersCat) && SchrodingersCat.hideRole) return true;
             if (player.isRole(RoleType.JekyllAndHyde)) return true;
             return player.isNeutral() && (player.isRole(RoleType.Lawyer) || player.isRole(RoleType.Pursuer) || player.isRole(RoleType.Shifter) || player.isRole(RoleType.Fox));
         }

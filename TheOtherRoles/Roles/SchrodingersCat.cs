@@ -38,6 +38,8 @@ namespace TheOtherRoles
         public static bool cantKillUntilLastOne { get { return CustomOptionHolder.schrodingersCatCantKillUntilLastOne.getBool(); } }
         public static bool killsKiller { get { return CustomOptionHolder.schrodingersCatKillsKiller.getBool(); } }
         public static bool justDieOnKilledByCrew { get { return CustomOptionHolder.schrodingersCatJustDieOnKilledByCrew.getBool(); } }
+        public static bool hideRole { get { return CustomOptionHolder.schrodingersCatHideRole.getBool(); } }
+        public static bool canWinAsCrewmate { get { return CustomOptionHolder.schrodingersCatHideRole.getBool() && CustomOptionHolder.schrodingersCatCanWinAsCrewmate.getBool(); } }
         public static PlayerControl killer = null;
 
         public SchrodingersCat()
@@ -90,6 +92,7 @@ namespace TheOtherRoles
         }
         public override void OnDeath(PlayerControl killer = null)
         {
+            player.clearAllTasks();
             // 占い師の画面では呪殺したことを分からなくするために自殺処理させているので注意すること
             if (team != Team.None) return;
             if (((killer != null && killer.isCrew()) || killer.isRole(RoleType.SchrodingersCat)) && justDieOnKilledByCrew) return;
@@ -321,6 +324,11 @@ namespace TheOtherRoles
                 if (CachedPlayer.LocalPlayer.PlayerControl != p && p.isImpostor() && p.isAlive()) return false;
             }
             return true;
+        }
+
+        public static bool hasTeam()
+        {
+            return team != Team.None;
         }
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]

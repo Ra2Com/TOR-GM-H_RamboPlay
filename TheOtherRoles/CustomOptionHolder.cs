@@ -411,6 +411,8 @@ namespace TheOtherRoles
         public static CustomOption schrodingersCatCantKillUntilLastOne;
         public static CustomOption schrodingersCatBecomesWhichTeamsOnExiled;
         public static CustomOption schrodingersCatJustDieOnKilledByCrew;
+        public static CustomOption schrodingersCatHideRole;
+        public static CustomOption schrodingersCatCanWinAsCrewmate;
 
         public static CustomRoleOption trapperSpawnRate;
         public static CustomOption trapperNumTrap;
@@ -801,6 +803,8 @@ namespace TheOtherRoles
             schrodingersCatCantKillUntilLastOne = CustomOption.Create(974, CustomOptionType.Neutral, "schrodingersCatCantKillUntilLastOne", false, schrodingersCatSpawnRate);
             schrodingersCatBecomesWhichTeamsOnExiled = CustomOption.Create(975, CustomOptionType.Neutral, "schrodingersCatBecomesWhichTeamsOnExiled", new string[] { "schrodingersCatNone", "schrodingersCatCrew", "schrodingersCatRandom" }, schrodingersCatSpawnRate);
             schrodingersCatJustDieOnKilledByCrew = CustomOption.Create(976, CustomOptionType.Neutral, "schrodingersCatJustDieOnKilledByCrew", false, schrodingersCatSpawnRate);
+            schrodingersCatHideRole = CustomOption.Create(977, CustomOptionType.Neutral, "schrodingersCatHideRole", false, schrodingersCatSpawnRate);
+            schrodingersCatCanWinAsCrewmate = CustomOption.Create(978, CustomOptionType.Neutral, "schrodingersCatCanWinAsCrewmate", false, schrodingersCatHideRole);
 
             puppeteerSpawnRate = new CustomRoleOption(1060, CustomOptionType.Neutral, "puppeteer", Puppeteer.color, 1);
             puppeteerNumKills = CustomOption.Create(1061, CustomOptionType.Neutral, "puppeteerNumKills", 3f, 1f, 15f, 1f, puppeteerSpawnRate);
@@ -934,7 +938,7 @@ namespace TheOtherRoles
             nmkNum = CustomOption.Create(2 + 100000, CustomOptionType.Crewmate, "numNMK", 2f, 1f, 10f, 1f, nmkSpawnRate);
             nmkMinDistance = CustomOption.Create(3 + 100000, CustomOptionType.Crewmate, "音声減衰開始距離", 10f, 1f, 50f, 1f, nmkSpawnRate);
             nmkMaxDistance = CustomOption.Create(4 + 100000, CustomOptionType.Crewmate, "音声最大距離", 20f, 1f, 50f, 1f, nmkSpawnRate);
-            pltSpawnRate = new CustomRoleOption(10 + 100000, CustomOptionType.Impostor, "plt", PLT.color, 1);
+            pltSpawnRate = new CustomRoleOption(10 + 100000, CustomOptionType.Impostor, "PLT", PLT.color, 1);
             pltMinDistance = CustomOption.Create(11 + 100000, CustomOptionType.Impostor, "音声減衰開始距離", 1f, 1f, 10f, 0.25f, pltSpawnRate);
             pltMaxDistance = CustomOption.Create(12 + 100000, CustomOptionType.Impostor, "音声最大距離", 2f, 1f, 10f, 0.25f, pltSpawnRate);
 #endif
