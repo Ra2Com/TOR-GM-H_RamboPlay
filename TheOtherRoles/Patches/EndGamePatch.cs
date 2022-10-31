@@ -219,8 +219,8 @@ namespace TheOtherRoles.Patches
             if (Pursuer.pursuer != null) notWinners.Add(Pursuer.pursuer);
 
             notWinners.AddRange(Jackal.formerJackals);
-            notWinners.AddRange(Madmate.allPlayers);
-            notWinners.AddRange(CreatedMadmate.allPlayers);
+            // notWinners.AddRange(Madmate.allPlayers);
+            // notWinners.AddRange(CreatedMadmate.allPlayers);
             notWinners.AddRange(Opportunist.allPlayers);
             notWinners.AddRange(PlagueDoctor.allPlayers);
             notWinners.AddRange(Fox.allPlayers);
@@ -232,7 +232,7 @@ namespace TheOtherRoles.Patches
             notWinners.AddRange(Moriarty.allPlayers);
             notWinners.AddRange(Cupid.allPlayers);
             if (Puppeteer.dummy != null) notWinners.Add(Puppeteer.dummy);
-            if (SchrodingersCat.team != SchrodingersCat.Team.Crew && !(SchrodingersCat.team == SchrodingersCat.Team.None && SchrodingersCat.canWinAsCrewmate)) notWinners.AddRange(SchrodingersCat.allPlayers);
+            // if (SchrodingersCat.team != SchrodingersCat.Team.Crew && !(SchrodingersCat.team == SchrodingersCat.Team.None && SchrodingersCat.canWinAsCrewmate)) notWinners.AddRange(SchrodingersCat.allPlayers);
 
             // Neutral shifter can't win
             if (Shifter.shifter != null && Shifter.isNeutral) notWinners.Add(Shifter.shifter);
@@ -280,14 +280,12 @@ namespace TheOtherRoles.Patches
                     {
                         WinningPlayerData wpd = new(p.Data);
                         TempData.winners.Add(wpd);
-                        continue;
                     }
-
-                    if (SchrodingersCat.team == SchrodingersCat.Team.Impostor)
+                    else if (p.isRole(RoleType.SchrodingersCat))
                     {
-                        foreach (var cat in SchrodingersCat.allPlayers)
+                        if(SchrodingersCat.team == SchrodingersCat.Team.Impostor)
                         {
-                            WinningPlayerData wpd = new(cat.Data);
+                            WinningPlayerData wpd = new(p.Data);
                             TempData.winners.Add(wpd);
                         }
                     }
@@ -303,9 +301,9 @@ namespace TheOtherRoles.Patches
                         WinningPlayerData wpd = new(p.Data);
                         TempData.winners.Add(wpd);
                     }
-                    if (p.isRole(RoleType.SchrodingersCat))
+                    else if (p.isRole(RoleType.SchrodingersCat))
                     {
-                        if(SchrodingersCat.team == SchrodingersCat.Team.Crew || (SchrodingersCat.team == SchrodingersCat.Team.None && SchrodingersCat.canWinAsCrewmate))
+                        if (SchrodingersCat.team == SchrodingersCat.Team.Crew || (SchrodingersCat.team == SchrodingersCat.Team.None && SchrodingersCat.canWinAsCrewmate))
                         {
                             WinningPlayerData wpd = new(p.Data);
                             TempData.winners.Add(wpd);
@@ -485,11 +483,14 @@ namespace TheOtherRoles.Patches
                 // Jackal wins if nobody except jackal is alive
                 AdditionalTempData.winCondition = WinCondition.JackalWin;
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                WinningPlayerData wpd = new(Jackal.jackal.Data)
+                if (Jackal.jackal != null)
                 {
-                    IsImpostor = false
-                };
-                TempData.winners.Add(wpd);
+                    WinningPlayerData wpd = new(Jackal.jackal.Data)
+                    {
+                        IsImpostor = false
+                    };
+                    TempData.winners.Add(wpd);
+                }
                 // If there is a sidekick. The sidekick also wins
                 if (Sidekick.sidekick != null)
                 {
