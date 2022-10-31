@@ -40,6 +40,7 @@ namespace TheOtherRoles
         public static bool justDieOnKilledByCrew { get { return CustomOptionHolder.schrodingersCatJustDieOnKilledByCrew.getBool(); } }
         public static bool hideRole { get { return CustomOptionHolder.schrodingersCatHideRole.getBool(); } }
         public static bool canWinAsCrewmate { get { return CustomOptionHolder.schrodingersCatHideRole.getBool() && CustomOptionHolder.schrodingersCatCanWinAsCrewmate.getBool(); } }
+        public static bool canChooseImpostor { get { return CustomOptionHolder.schrodingersCatHideRole.getBool() && CustomOptionHolder.schrodingersCatCanChooseImpostor.getBool(); } }
         public static PlayerControl killer = null;
 
         public SchrodingersCat()
@@ -201,6 +202,7 @@ namespace TheOtherRoles
         public override void HandleDisconnect(PlayerControl player, DisconnectReasons reason) { }
 
         private static CustomButton killButton;
+        private static CustomButton switchButton;
         public static PlayerControl currentTarget;
         public static void MakeButtons(HudManager hm)
         {
@@ -222,6 +224,24 @@ namespace TheOtherRoles
                 KeyCode.Q
             );
             killButton.Timer = killButton.MaxTimer = killCooldown;
+            switchButton = new CustomButton(
+                () =>
+                {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
+                    writer.Write((byte)SchrodingersCat.Team.Impostor);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Impostor);
+                },
+                () => { return SchrodingersCat.team == SchrodingersCat.Team.None && canChooseImpostor && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.SchrodingersCat) && tasksComplete(CachedPlayer.LocalPlayer.PlayerControl); },
+                () => { return CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
+                () => { switchButton.Timer = 0; },
+                getSwitchButtonSprite(),
+                new Vector3(0, 1f, 0),
+                hm,
+                hm.AbilityButton,
+                KeyCode.F
+            ){buttonText = ModTranslation.getString("schrodingersCatImpostorButton")};
+            switchButton.Timer = switchButton.MaxTimer = 0;
         }
         public static void SetButtonCooldowns()
         {
@@ -329,6 +349,36 @@ namespace TheOtherRoles
         public static bool hasTeam()
         {
             return team != Team.None;
+        }
+        private static bool tasksComplete(PlayerControl p)
+        {
+            int counter = 0;
+            int totalTasks = 1;
+            if (totalTasks == 0) return true;
+            foreach (var task in p.Data.Tasks)
+            {
+                if (task.Complete)
+                {
+                    counter++;
+                }
+            }
+            return counter == totalTasks;
+        }
+
+        private static Sprite switchButtonSprite;
+        private static Sprite getSwitchButtonSprite()
+        {
+            if (switchButtonSprite) return switchButtonSprite;
+            switchButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MorphButton.png", 115f);
+            return switchButtonSprite;
+        }
+
+        private static Sprite blankButtonSprite;
+        private static Sprite getBlankButtonSprite()
+        {
+            if (blankButtonSprite) return blankButtonSprite;
+            blankButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlankButton.png", 115f);
+            return blankButtonSprite;
         }
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]

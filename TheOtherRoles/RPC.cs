@@ -1232,6 +1232,10 @@ namespace TheOtherRoles
                     break;
                 case SchrodingersCat.Team.Impostor:
                     SchrodingersCat.setImpostorFlag();
+                    if (SchrodingersCat.becomesImpostor)
+                    {
+                        SchrodingersCat.allPlayers.ForEach(x => FastDestroyableSingleton<RoleManager>.Instance.SetRole(x, RoleTypes.Impostor));
+                    }
                     break;
                 case SchrodingersCat.Team.Jackal:
                     SchrodingersCat.setJackalFlag();
