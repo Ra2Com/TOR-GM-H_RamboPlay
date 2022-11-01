@@ -437,7 +437,7 @@ namespace TheOtherRoles
                         }));
                         teams.Add(moriarty);
                     }
-                    if (PlayerControl.AllPlayerControls.ToSystemList().Count(x => x.isRole(RoleType.Moriarty)) > 0)
+                    if (PlayerControl.AllPlayerControls.ToSystemList().Count(x => x.isRole(RoleType.JekyllAndHyde)) > 0)
                     {
                         var jekyllAndHyde = createPoolable(parent, "jekyllAndHyde", 6, (UnityAction)(() =>
                         {
