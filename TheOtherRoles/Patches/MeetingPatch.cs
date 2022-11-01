@@ -653,7 +653,7 @@ namespace TheOtherRoles.Patches
             }
 
             // トラックボタン
-            bool isTrackerButton = EvilTracker.target == null && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker) && CachedPlayer.LocalPlayer.PlayerControl.isAlive();
+            bool isTrackerButton = EvilTracker.canSetTargetOnMeeting && EvilTracker.target == null && CachedPlayer.LocalPlayer.PlayerControl.isRole(RoleType.EvilTracker) && CachedPlayer.LocalPlayer.PlayerControl.isAlive();
             if (isTrackerButton)
             {
                 for (int i = 0; i < __instance.playerStates.Length; i++)
