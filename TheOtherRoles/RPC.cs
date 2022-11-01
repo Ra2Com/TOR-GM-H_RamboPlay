@@ -164,7 +164,6 @@ namespace TheOtherRoles
             Trap.clearAllTraps();
             AssassinTrace.clearTraces();
             SpawnInMinigamePatch.reset();
-            ElectricPatch.reset();
             MapBehaviorPatch.resetRealTasks();
             CustomNormalPlayerTask.reset();
             Shrine.reset();

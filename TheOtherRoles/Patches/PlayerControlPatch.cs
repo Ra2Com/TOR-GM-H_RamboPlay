@@ -1092,7 +1092,7 @@ namespace TheOtherRoles.Patches
         {
             if (CustomOptionHolder.exceptOnTask.getBool())
             {
-                if (Patches.ElectricPatch.onTask)
+                if (Patches.ElectricPatch.isOntask())
                 {
                     __instance.SetKillTimer(__instance.killTimer + Time.fixedDeltaTime);
                 }

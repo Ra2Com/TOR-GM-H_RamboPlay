@@ -341,8 +341,6 @@ namespace TheOtherRoles.Patches
                 UnityEngine.Object.Destroy(array[i].gameObject);
             }
 
-            ElectricPatch.reset();
-
             // ベントバグ対策
             VentilationSystem vs = FastDestroyableSingleton<ShipStatus>.Instance.Systems[SystemTypes.Ventilation].TryCast<VentilationSystem>();
             vs.PlayersInsideVents.Clear();
