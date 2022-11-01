@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using Hazel;
 using TheOtherRoles.Objects;
@@ -412,33 +413,42 @@ namespace TheOtherRoles
                         showMenu();
                     }));
                     teams.Add(impostor);
-                    var jackal = createPoolable(parent, "jackal", 1, (UnityAction)(() =>
+                    if (PlayerControl.AllPlayerControls.ToSystemList().Count(x => x.isRole(RoleType.Jackal)) > 0)
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
-                        writer.Write((byte)SchrodingersCat.Team.Jackal);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Jackal);
-                        showMenu();
-                    }));
-                    teams.Add(jackal);
-                    var moriarty = createPoolable(parent, "moriarty", 2, (UnityAction)(() =>
+                        var jackal = createPoolable(parent, "jackal", 1, (UnityAction)(() =>
+                        {
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
+                            writer.Write((byte)SchrodingersCat.Team.Jackal);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Jackal);
+                            showMenu();
+                        }));
+                        teams.Add(jackal);
+                    }
+                    if (PlayerControl.AllPlayerControls.ToSystemList().Count(x => x.isRole(RoleType.Moriarty)) > 0)
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
-                        writer.Write((byte)SchrodingersCat.Team.Moriarty);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Moriarty);
-                        showMenu();
-                    }));
-                    teams.Add(moriarty);
-                    var jekyllAndHyde = createPoolable(parent, "jekyllAndHyde", 6, (UnityAction)(() =>
+                        var moriarty = createPoolable(parent, "moriarty", 2, (UnityAction)(() =>
+                        {
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
+                            writer.Write((byte)SchrodingersCat.Team.Moriarty);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.Moriarty);
+                            showMenu();
+                        }));
+                        teams.Add(moriarty);
+                    }
+                    if (PlayerControl.AllPlayerControls.ToSystemList().Count(x => x.isRole(RoleType.Moriarty)) > 0)
                     {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
-                        writer.Write((byte)SchrodingersCat.Team.JekyllAndHyde);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.JekyllAndHyde);
-                        showMenu();
-                    }));
-                    teams.Add(jekyllAndHyde);
+                        var jekyllAndHyde = createPoolable(parent, "jekyllAndHyde", 6, (UnityAction)(() =>
+                        {
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
+                            writer.Write((byte)SchrodingersCat.Team.JekyllAndHyde);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.schrodingersCatSetTeam((byte)SchrodingersCat.Team.JekyllAndHyde);
+                            showMenu();
+                        }));
+                        teams.Add(jekyllAndHyde);
+                    }
                     var crewmate = createPoolable(parent, "schrodingersCatCrew", 10, (UnityAction)(() =>
                     {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SchrodingersCatSetTeam, Hazel.SendOption.Reliable, -1);
