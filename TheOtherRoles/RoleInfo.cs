@@ -354,7 +354,7 @@ namespace TheOtherRoles
             // はおみんオリジナル
             if (p.isRole(RoleType.SchrodingersCat))
             {
-                if(SchrodingersCat.hideRole && !SchrodingersCat.hasTeam() && !includeHidden)
+                if(SchrodingersCat.hideRole && !SchrodingersCat.hasTeam() && !includeHidden && CachedPlayer.LocalPlayer.PlayerControl.isAlive())
                 {
                     infos.Add(crewmate);
                 }

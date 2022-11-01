@@ -295,7 +295,7 @@ namespace TheOtherRoles.Patches
             bool jackalFlag = player.isRole(RoleType.SchrodingersCat) || player.isRole(RoleType.Jackal) || player.isRole(RoleType.Sidekick);
             bool jekyllAndHydeFlag = player.isRole(RoleType.SchrodingersCat) || player.isRole(RoleType.JekyllAndHyde);
             bool moriartyFlag = player.isRole(RoleType.SchrodingersCat) || player.isRole(RoleType.Moriarty);
-            if (!SchrodingersCat.hasTeam() && SchrodingersCat.hideRole)
+            if (!SchrodingersCat.hasTeam() && SchrodingersCat.hideRole && CachedPlayer.LocalPlayer.PlayerControl.isAlive())
             {
                 // 何もしない
             }
