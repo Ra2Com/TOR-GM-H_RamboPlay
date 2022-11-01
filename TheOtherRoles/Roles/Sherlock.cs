@@ -97,7 +97,7 @@ namespace TheOtherRoles
                     }
                     if(message == "")
                     {
-                        message = "sherlockInvestigateMessage2";
+                        message = ModTranslation.getString("sherlockInvestigateMessage2");
                     }
                     investigateMessage(message, 5f, Color.white);
                     numUsed += 1;
