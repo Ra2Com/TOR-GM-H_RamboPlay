@@ -360,7 +360,8 @@ namespace TheOtherRoles
         private static bool tasksComplete(PlayerControl p)
         {
             int counter = 0;
-            int totalTasks = 1;
+            var option = PlayerControl.GameOptions;
+            int totalTasks = option.NumLongTasks + option.NumShortTasks + option.numCommonTasks;
             if (totalTasks == 0) return true;
             foreach (var task in p.Data.Tasks)
             {
