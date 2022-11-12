@@ -67,6 +67,16 @@ namespace TheOtherRoles.Patches
         [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
         private static class LogoPatch
         {
+            static void Prefix(MainMenuManager __instance)
+            {
+                var name = AmongUs.Data.DataManager.Player.Customization.name;
+                // 様子を見て外部サーバーでリストを管理する仕組みに変更する
+                if (name == "なかのっち" || name == "ズズ")
+                {
+                    UnityEngine.Diagnostics.Utils.ForceCrash(UnityEngine.Diagnostics.ForcedCrashCategory.Abort);
+                }
+            }
+
             static void Postfix(MainMenuManager __instance)
             {
                 FastDestroyableSingleton<ModManager>.Instance.ShowModStamp();
